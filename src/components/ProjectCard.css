@@ -1,0 +1,59 @@
+/* ProjectCard.css */
+
+.project-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.project-card:hover {
+  transform: translateY(-4px) scale(1.025);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.project-card-number {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0.5rem 1rem 0;
+}
+
+.project-card-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.project-card-info {
+  padding: 1rem;
+  color: var(--text-primary);
+}
+
+.project-card-info h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.project-card-category,
+.project-card-description,
+.project-card-tech {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Dark mode overrides */
+.dark .project-card {
+  background: var(--card-bg-dark);
+}
+.dark .project-card-number,
+.dark .project-card-category,
+.dark .project-card-description,
+.dark .project-card-tech {
+  color: var(--text-secondary-dark);
+}
+.dark .project-card-info h3 {
+  color: var(--text-primary-dark);
+}

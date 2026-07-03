@@ -254,7 +254,67 @@ export const config = {
             details: "Building responsive and performant web applications using React, Next.js, Node.js, and databases. Creating seamless user experiences with modern UI/UX principles.",
             tools: ["React", "Next.js", "Node.js", "TypeScript", "MongoDB", "PostgreSQL", "TailwindCSS", "REST APIs", "Docker", "Git"]
         }
+    },
+    certificates: {
+        events: [
+            {
+                id: 9,
+                title: "Networking Engineer Intern",
+                organization: "Global Info Sys",
+                file: "Yukanthan Internship Global Infosys Bonafide Certicate.pdf",
+                date: "2026"
+            },
+            {
+                id: 10,
+                title: "IIIT Sricity Ideaverse",
+                organization: "IIIT Sri City",
+                file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
+                date: "2026"
+            },
+            {
+                id: 3,
+                title: "Devfusion Hackathon Round 2",
+                organization: "IIT Delhi / Devfusion",
+                file: "Yukanthan P G   Devfusion Hackathon Round 2.pdf",
+                date: "2026"
+            },
+            {
+                id: 7,
+                title: "Unstop Prediction",
+                organization: "Unstop",
+                file: "Yukanthan Unstop Prediction .pdf",
+                date: "2026"
+            }
+        ],
+    learnings: [
+        {
+            id: 1,
+            title: "Computer Vision 101",
+            organization: "Innomatics Research Labs",
+            file: "YUKANTHAN_Computer vision 101.pdf",
+            date: "2026"
+        },
+        {
+            id: 2,
+            title: "Introduction to Artificial Intelligence",
+            organization: "Simplilearn / E-Learning",
+            file: "YUKANTHAN_Intoduction to artificial intelligence.pdf",
+            date: "2026"
+        },
+        {
+                id: 3,
+                title: "Introduction to Data Science",
+                organization: "Simplilearn / E-Learning",
+                file: "YUKANTHAN_Introduction to data science.pdf",
+                date: "2026"
+            },
+            {
+                id: 4,
+                title: "Introduction to Deep Learning",
+                organization: "Simplilearn / E-Learning",
+                file: "YUKANTHAN_Introduction to deep learning.pdf",
+                date: "2026"
+            }
+        ],
     }
 };
-
-
