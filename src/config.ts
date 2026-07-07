@@ -316,5 +316,91 @@ export const config = {
                 date: "2026"
             }
         ],
+    modalOnly: [
+        {
+            id: 11,
+            title: "Prelude",
+            organization: "Innomatics Research Labs",
+            file: "YUKANTHAN_Prelude.pdf",
+            date: "2026"
+        },
+        {
+            id: 12,
+            title: "Introduction to Robotic Process Automation",
+            organization: "Simplilearn / E-Learning",
+            file: "YUKANTHAN_Introduction to robotic process automation.pdf",
+            date: "2026"
+        },
+        {
+            id: 13,
+            title: "I PUC English",
+            organization: "Academic",
+            file: "YUKANTHAN_I PUC-ENGLISH.pdf",
+            date: "2024"
+        },
+        {
+            id: 14,
+            title: "Satwa Round 1 Certificate",
+            organization: "Satwa",
+            file: "Yukanthan P G _ Satwa Round1 certificate.pdf",
+            date: "2026"
+        },
+        {
+            id: 15,
+            title: "Certificate of Participation",
+            organization: "Event",
+            file: "Yukanthan P G .pdf",
+            date: "2026"
+        },
+        {
+            id: 16,
+            title: "AI Workshop",
+            organization: "Innomatics Research Labs",
+            file: "Yukanthan P G   AI Workshop Innomatics .pdf",
+            date: "2026"
+        },
+        {
+            id: 17,
+            title: "Cloud Computing",
+            organization: "NPTEL",
+            file: "Yukanthan Nptel Cloud Computing.pdf",
+            date: "2026"
+        },
+        {
+            id: 18,
+            title: "Next Dialog E-Summit'26",
+            organization: "Akhilesh Das Gutpta Institute of Professional Studies",
+            file: "Yukanthan Next Dialog E-Summit'26 organized by Akhilesh Das Gutpta Institute of Professional tudies.pdf",
+            date: "2026"
+        },
+        {
+            id: 19,
+            title: "GenAI Powered Data Analytics Job Simulation",
+            organization: "Tata / Forage",
+            file: "Yukanthan GenAI Powered Data Analytics Job Simulation (Tata) Micro internsip.pdf",
+            date: "2026"
+        },
+        {
+            id: 20,
+            title: "Devfusion",
+            organization: "IIT Delhi",
+            file: "Yukanthan Devfusion IIT Delhi.pdf",
+            date: "2026"
+        },
+        {
+            id: 21,
+            title: "ApoorvCTF'26",
+            organization: "IIIT Allahabad",
+            file: "Yukanthan ApoorvCTF26.pdf",
+            date: "2026"
+        },
+        {
+            id: 22,
+            title: "GDG Madurai Agentic AI",
+            organization: "GDG Madurai",
+            file: "Ticket Yukanthan GDG Madurai Agentic AIGOOGE263440194.pdf",
+            date: "2026"
+        }
+    ],
     }
 };

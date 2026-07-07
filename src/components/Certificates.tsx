@@ -18,7 +18,7 @@ const Certificates = () => {
       const st = ScrollTrigger.getById("certificates");
       st?.disable();
 
-      const content = document.querySelector(".modal-content");
+      const content = document.querySelector<HTMLElement>(".modal-content");
 
       const onScroll = () => {
         if (window.scrollY !== savedScrollY) {
@@ -26,22 +26,55 @@ const Certificates = () => {
         }
       };
 
-      const onWheel = (e: WheelEvent) => {
+      const onWheel = (e: Event) => {
+        const we = e as WheelEvent;
         if (!content) return;
+        we.stopPropagation();
         const { scrollTop, scrollHeight, clientHeight } = content;
         const atTop = scrollTop <= 0;
         const atBottom = scrollTop + clientHeight >= scrollHeight;
-        if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
-          e.preventDefault();
+        if ((we.deltaY < 0 && atTop) || (we.deltaY > 0 && atBottom)) {
+          we.preventDefault();
+        }
+      };
+
+      let lastTouchY = 0;
+
+      const onTouchMove = (e: Event) => {
+        const te = e as TouchEvent;
+        if (!content) return;
+        if (content.contains(te.target as Node)) {
+          const touchY = te.touches[0].clientY;
+          const deltaY = lastTouchY - touchY;
+          const { scrollTop, scrollHeight, clientHeight } = content;
+          const atTop = scrollTop <= 0;
+          const atBottom = scrollTop + clientHeight >= scrollHeight;
+          if ((deltaY < 0 && atTop) || (deltaY > 0 && atBottom)) {
+            te.preventDefault();
+          }
+          lastTouchY = touchY;
+        } else {
+          te.preventDefault();
+        }
+      };
+
+      const onTouchStart = (e: Event) => {
+        const te = e as TouchEvent;
+        if (content?.contains(te.target as Node)) {
+          lastTouchY = te.touches[0].clientY;
         }
       };
 
       window.addEventListener("scroll", onScroll, { passive: true });
       content?.addEventListener("wheel", onWheel, { passive: false });
+      content?.addEventListener("touchstart", onTouchStart, { passive: true });
+      document.body.addEventListener("touchmove", onTouchMove, { passive: false });
 
       return () => {
         window.removeEventListener("scroll", onScroll);
         content?.removeEventListener("wheel", onWheel);
+        content?.removeEventListener("touchstart", onTouchStart);
+        document.body.removeEventListener("touchmove", onTouchMove);
         ScrollTrigger.getById("certificates")?.enable();
         ScrollTrigger.refresh();
         window.scrollTo(0, savedScrollY);
@@ -52,6 +85,7 @@ const Certificates = () => {
   const allCertificates = [
     ...config.certificates.events.map(c => ({ ...c, category: "Event" })),
     ...config.certificates.learnings.map(c => ({ ...c, category: "Learning" })),
+    ...(config.certificates.modalOnly || []).map(c => ({ ...c, category: "Certificate" })),
   ];
   useEffect(() => {
     // Only animate stacks on desktop viewports
