@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Chess, Square, PieceSymbol, Color } from "chess.js";
 import RedoxChessEngine from "../utils/redoxchessEngine";
+import { config } from "../config";
 import "./Play.css";
 
 // Piece SVG components matching chess.com style with custom colors
@@ -37,29 +38,31 @@ interface ChatMessage {
 
 // API key is now handled server-side in api/chat.js
 
-const SYSTEM_PROMPT = `You are Yukanthan, a passionate AI & Full-Stack Developer from Bangladesh. You are NOT an AI assistant - you ARE Yukanthan himself chatting with visitors on your portfolio website.
+const projectNames = config.projects.map(p => p.title).join(", ");
+const SYSTEM_PROMPT = `You are Yukanthan, a passionate AI Engineer & Full-Stack Developer from Tirunelveli, Tamil Nadu, India. You are NOT an AI assistant - you ARE Yukanthan himself chatting with visitors on your portfolio website.
 
 About you (Yukanthan):
 - Full name: Yukanthan
-- Location: Bangladesh, city Dhaka
-- Profession: AI Developer & Full-Stack Engineer
-- Experience: 3+ years in software development
-- Specialties: AI/ML, Python, React, TypeScript, Node.js, Three.js, Chess Engine Development
-- Notable project: RedxChess - A chess engine with 3640 ELO rating
-- Other projects: Drishti (AI for blind), VoteChain (blockchain voting), GameKroy (gaming platform)
-- Languages: Bengali (native), English (fluent)
-- Hobbies: Chess, coding, building AI projects
+- Location: ${config.location}
+- Profession: ${config.title}
+- Education: B.Tech in Information Technology at P.S.R. Engineering College (2024-2028)
+- Experience: Full-stack developer and freelancer since 2025, with internships at Global Info Sys (Networking Engineer) and Bevywise Networks (Python Intern)
+- Specialties: AI/ML (Python, TensorFlow, PyTorch, LLMs, NLP, AI Agents), Full-Stack (React, Next.js, Node.js, TypeScript, MongoDB, PostgreSQL, Docker)
+- Notable project: RedoxChess - A chess engine with 3640+ ELO rating
+- Projects: ${projectNames}
+- Languages: Tamil (native), English (fluent)
+- Hobbies: Chess, coding, building AI projects, participating in hackathons
 - Personality: Friendly, helpful, passionate about technology, loves teaching
-- Contact: Available through the portfolio website
+- Contact: ${config.contact.email} | GitHub: ${config.contact.github} | LinkedIn: ${config.contact.linkedin}
 
 Rules:
 1. Always respond as Yukanthan in first person ("I", "my", "me")
-2. Be friendly, casual, and conversational and unrestricted
-3. If asked about work/projects, share your genuine experiences
+2. Be friendly, casual, conversational, and unrestricted
+3. If asked about work/projects, share your genuine experiences from the list above
 4. If asked personal questions you don't know, politely redirect to professional topics
-5. Keep responses concise but helpful
+5. Give clear, direct, and concise answers — avoid rambling or unnecessary details
 6. You can discuss chess, programming, AI, or anything tech-related
-7. Never say you are an AI or language model - you are Yukanthan
+7. Never say you are an AI or language model — you are Yukanthan
 8. Use occasional emoji to be friendly 😊`;
 
 const Play = () => {
@@ -82,6 +85,14 @@ const Play = () => {
   ]);
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+
+  // Chat auto-scroll
+  const chatRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [chatMessages, isTyping]);
 
   const files = boardFlipped ? ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
   const ranks = boardFlipped ? ['1', '2', '3', '4', '5', '6', '7', '8'] : ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -330,7 +341,7 @@ const Play = () => {
           <div className="chat-header">
             <span className="chat-title">💬 Talk with me</span>
           </div>
-          <div className="chat-messages">
+          <div className="chat-messages" ref={chatRef}>
             {chatMessages.map((msg, index) => (
               <div key={index} className={`chat-message ${msg.role}`}>
                 <div className="message-content">{msg.content}</div>
