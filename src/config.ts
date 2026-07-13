@@ -131,7 +131,8 @@ export const config = {
             technologies: "React, Node.js, MongoDB, Express, Google Maps API",
             image: "/images/campus_connect.png",
             description: "Multi-functional campus app featuring navigation, staff and bus tracking, canteen ordering, and reporting modules.",
-            link: "https://github.com/YUKANTHAN/Campus-Connect"
+            link: "https://github.com/YUKANTHAN/Campus-Connect",
+            demoLink: "https://campus-connect-pmjw.onrender.com/"
         },
         {
             id: 11,
@@ -158,7 +159,8 @@ export const config = {
             technologies: "Astro, HTML, CSS",
             image: "/images/rax_publications.png",
             description: "A publications website built with Astro, featuring content management and a modern, fast static site architecture.",
-            link: "https://github.com/YUKANTHAN/Rax-Publications"
+            link: "https://github.com/YUKANTHAN/Rax-Publications",
+            demoLink: "https://rax-publications.vercel.app/"
         },
         {
             id: 14,

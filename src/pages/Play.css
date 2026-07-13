@@ -216,7 +216,7 @@ body:has(.play-page) {
 /* Captured Pieces */
 .captured-pieces {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 2px;
   min-height: 28px;
   padding: 6px 8px;
@@ -373,6 +373,9 @@ body:has(.play-page) {
   text-align: center;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .game-status span {
@@ -789,5 +792,109 @@ body:has(.play-page) {
     min-height: 120px;
     overflow-y: auto;
     flex: 1 1 auto;
+  }
+}
+
+/* Game Over Overlay - Full Screen */
+.game-over-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayFadeIn 0.5s ease;
+  transition: opacity 0.5s ease;
+}
+
+.game-over-overlay.hiding {
+  opacity: 0;
+}
+
+.game-over-content {
+  text-align: center;
+  padding: 30px 40px;
+  background: rgba(11, 8, 12, 0.9);
+  border: 1px solid rgba(194, 164, 255, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 0 60px rgba(194, 164, 255, 0.2), 0 0 120px rgba(251, 141, 255, 0.1);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.trophy {
+  font-size: 80px;
+  animation: bounce 1s ease infinite;
+}
+
+.game-over-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 16px 0 8px;
+  background: linear-gradient(135deg, #fb8dff, #c2a4ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-over-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.game-result-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fb8dff;
+  padding: 6px 12px;
+  background: rgba(251, 141, 255, 0.1);
+  border: 1px solid rgba(251, 141, 255, 0.3);
+  border-radius: 20px;
+  text-align: center;
+  animation: popIn 0.4s ease;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* Toast Notification */
+.toast-notification {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px 32px;
+  background: rgba(11, 8, 12, 0.95);
+  border: 1px solid rgba(194, 164, 255, 0.3);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  z-index: 2000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(194, 164, 255, 0.15);
+  animation: toastIn 0.3s ease;
+  pointer-events: none;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 }

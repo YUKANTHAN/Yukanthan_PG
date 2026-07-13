@@ -75,9 +75,21 @@ const Play = () => {
   const [boardFlipped, setBoardFlipped] = useState(false);
   const [lastMove, setLastMove] = useState<{ from: Square; to: Square } | null>(null);
   const [gameStatus, setGameStatus] = useState<string>("");
+  const [gameOver, setGameOver] = useState<{ type: 'win' | 'lose' | 'draw'; winner?: string } | null>(null);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayHiding, setOverlayHiding] = useState(false);
   const [playerColor] = useState<Color>("w");
   const [engineThinking, setEngineThinking] = useState(false);
   const redoxchessRef = useRef<RedoxChessEngine | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  // Auto-dismiss toast
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   // Chat state
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
@@ -94,21 +106,48 @@ const Play = () => {
     }
   }, [chatMessages, isTyping]);
 
+  // Auto-dismiss full-screen overlay after 2s
+  useEffect(() => {
+    if (gameOver) {
+      setShowOverlay(true);
+      setOverlayHiding(false);
+      const timer = setTimeout(() => setOverlayHiding(true), 2000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowOverlay(false);
+      setOverlayHiding(false);
+    }
+  }, [gameOver]);
+
+  // Remove overlay from DOM after fade-out completes
+  useEffect(() => {
+    if (overlayHiding) {
+      const timer = setTimeout(() => setShowOverlay(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [overlayHiding]);
+
   const files = boardFlipped ? ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
   const ranks = boardFlipped ? ['1', '2', '3', '4', '5', '6', '7', '8'] : ['8', '7', '6', '5', '4', '3', '2', '1'];
 
   const updateGameStatus = useCallback((g: Chess) => {
     if (g.isCheckmate()) {
-      setGameStatus(g.turn() === 'w' ? 'Checkmate! Black wins!' : 'Checkmate! White wins!');
+      const aiWon = g.turn() === 'w';
+      setGameStatus(aiWon ? 'Checkmate! Yukanthan wins!' : 'Checkmate! You win!');
+      setGameOver({ type: aiWon ? 'lose' : 'win' });
     } else if (g.isDraw()) {
       if (g.isStalemate()) setGameStatus('Draw by stalemate');
       else if (g.isThreefoldRepetition()) setGameStatus('Draw by repetition');
       else if (g.isInsufficientMaterial()) setGameStatus('Draw by insufficient material');
       else setGameStatus('Draw');
-    } else if (g.isCheck()) {
-      setGameStatus(g.turn() === 'w' ? 'White is in check!' : 'Black is in check!');
+      setGameOver({ type: 'draw' });
     } else {
-      setGameStatus(g.turn() === 'w' ? "White's turn" : "Black's turn");
+      setGameOver(null);
+      if (g.isCheck()) {
+        setGameStatus(g.turn() === 'w' ? 'White is in check!' : 'Black is in check!');
+      } else {
+        setGameStatus(g.turn() === 'w' ? "White's turn" : "Black's turn");
+      }
     }
   }, []);
 
@@ -146,6 +185,10 @@ const Play = () => {
 
   const handleSquareClick = (square: Square) => {
     if (engineThinking || game.turn() !== 'w') return;
+    if (gameOver) {
+      setToast('Game is over! Click "New Game" to start a new match.');
+      return;
+    }
     const piece = getPieceAt(square);
 
     // If a piece is already selected
@@ -217,6 +260,7 @@ const Play = () => {
     setCapturedBlack([]);
     setLastMove(null);
     setGameStatus("White's turn");
+    setGameOver(null);
     setBoardFlipped(false);
   };
 
@@ -335,6 +379,8 @@ const Play = () => {
         </Link>
       </div>
 
+      {toast && <div className="toast-notification">{toast}</div>}
+
       <div className="chess-container">
         {/* Chat Panel - Left Side */}
         <div className="chat-panel">
@@ -391,7 +437,7 @@ const Play = () => {
 
           {/* Chess Board */}
           <div className="chess-board-wrapper">
-            <div className="chess-board">
+            <div className="chess-board" style={{ position: 'relative' }}>
               {ranks.map((rank) => (
                 files.map((file) => {
                   const square = `${file}${rank}` as Square;
@@ -432,6 +478,19 @@ const Play = () => {
                 })
               ))}
             </div>
+            {showOverlay && (
+              <div className={`game-over-overlay ${gameOver?.type}${overlayHiding ? ' hiding' : ''}`}>
+                <div className="game-over-content">
+                  <div className="trophy">🏆</div>
+                  <h2 className="game-over-title">
+                    {gameOver?.type === 'win' ? 'You Won!' : gameOver?.type === 'lose' ? 'Yukanthan Won!' : 'Draw'}
+                  </h2>
+                  <p className="game-over-subtitle">
+                    {gameOver?.type === 'win' ? 'Congratulations! You defeated the champion!' : gameOver?.type === 'lose' ? 'Better luck next time!' : 'Well played!'}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Player Info - Bottom of Board */}
@@ -456,6 +515,11 @@ const Play = () => {
           {/* Game Status */}
           <div className="game-status">
             <span className={game.isCheck() ? 'check' : ''}>{gameStatus}</span>
+            {gameOver && !showOverlay && (
+              <div className="game-result-badge">
+                {gameOver.type === 'win' ? '🏆 You Won!' : gameOver.type === 'lose' ? '🏆 Yukanthan Won!' : '🤝 Draw'}
+              </div>
+            )}
           </div>
 
           {/* Move History */}

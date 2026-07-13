@@ -126,6 +126,43 @@
   line-height: 1.5;
 }
 
+.myworks-card-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.myworks-card-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: rgba(194, 164, 255, 0.1);
+  color: var(--accentColor);
+  border: 1px solid rgba(194, 164, 255, 0.2);
+}
+
+.myworks-card-link:hover {
+  background: var(--accentColor);
+  color: #0b080c;
+  transform: translateY(-2px);
+}
+
+.myworks-card-link.live {
+  background: rgba(251, 141, 255, 0.1);
+  color: #fb8dff;
+  border-color: rgba(251, 141, 255, 0.2);
+}
+
+.myworks-card-link.live:hover {
+  background: #fb8dff;
+  color: #0b080c;
+}
+
 /* Responsive */
 @media only screen and (max-width: 768px) {
   .myworks-page {

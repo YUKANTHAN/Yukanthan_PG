@@ -9,6 +9,7 @@ interface Project {
   image: string;
   description: string;
   link?: string;
+  demoLink?: string;
 }
 
 interface ProjectCardProps {
@@ -16,9 +17,9 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
-  const { id, title, category, technologies, image, description, link } = project;
+  const { id, title, category, technologies, image, description, link, demoLink } = project;
   const imgSrc = image.replace('.png', '.webp');
-  const card = (
+  return (
     <div className="myworks-card">
       <div className="myworks-card-number">#{id}</div>
       <div className="myworks-card-image">
@@ -29,20 +30,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <div className="myworks-card-category">{category}</div>
         <p className="myworks-card-description">{description}</p>
         <div className="myworks-card-tech">{technologies}</div>
-        {link && (
-          <a href={link} target="_blank" rel="noopener noreferrer" className="myworks-card-link">
-            View Project
-          </a>
-        )}
+        <div className="myworks-card-links">
+          {link && (
+            <a href={link} target="_blank" rel="noopener noreferrer" className="myworks-card-link">
+              GitHub
+            </a>
+          )}
+          {demoLink && (
+            <a href={demoLink} target="_blank" rel="noopener noreferrer" className="myworks-card-link live">
+              Live Demo
+            </a>
+          )}
+        </div>
       </div>
     </div>
-  );
-  return link ? (
-    <a href={link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-      {card}
-    </a>
-  ) : (
-    card
   );
 };
 
