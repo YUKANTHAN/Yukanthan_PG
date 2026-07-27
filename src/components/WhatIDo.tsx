@@ -8,22 +8,39 @@ const WhatIDo = () => {
   const setRef = (el: HTMLDivElement | null, index: number) => {
     containerRef.current[index] = el;
   };
-  useEffect(() => {
-    if (ScrollTrigger.isTouch) {
-      containerRef.current.forEach((container) => {
-        if (container) {
-          container.classList.remove("what-noTouch");
-          container.addEventListener("click", () => handleClick(container));
+
+  const handleClick = (container: HTMLDivElement) => {
+    container.classList.toggle("what-content-active");
+    container.classList.remove("what-sibling");
+    if (container.parentElement) {
+      const siblings = Array.from(container.parentElement.children);
+
+      siblings.forEach((sibling) => {
+        if (sibling !== container) {
+          sibling.classList.remove("what-content-active");
+          sibling.classList.toggle("what-sibling");
         }
       });
     }
-    return () => {
+  };
+
+  useEffect(() => {
+    if (ScrollTrigger.isTouch) {
+      const handlers: { container: HTMLDivElement; handler: () => void }[] = [];
       containerRef.current.forEach((container) => {
         if (container) {
-          container.removeEventListener("click", () => handleClick(container));
+          container.classList.remove("what-noTouch");
+          const handler = () => handleClick(container);
+          container.addEventListener("click", handler);
+          handlers.push({ container, handler });
         }
       });
-    };
+      return () => {
+        handlers.forEach(({ container, handler }) => {
+          container.removeEventListener("click", handler);
+        });
+      };
+    }
   }, []);
   return (
     <div className="whatIDO">
@@ -142,18 +159,3 @@ const WhatIDo = () => {
 };
 
 export default WhatIDo;
-
-function handleClick(container: HTMLDivElement) {
-  container.classList.toggle("what-content-active");
-  container.classList.remove("what-sibling");
-  if (container.parentElement) {
-    const siblings = Array.from(container.parentElement.children);
-
-    siblings.forEach((sibling) => {
-      if (sibling !== container) {
-        sibling.classList.remove("what-content-active");
-        sibling.classList.toggle("what-sibling");
-      }
-    });
-  }
-}

@@ -46,6 +46,15 @@ const Cursor = () => {
         hover = false;
       });
     });
+    document.querySelectorAll("[data-cursor-section='bright']").forEach((item) => {
+      const element = item as HTMLElement;
+      element.addEventListener("mouseenter", () => {
+        cursor.classList.add("cursor-bright");
+      });
+      element.addEventListener("mouseleave", () => {
+        cursor.classList.remove("cursor-bright");
+      });
+    });
   }, []);
 
   return <div className="cursor-main" ref={cursorRef}></div>;

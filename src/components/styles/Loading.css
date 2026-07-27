@@ -197,7 +197,11 @@
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.2px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
+
 @keyframes blink {
   0% {
     opacity: 0;

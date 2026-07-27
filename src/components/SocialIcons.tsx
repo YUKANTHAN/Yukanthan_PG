@@ -52,7 +52,7 @@ const SocialIcons = () => {
       updatePosition();
 
       return () => {
-        elem.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mousemove", onMouseMove);
       };
     });
   }, []);
@@ -61,29 +61,29 @@ const SocialIcons = () => {
     <div className="icons-section">
       <div className="social-icons" data-cursor="icons" id="social">
         <span>
-          <a href={config.contact.github} target="_blank" rel="noopener noreferrer">
+          <a href={config.contact.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <FaGithub />
           </a>
         </span>
         <span>
-          <a href={config.contact.linkedin} target="_blank" rel="noopener noreferrer">
+          <a href={config.contact.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <FaLinkedinIn />
           </a>
         </span>
         {config.contact.twitter && (
           <span>
-            <a href={config.contact.twitter} target="_blank" rel="noopener noreferrer">
+            <a href={config.contact.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter">
               <FaXTwitter />
             </a>
           </span>
         )}
         <span>
-          <a href={config.contact.instagram} target="_blank" rel="noopener noreferrer">
+          <a href={config.contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <FaInstagram />
           </a>
         </span>
       </div>
-      <a className="resume-button" href="/Yukanthan_PG_Resume.pdf" target="_blank" rel="noopener noreferrer">
+      <a className="resume-button" href="/Yukanthan_PG_Resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Download Resume">
         <HoverLinks text="RESUME" />
         <span>
           <TbNotes />

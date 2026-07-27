@@ -1,12 +1,18 @@
 import * as THREE from "three";
 import gsap from "gsap";
 
+let intensityInterval: number | undefined;
+let screenLightTimeline: gsap.core.Timeline | undefined;
+
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
   camera: THREE.PerspectiveCamera
 ) {
+  if (intensityInterval) clearInterval(intensityInterval);
+  if (screenLightTimeline) screenLightTimeline.kill();
+
   let intensity: number = 0;
-  setInterval(() => {
+  intensityInterval = setInterval(() => {
     intensity = Math.random();
   }, 200);
   const tl1 = gsap.timeline({
@@ -52,7 +58,7 @@ export function setCharTimeline(
       object.material.transparent = true;
       object.material.opacity = 0;
       object.material.emissive.set("#C8BFFF");
-      gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
+      screenLightTimeline = gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
         emissiveIntensity: () => intensity * 8,
         duration: () => Math.random() * 0.6,
         delay: () => Math.random() * 0.1,

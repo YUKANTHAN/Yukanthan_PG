@@ -14,8 +14,11 @@ export const useScrollAnimations = () => {
     if (prefersReduced.matches) return;
 
     const elements = document.querySelectorAll<HTMLElement>('.anim-section');
+    if (elements.length === 0) return;
+
+    const animations: gsap.core.Tween[] = [];
     elements.forEach((el) => {
-      gsap.fromTo(
+      const animation = gsap.fromTo(
         el,
         { opacity: 0, y: 30 },
         {
@@ -30,6 +33,12 @@ export const useScrollAnimations = () => {
           },
         }
       );
+      animations.push(animation);
     });
+
+    return () => {
+      animations.forEach(anim => anim.kill());
+      ScrollTrigger.refresh();
+    };
   }, []);
 };

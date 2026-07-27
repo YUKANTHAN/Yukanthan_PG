@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"node server.js\" \"vite --host\"",
+    "dev": "concurrently \"cd backend && python main.py\" \"vite --host\"",
     "dev:vite": "vite --host",
     "dev:api": "node server.js",
     "build": "tsc -b && vite build",

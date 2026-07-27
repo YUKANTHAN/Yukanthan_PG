@@ -175,7 +175,7 @@ const Play = () => {
         const to = move.substring(2, 4) as Square;
         makeMove(from, to);
         setEngineThinking(false);
-      }, 12);
+      }, config.engineDepth);
     }
   }, [game]);
 
@@ -205,6 +205,7 @@ const Play = () => {
         // Deselect
         setSelectedSquare(null);
         setPossibleMoves([]);
+        setToast('Invalid move');
       }
     } else {
       // Select a piece if it's the current player's turn
@@ -212,6 +213,8 @@ const Play = () => {
         setSelectedSquare(square);
         const moves = game.moves({ square, verbose: true });
         setPossibleMoves(moves.map(m => m.to as Square));
+      } else {
+        setToast('Select one of your pieces');
       }
     }
   };
@@ -248,6 +251,7 @@ const Play = () => {
     } catch {
       setSelectedSquare(null);
       setPossibleMoves([]);
+      setToast('Illegal move');
     }
   };
 
@@ -259,20 +263,13 @@ const Play = () => {
     setCapturedWhite([]);
     setCapturedBlack([]);
     setLastMove(null);
+    setEngineThinking(false);
     setGameStatus("White's turn");
     setGameOver(null);
     setBoardFlipped(false);
   };
 
   const flipBoard = () => {
-    // If game is in progress, ask to start new game
-    if (moveHistory.length > 0) {
-      if (window.confirm('Start new game?')) {
-        resetGame();
-        setBoardFlipped(!boardFlipped);
-      }
-      return;
-    }
     setBoardFlipped(!boardFlipped);
   };
 
@@ -408,7 +405,7 @@ const Play = () => {
               placeholder="Type a message..."
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
-              onKeyPress={handleKeyPress}
+               onKeyDown={handleKeyPress}
               data-cursor="disable"
             />
             <button className="chat-send-btn" onClick={sendMessage} data-cursor="disable">

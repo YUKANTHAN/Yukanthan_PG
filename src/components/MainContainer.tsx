@@ -19,28 +19,28 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const [isMobile] = useState<boolean>(window.innerWidth <= 768);
 
   useEffect(() => {
     const resizeHandler = () => {
       setSplitText();
-      setIsDesktopView(window.innerWidth > 1024);
+      const desktop = window.innerWidth > 1024;
+      setIsDesktopView(desktop);
     };
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
     return () => {
       window.removeEventListener("resize", resizeHandler);
     };
-  }, [isDesktopView]);
+  }, []);
 
   return (
     <div className="container-main">
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {isDesktopView && !isMobile && children}
+      {isDesktopView && children}
 
-      <div className="container-main">
+      <div>
         <Landing />
         <About />
         <WhatIDo />

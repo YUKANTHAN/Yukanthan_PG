@@ -1,13 +1,18 @@
-import { MdArrowOutward, MdCopyright } from "react-icons/md";
+import { MdArrowOutward } from "react-icons/md";
 import "./styles/Contact.css";
 import { config } from "../config";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
   useEffect(() => {
     const contactTimeline = gsap.timeline({
       scrollTrigger: {
@@ -18,43 +23,45 @@ const Contact = () => {
       },
     });
 
-    // Animate title from bottom
     contactTimeline.fromTo(
       ".contact-section h3",
-      {
-        opacity: 0,
-        y: 50,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      }
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
     );
 
-    // Animate contact boxes with stagger from bottom
     contactTimeline.fromTo(
       ".contact-box",
-      {
-        opacity: 0,
-        y: 50,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        stagger: 0.15,
-        ease: "power3.out",
-      },
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power3.out" },
       "-=0.4"
     );
 
-    // Clean up
     return () => {
       contactTimeline.kill();
     };
   }, []);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setStatus("sending");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (!res.ok) throw new Error("Failed");
+
+      setStatus("success");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch {
+      setStatus("error");
+    }
+  };
 
   return (
     <div className="contact-section section-container" id="contact">
@@ -125,13 +132,47 @@ const Contact = () => {
               Instagram <MdArrowOutward />
             </a>
           </div>
-          <div className="contact-box">
-            <h2>
-              Designed and Developed <br /> by <span>{config.fullName}</span>
-            </h2>
-            <h5>
-              <MdCopyright /> {new Date().getFullYear()}
-            </h5>
+          <div className="contact-box contact-form-box">
+            <h2>Leave a Message</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="contact-name">Name</label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  placeholder="Your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="contact-email">Email</label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="contact-message">Message</label>
+                <textarea
+                  id="contact-message"
+                  placeholder="Your message..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={4}
+                />
+              </div>
+              <button type="submit" disabled={status === "sending"}>
+                {status === "sending" ? "Sending..." : "Send"}
+              </button>
+            </form>
+            {status === "success" && <p className="form-status success">Sent successfully!</p>}
+            {status === "error" && <p className="form-status error">Something went wrong. Try again.</p>}
           </div>
         </div>
       </div>

@@ -770,30 +770,6 @@ body:has(.play-page) {
   box-shadow: 0 0 20px rgba(194, 164, 255, 0.4);
 }
 
-/* Responsive for chat */
-@media only screen and (max-width: 1100px) {
-  .chess-container {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .chat-panel {
-    width: 100%;
-    max-width: 540px;
-    height: 400px;
-    min-height: 320px;
-    max-height: 70vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .chat-messages {
-    max-height: 220px;
-    min-height: 120px;
-    overflow-y: auto;
-    flex: 1 1 auto;
-  }
-}
 
 /* Game Over Overlay - Full Screen */
 .game-over-overlay {

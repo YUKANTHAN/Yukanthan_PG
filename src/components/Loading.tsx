@@ -4,11 +4,35 @@ import { useLoading } from "../context/LoadingProvider";
 
 import Marquee from "react-fast-marquee";
 
+const translations = [
+  "யுகாந்தன்",
+  "Yukanthan",
+  "യുകൻ",
+  "ಯುಕನ್",
+  "యుకన్",
+  "ユーカンタン",
+  "युकान्तन",
+  "যুকান্থন",
+  "યુકન્થન",
+  "ਯੂਕਾਂਥਨ",
+  "يوكانثان",
+  "尤坎坦",
+  "Юкантан"
+];
+
 const Loading = ({ percent }: { percent: number }) => {
   const { setIsLoading } = useLoading();
   const [loaded, setLoaded] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [langIndex, setLangIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLangIndex((prev) => (prev + 1) % translations.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   if (percent >= 100) {
     setTimeout(() => {
@@ -45,9 +69,9 @@ const Loading = ({ percent }: { percent: number }) => {
   return (
     <>
       <div className="loading-header">
-        <a href="/#" className="loader-title" data-cursor="disable">
-          Yukanthan
-        </a>
+        <span className="loader-title" data-cursor="disable" onMouseDown={(e) => e.preventDefault()} draggable={false}>
+          {translations[langIndex]}
+        </span>
         <div className={`loaderGame ${clicked && "loader-out"}`}>
           <div className="loaderGame-container">
             <div className="loaderGame-in">

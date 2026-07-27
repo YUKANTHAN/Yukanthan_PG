@@ -14,6 +14,9 @@ const Work = () => {
     if (window.innerWidth <= 768) return;
 
     let translateX: number = 0;
+    let timeline: gsap.core.Timeline | null = null;
+
+    let resizeTimeout: number;
 
     function setTranslateX() {
       const boxes = document.querySelectorAll<HTMLElement>(".work-box");
@@ -27,38 +30,59 @@ const Work = () => {
       translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
     }
 
-    setTranslateX();
+    function createTimeline() {
+      if (timeline) {
+        timeline.kill();
+        ScrollTrigger.getById("work")?.kill();
+      }
 
-    let timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".work-section",
-        start: "top top",
-        end: `+=${translateX}`,
-        scrub: 1,
-        pin: true,
-        pinSpacing: true,
-        anticipatePin: 1,
-        id: "work",
-        invalidateOnRefresh: true,
-      },
-    });
+      setTranslateX();
 
-    timeline.to(".work-flex", {
-      x: -translateX,
-      ease: "none",
-    });
+      timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".work-section",
+          start: "top top",
+          end: `+=${translateX}`,
+          scrub: 1,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          id: "work",
+          invalidateOnRefresh: true,
+        },
+      });
 
-    // Refresh ScrollTrigger after layout settles
-    ScrollTrigger.refresh();
+      timeline.to(".work-flex", {
+        x: -translateX,
+        ease: "none",
+      });
+
+      ScrollTrigger.refresh();
+    }
+
+    createTimeline();
+
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(() => {
+        createTimeline();
+      }, 200);
+    };
+
+    window.addEventListener("resize", handleResize);
 
     // Clean up
     return () => {
-      timeline.kill();
-      ScrollTrigger.getById("work")?.kill();
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
+      if (timeline) {
+        timeline.kill();
+        ScrollTrigger.getById("work")?.kill();
+      }
     };
   }, []);
   return (
-    <div className="work-section" id="work">
+    <div className="work-section" id="work" data-cursor-section="bright">
       <div className="work-container section-container">
         <h2>
           My <span>Work</span>

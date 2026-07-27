@@ -2,6 +2,7 @@ export const config = {
     name: "Yukanthan",
     fullName: "Yukanthan",
     title: "AI Engineer, Full Stack Developer, Software Engineer",
+    engineDepth: 12,
     description: "Passionate Software Engineer specialized in building scalable web applications and solving complex problems with efficient code. Experienced in full-stack development and committed to continuous learning.",
     github: "yukanthan",
     email: "pgyukanthan@gmail.com",
@@ -18,7 +19,6 @@ export const config = {
             period: "Jan 2026 - Present",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Launched my career as a professional full‑stack developer and freelancer, delivering web applications for clients while continuing my studies.",
-            responsibilities: [],
             technologies: ["React", "Next.js", "Node.js", "MongoDB", "Docker"]
         },
         {
@@ -27,7 +27,6 @@ export const config = {
             period: "Jun 2026 (15 days)",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Assisted with network configuration, monitoring, and troubleshooting as part of a brief internship.",
-            responsibilities: [],
             technologies: ["Networking", "Cisco", "Wireshark"]
         },
         {
@@ -36,7 +35,6 @@ export const config = {
             period: "2026",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Created an AI agent as a self‑taught project, showcasing conversational abilities and integration with external APIs.",
-            responsibilities: [],
             technologies: ["Python", "LangChain", "OpenAI API"]
         },
         {
@@ -45,7 +43,6 @@ export const config = {
             period: "2026",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Prepared myself for AI engineering, studying deep learning, LLMs, and building AI‑powered prototypes.",
-            responsibilities: [],
             technologies: ["Python", "TensorFlow", "PyTorch", "LLMs"]
         },
         {
@@ -54,7 +51,6 @@ export const config = {
             period: "Dec 2025 (15 days)",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Worked on Python automation scripts and data processing tasks during a short internship.",
-            responsibilities: [],
             technologies: ["Python"]
         },
         {
@@ -63,7 +59,6 @@ export const config = {
             period: "2025",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Started learning full‑stack development concepts on my own, building small projects to solidify front‑end and back‑end skills.",
-            responsibilities: [],
             technologies: ["HTML", "CSS", "JavaScript", "React", "Node.js"]
         },
         {
@@ -71,9 +66,7 @@ export const config = {
             company: "P.S.R. Engineering College",
             period: "2024 - 2028",
             location: "Tirunelveli, Tamil Nadu, India",
-            description: "Pursuing a B.Tech in Information Technology, focusing on software engineering, networks, and emerging technologies.",
-            responsibilities: [],
-            technologies: []
+            description: "Pursuing a B.Tech in Information Technology, focusing on software engineering, networks, and emerging technologies."
         },
         {
             position: "Python Learner",
@@ -81,7 +74,6 @@ export const config = {
             period: "2023",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Completed comprehensive, concept‑wise learning of Python, covering scripting, data structures, libraries, and automation.",
-            responsibilities: [],
             technologies: ["Python"]
         },
         {
@@ -90,7 +82,6 @@ export const config = {
             period: "2022",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Studied C++ as part of my college curriculum, gaining solid fundamentals in object‑oriented programming.",
-            responsibilities: [],
             technologies: ["C++"]
         },
         {
@@ -99,7 +90,6 @@ export const config = {
             period: "2019",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Learned basic HTML and began experimenting with small web projects, marking my first foray into web development.",
-            responsibilities: [],
             technologies: ["HTML"]
         },
         {
@@ -108,7 +98,6 @@ export const config = {
             period: "2016",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Started my learning journey with Microsoft Office tools (Word, Excel, PowerPoint) at an education institute, laying the foundation for digital literacy.",
-            responsibilities: [],
             technologies: ["Microsoft Word", "Microsoft Excel", "Microsoft PowerPoint"]
         }
     ],
@@ -150,7 +139,7 @@ export const config = {
             technologies: "React, Node.js, PostgreSQL, Docker",
             image: "/images/erp_system.png",
             description: "Robust ERP system for enterprises to manage resources and tasks efficiently.",
-            link: "#"
+            link: "https://github.com/YUKANTHAN/ERP-System"
         },
         {
             id: 13,
@@ -178,7 +167,8 @@ export const config = {
             technologies: "JavaScript, HTML, CSS",
             image: "/images/uni_path.png",
             description: "An education platform designed to guide students through their academic journey with resources and planning tools.",
-            link: "https://github.com/YUKANTHAN/Uni-Path"
+            link: "https://github.com/YUKANTHAN/Uni-Path",
+            demoLink: "https://yukanthan.github.io/Uni-Path/"
         },
         {
             id: 16,
@@ -214,7 +204,8 @@ export const config = {
             technologies: "HTML, CSS, JavaScript",
             image: "/images/vivekananda_school.png",
             description: "Official website for Vivekananda Vidhyashram School featuring school information, events, and admission details.",
-            link: "https://github.com/YUKANTHAN/Vivekananda-Vidhyashram-School-Home-Page"
+                link: "https://github.com/YUKANTHAN/Vivekananda-Vidhyashram-School-Home-Page",
+                demoLink: "https://yukanthan.github.io/Vivekananda-Vidhyashram-School-Home-Page/"
         },
         {
             id: 20,
@@ -232,7 +223,8 @@ export const config = {
             technologies: "JavaScript, HTML, CSS",
             image: "/images/worst_ui.png",
             description: "A fun and experimental UI project showcasing intentionally unconventional and quirky design patterns.",
-            link: "https://github.com/YUKANTHAN/worst_ui"
+            link: "https://github.com/YUKANTHAN/worst_ui",
+            demoLink: "https://yukanthan.github.io/worst_ui/"
         }
     ],
     contact: {

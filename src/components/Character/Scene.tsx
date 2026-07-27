@@ -20,6 +20,8 @@ const Scene = () => {
   const { setLoading } = useLoading();
 
   const [character, setChar] = useState<THREE.Object3D | null>(null);
+  const resizeRef = useRef<(() => void) | null>(null);
+
   useEffect(() => {
     if (canvasDiv.current) {
       let rect = canvasDiv.current.getBoundingClientRect();
@@ -70,14 +72,18 @@ const Scene = () => {
               animations.startIntro();
             }, 2500);
           });
-          window.addEventListener("resize", () =>
-            handleResize(renderer, camera, canvasDiv, character)
-          );
+
+          const handleWindowResize = () =>
+            handleResize(renderer, camera, canvasDiv, character);
+          resizeRef.current = handleWindowResize;
+          window.addEventListener("resize", handleWindowResize);
         }
       });
 
       let mouse = { x: 0, y: 0 },
-        interpolation = { x: 0.1, y: 0.2 };
+        interpolation = { x: 0.1, y: 0.2 },
+        interpolationX = interpolation.x,
+        interpolationY = interpolation.y;
 
       const onMouseMove = (event: MouseEvent) => {
         handleMouseMove(event, (x, y) => (mouse = { x, y }));
@@ -93,9 +99,11 @@ const Scene = () => {
       };
 
       const onTouchEnd = () => {
-        handleTouchEnd((x, y, interpolationX, interpolationY) => {
+        handleTouchEnd((x, y, ix, iy) => {
           mouse = { x, y };
-          interpolation = { x: interpolationX, y: interpolationY };
+          interpolation = { x: ix, y: iy };
+          interpolationX = ix;
+          interpolationY = iy;
         });
       };
 
@@ -131,9 +139,9 @@ const Scene = () => {
         clearTimeout(debounce);
         scene.clear();
         renderer.dispose();
-        window.removeEventListener("resize", () =>
-          handleResize(renderer, camera, canvasDiv, character!)
-        );
+        if (resizeRef.current) {
+          window.removeEventListener("resize", resizeRef.current);
+        }
         if (canvasDiv.current) {
           canvasDiv.current.removeChild(renderer.domElement);
         }

@@ -161,8 +161,26 @@ const Certificates = () => {
     };
   }, []);
 
+  const handleCardClick = (filename: string) => {
+    openPdf(filename);
+  };
+
+  const handleCardKeyDown = (e: React.KeyboardEvent, filename: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openPdf(filename);
+    }
+  };
+
   const openPdf = (filename: string) => {
-    window.open(`/certificates/${filename}`, "_blank", "noopener,noreferrer");
+    const url = `/certificates/${filename}`;
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Stack styling helper: gives card a subtle layout offset so they look like a real physical stack
@@ -187,8 +205,13 @@ const Certificates = () => {
     return `/certificates/${pngName}`;
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.currentTarget;
+    target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23c2a4ff' font-family='sans-serif' font-size='14'%3ENo Preview%3C/text%3E%3C/svg%3E";
+  };
+
   return (
-    <div className="certificates-section" id="certificates">
+    <div className="certificates-section" id="certificates" data-cursor-section="bright">
       <div className="certificates-container">
         <div className="certificates-header">
           <h2>
@@ -207,7 +230,11 @@ const Certificates = () => {
                   className={`certificate-card left-card-${index}`}
                   key={`event-${cert.id}`}
                   style={getStackStyle(index, config.certificates.events.length)}
-                  onClick={() => openPdf(cert.file)}
+                  onClick={() => handleCardClick(cert.file)}
+                  onKeyDown={(e) => handleCardKeyDown(e, cert.file)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${cert.title} certificate from ${cert.organization}`}
                   data-cursor="disable"
                 >
                   <div className="certificate-image-container">
@@ -216,6 +243,7 @@ const Certificates = () => {
                       alt={cert.title}
                       className="certificate-img"
                       loading="lazy"
+                      onError={handleImageError}
                     />
                     <div className="certificate-overlay">
                       <div className="overlay-content">
@@ -239,7 +267,11 @@ const Certificates = () => {
                   className={`certificate-card right-card-${index}`}
                   key={`learning-${cert.id}`}
                   style={getStackStyle(index, config.certificates.learnings.length)}
-                  onClick={() => openPdf(cert.file)}
+                  onClick={() => handleCardClick(cert.file)}
+                  onKeyDown={(e) => handleCardKeyDown(e, cert.file)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${cert.title} certificate from ${cert.organization}`}
                   data-cursor="disable"
                 >
                   <div className="certificate-image-container">
@@ -248,6 +280,7 @@ const Certificates = () => {
                       alt={cert.title}
                       className="certificate-img"
                       loading="lazy"
+                      onError={handleImageError}
                     />
                     <div className="certificate-overlay">
                       <div className="overlay-content">
@@ -269,9 +302,9 @@ const Certificates = () => {
       </div>
 
       {showAllModal && createPortal(
-        <div className="modal-overlay" onClick={() => setShowAllModal(false)}>
+        <div className="modal-overlay" onClick={() => setShowAllModal(false)} data-cursor-section="bright">
           <div className="modal-content" ref={modalContentRef} onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setShowAllModal(false)}>
+            <button className="modal-close" onClick={() => setShowAllModal(false)} aria-label="Close modal">
               ✕
             </button>
             <h2>All <span>Certificates</span></h2>
@@ -280,13 +313,18 @@ const Certificates = () => {
                 <div
                   className="modal-card"
                   key={`${cert.category}-${cert.id}`}
-                  onClick={() => openPdf(cert.file)}
+                  onClick={() => handleCardClick(cert.file)}
+                  onKeyDown={(e) => handleCardKeyDown(e, cert.file)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${cert.title} certificate from ${cert.organization}`}
                 >
                   <div className="modal-card-image">
                     <img
                       src={getImagePath(cert.file)}
                       alt={cert.title}
                       loading="lazy"
+                      onError={handleImageError}
                     />
                     <div className="modal-card-overlay">
                       <span>View PDF ↗</span>
