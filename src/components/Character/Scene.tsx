@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
@@ -19,7 +19,6 @@ const Scene = () => {
   const sceneRef = useRef(new THREE.Scene());
   const { setLoading } = useLoading();
 
-  const [character, setChar] = useState<THREE.Object3D | null>(null);
   const resizeRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -62,7 +61,6 @@ const Scene = () => {
           hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
           mixer = animations.mixer;
           let character = gltf.scene;
-          setChar(character);
           scene.add(character);
           headBone = character.getObjectByName("spine006") || null;
           screenLight = character.getObjectByName("screenlight") || null;
@@ -81,9 +79,7 @@ const Scene = () => {
       });
 
       let mouse = { x: 0, y: 0 },
-        interpolation = { x: 0.1, y: 0.2 },
-        interpolationX = interpolation.x,
-        interpolationY = interpolation.y;
+        interpolation = { x: 0.1, y: 0.2 };
 
       const onMouseMove = (event: MouseEvent) => {
         handleMouseMove(event, (x, y) => (mouse = { x, y }));
@@ -102,8 +98,6 @@ const Scene = () => {
         handleTouchEnd((x, y, ix, iy) => {
           mouse = { x, y };
           interpolation = { x: ix, y: iy };
-          interpolationX = ix;
-          interpolationY = iy;
         });
       };
 

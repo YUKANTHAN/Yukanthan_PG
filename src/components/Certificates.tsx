@@ -296,7 +296,7 @@ const Certificates = () => {
           </div>
         </div>
 
-        <button className="view-all-btn" onClick={() => setShowAllModal(true)}>
+        <button className="view-all-btn" onClick={() => setShowAllModal(true)} data-cursor="disable">
           View All Certificates
         </button>
       </div>

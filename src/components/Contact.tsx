@@ -4,13 +4,27 @@ import { config } from "../config";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FormEvent, useEffect, useState } from "react";
+import emailjs from "@emailjs/browser";
+
+interface FormState {
+  name: string;
+  email: string;
+  message: string;
+}
+
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
+const THANKYOU_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_THANKYOU_TEMPLATE_ID || "";
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [form, setForm] = useState<FormState>({
+    name: "",
+    email: "",
+    message: "",
+  });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   useEffect(() => {
@@ -41,23 +55,51 @@ const Contact = () => {
     };
   }, []);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setStatus("sending");
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
-      });
+    if (!SERVICE_ID || !TEMPLATE_ID || !THANKYOU_TEMPLATE_ID || !PUBLIC_KEY) {
+      setStatus("error");
+      return;
+    }
 
-      if (!res.ok) throw new Error("Failed");
+    try {
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: form.name,
+          to_name: "Yukanthan",
+          from_email: form.email,
+          to_email: config.contact.email,
+          message: form.message,
+        },
+        PUBLIC_KEY
+      );
+
+      await emailjs.send(
+        SERVICE_ID,
+        THANKYOU_TEMPLATE_ID,
+        {
+          to_name: form.name,
+          to_email: form.email,
+          reply_to: config.contact.email,
+          from_name: "Yukanthan",
+        },
+        PUBLIC_KEY
+      );
 
       setStatus("success");
-      setName("");
-      setEmail("");
-      setMessage("");
+      setForm({ name: "", email: "", message: "" });
     } catch {
       setStatus("error");
     }
@@ -140,9 +182,10 @@ const Contact = () => {
                 <input
                   id="contact-name"
                   type="text"
+                  name="name"
                   placeholder="Your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={form.name}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -151,9 +194,10 @@ const Contact = () => {
                 <input
                   id="contact-email"
                   type="email"
+                  name="email"
                   placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={form.email}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -161,9 +205,10 @@ const Contact = () => {
                 <label htmlFor="contact-message">Message</label>
                 <textarea
                   id="contact-message"
+                  name="message"
                   placeholder="Your message..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  value={form.message}
+                  onChange={handleChange}
                   rows={4}
                 />
               </div>
@@ -171,8 +216,8 @@ const Contact = () => {
                 {status === "sending" ? "Sending..." : "Send"}
               </button>
             </form>
-            {status === "success" && <p className="form-status success">Sent successfully!</p>}
-            {status === "error" && <p className="form-status error">Something went wrong. Try again.</p>}
+            {status === "success" && <p className="form-status success">Thank you! Your message has been sent successfully.</p>}
+            {status === "error" && <p className="form-status error">Something went wrong. Please try again or email directly.</p>}
           </div>
         </div>
       </div>
