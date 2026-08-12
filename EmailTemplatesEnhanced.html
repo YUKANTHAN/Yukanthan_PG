@@ -1,756 +1,152 @@
 <!-- ========================================
-     PREMIUM EMAIL TEMPLATES
-     Enhanced with advanced HTML/CSS, responsive design
+     EMAIL TEMPLATES - PLAINTEXT EDITION
+     Monospace, near-plaintext, no gimmicks.
+     Paste each template into your EmailJS
+     template's Code Editor (<> button).
+
+     TEMPLATE 1  ->  Thank-you email (visitor)
+       Variables: {{to_name}}, {{to_email}}
+     TEMPLATE 2  ->  New submission (owner)
+       Variables: {{from_name}}, {{from_email}}, {{message}}
      ======================================== -->
 
 <!-- ========================================
-     TEMPLATE 1: PREMIUM WELCOME EMAIL
+     TEMPLATE 1: THANK-YOU
+     Sent to the visitor after they submit.
      ======================================== -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Welcome!</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .email-wrapper {
-            width: 100%;
-            background: #f5f5f5;
-        }
-
-        .email-container {
-            max-width: 600px;
-            margin: 20px auto;
-            background: linear-gradient(135deg, #1a1f3a 0%, #16213e 100%);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 60px 30px 40px;
-            text-align: center;
-            border-bottom: 2px solid #00d4ff;
-            position: relative;
-        }
-
-        .header-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            color: #00d4ff;
-            margin-bottom: 8px;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .header-subtitle {
-            color: rgba(224, 224, 224, 0.6);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Content */
-        .content {
-            padding: 50px 40px;
-            color: #e0e0e0;
-        }
-
-        .greeting {
-            font-size: 18px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .greeting-name {
-            color: #00d4ff;
-            font-weight: 700;
-        }
-
-        .message-box {
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.3) 0%, rgba(22, 33, 62, 0.3) 100%);
-            border-left: 4px solid #00d4ff;
-            padding: 25px;
-            margin: 30px 0;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            line-height: 1.8;
-        }
-
-        .message-box p {
-            margin-bottom: 15px;
-            color: #e0e0e0;
-        }
-
-        .message-box p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Details Section */
-        .details-section {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(107, 33, 255, 0.05) 100%);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-        }
-
-        .details-title {
-            font-size: 13px;
-            color: rgba(224, 224, 224, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 14px;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            color: rgba(224, 224, 224, 0.6);
-            font-weight: 600;
-        }
-
-        .detail-value {
-            color: #00d4ff;
-            font-weight: 700;
-        }
-
-        /* What's Next */
-        .next-steps {
-            background: linear-gradient(135deg, rgba(107, 33, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
-            border: 1px solid rgba(107, 33, 255, 0.2);
-        }
-
-        .next-steps h3 {
-            color: #00d4ff;
-            font-size: 14px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
-        .next-steps ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .next-steps li {
-            padding: 10px 0 10px 25px;
-            color: #e0e0e0;
-            font-size: 14px;
-            position: relative;
-            line-height: 1.6;
-        }
-
-        .next-steps li:before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: #6b21ff;
-            font-weight: bold;
-        }
-
-        /* Social Links */
-        .social-section {
-            text-align: center;
-            margin: 40px 0 30px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .social-label {
-            color: rgba(224, 224, 224, 0.6);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            display: block;
-            font-weight: 600;
-        }
-
-        .social-links {
-            display: inline-flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .social-link {
-            display: inline-block;
-            padding: 10px 18px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 6px;
-            color: #00d4ff;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: rgba(0, 212, 255, 0.6);
-        }
-
-        /* Signature */
-        .signature {
-            margin-top: 30px;
-            font-size: 15px;
-            color: #e0e0e0;
-        }
-
-        .signature-name {
-            color: #00d4ff;
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .signature-title {
-            color: rgba(224, 224, 224, 0.5);
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
-            margin: 20px 0;
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 30px 40px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer p {
-            font-size: 12px;
-            color: rgba(224, 224, 224, 0.5);
-            margin: 8px 0;
-            line-height: 1.6;
-        }
-
-        /* Responsive */
-        @media only screen and (max-width: 600px) {
-            .email-container {
-                margin: 10px;
-            }
-
-            .content {
-                padding: 30px 20px;
-            }
-
-            .header {
-                padding: 40px 20px 30px;
-            }
-
-            .header h1 {
-                font-size: 28px;
-            }
-
-            .greeting {
-                font-size: 16px;
-            }
-
-            .message-box {
-                padding: 20px;
-            }
-
-            .detail-row {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .social-links {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .social-link {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanks for reaching out</title>
+<style>
+  @media only screen and (max-width: 620px) {
+    .container { width: 100% !important; }
+    .content { padding: 24px 0 !important; }
+  }
+</style>
 </head>
-<body>
-    <div class="email-wrapper">
-        <div class="email-container">
-            <!-- Header -->
-            <div class="header">
-                <span class="header-icon">✨</span>
-                <h1>Welcome!</h1>
-                <p class="header-subtitle">Thanks for reaching out</p>
-            </div>
+<body style="margin:0; padding:0; background-color:#ffffff;">
 
-            <!-- Content -->
-            <div class="content">
-                <div class="greeting">
-                    Hey <span class="greeting-name">{{to_name}}</span>,
-                </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px;">
 
-                <div class="message-box">
-                    <p>Thank you so much for taking the time to reach out! Your message means a lot to me, and I'm genuinely excited to connect with you.</p>
-                    <p>I've received all your details and will get back to you as soon as possible—typically within 24-48 hours.</p>
-                </div>
+          <!-- Plaintext header block -->
+          <tr>
+            <td style="padding:0 0 16px; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:13px; color:#57606a; line-height:1.7;">
+              From: Yukanthan &lt;pgyukanthan@gmail.com&gt;<br>
+              To: {{to_name}} &lt;{{to_email}}&gt;<br>
+              Subject: Thanks for reaching out
+            </td>
+          </tr>
+          <tr>
+            <td style="border-top:1px solid #d0d7de; font-size:0; line-height:0;">&nbsp;</td>
+          </tr>
 
-                <!-- Details -->
-                <div class="details-section">
-                    <div class="details-title">📋 What We Received</div>
-                    <div class="detail-row">
-                        <span class="detail-label">Email:</span>
-                        <span class="detail-value">{{to_email}}</span>
-                    </div>
-                </div>
+          <!-- Body -->
+          <tr>
+            <td class="content" style="padding:28px 0; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:15px; color:#24292f; line-height:1.8;">
+              <p style="margin:0 0 18px;">Hi {{to_name}},</p>
+              <p style="margin:0 0 18px;">Thanks for reaching out. Your message is in my inbox and I&rsquo;ll get back to you within 24&ndash;48 hours.</p>
+              <p style="margin:0;">In the meantime you can look at my work at <a href="https://yukanthan.dev" style="color:#0969da;">https://yukanthan.dev</a></p>
 
-                <!-- What's Next -->
-                <div class="next-steps">
-                    <h3>🚀 What Happens Next</h3>
-                    <ul>
-                        <li>I'll carefully review your message</li>
-                        <li>You'll hear back from me very soon</li>
-                        <li>Let's create something amazing together</li>
-                    </ul>
-                </div>
+              <!-- Signature -->
+              <p style="margin:32px 0 0; border-top:1px solid #d0d7de; padding-top:20px;">Best,</p>
+              <p style="margin:0 0 2px; font-weight:700;">Yukanthan</p>
+              <p style="margin:0 0 2px; font-size:13px; color:#57606a;">AI Engineer &middot; Full-Stack Developer</p>
+              <p style="margin:0 0 2px; font-size:13px;"><a href="https://yukanthan.dev" style="color:#0969da; text-decoration:none;">https://yukanthan.dev</a></p>
+              <p style="margin:0 0 2px; font-size:13px;"><a href="https://github.com/yukanthan" style="color:#0969da; text-decoration:none;">github.com/yukanthan</a> &middot; <a href="https://linkedin.com/in/yukanthan067" style="color:#0969da; text-decoration:none;">linkedin.com/in/yukanthan067</a></p>
+              <p style="margin:0; font-size:13px;"><a href="mailto:pgyukanthan@gmail.com" style="color:#0969da; text-decoration:none;">pgyukanthan@gmail.com</a></p>
+            </td>
+          </tr>
 
-                <!-- In the meantime -->
-                <div class="message-box">
-                    <p><strong>In the meantime, feel free to explore:</strong></p>
-                    <ul style="list-style: none; padding-left: 0;">
-                        <li>✓ My latest projects on GitHub</li>
-                        <li>✓ Connect on LinkedIn</li>
-                        <li>✓ Check out my portfolio</li>
-                    </ul>
-                </div>
+          <!-- Footer -->
+          <tr>
+            <td style="border-top:1px solid #d0d7de; padding:16px 0 0; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:12px; color:#8b949e; text-align:center;">Sent automatically from yukanthan.dev &mdash; do not reply to this address.</td>
+          </tr>
 
-                <!-- Social -->
-                <div class="social-section">
-                    <span class="social-label">Let's Connect</span>
-                    <div class="social-links">
-                        <a href="https://github.com/yukanthan" class="social-link">GitHub</a>
-                        <a href="https://linkedin.com/in/yukanthan067" class="social-link">LinkedIn</a>
-                        <a href="https://yukanthan.dev" class="social-link">Portfolio</a>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Signature -->
-                <div class="signature">
-                    <p>Looking forward to our conversation!</p>
-                    <p>
-                        <span class="signature-name">Yukanthan</span><br>
-                        <span class="signature-title">Full Stack Developer | AI Engineer | Tech Enthusiast</span>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="footer">
-                <p>This is an automated message. Please don't reply to this email.</p>
-                <p>&copy; 2026 Yukanthan. All rights reserved.</p>
-            </div>
-        </div>
-    </div>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
 
 
 <!-- ========================================
-     TEMPLATE 2: PREMIUM NOTIFICATION EMAIL
+     TEMPLATE 2: NEW SUBMISSION NOTIFICATION
+     Sent to you when someone submits the form.
      ======================================== -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Submission</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .email-wrapper {
-            width: 100%;
-            background: #f5f5f5;
-        }
-
-        .email-container {
-            max-width: 700px;
-            margin: 20px auto;
-            background: linear-gradient(135deg, #1a1f3a 0%, #16213e 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 50px 30px;
-            border-bottom: 2px solid #00ff88;
-            position: relative;
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-icon {
-            font-size: 32px;
-            display: block;
-        }
-
-        .header-text h1 {
-            font-size: 24px;
-            color: #00ff88;
-            margin: 0;
-            font-weight: 800;
-        }
-
-        .header-subtitle {
-            color: rgba(224, 224, 224, 0.6);
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 3px;
-        }
-
-        /* Content */
-        .content {
-            padding: 50px 40px;
-        }
-
-        /* Section */
-        .section {
-            margin: 30px 0;
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.2) 0%, rgba(22, 33, 62, 0.2) 100%);
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .section-header {
-            background: linear-gradient(90deg, rgba(0, 212, 255, 0.15) 0%, rgba(107, 33, 255, 0.15) 100%);
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-            font-weight: 700;
-            color: #00d4ff;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .section-content {
-            padding: 25px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 14px;
-            align-items: flex-start;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-weight: 700;
-            color: rgba(224, 224, 224, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 12px;
-            min-width: 120px;
-        }
-
-        .info-value {
-            color: #e0e0e0;
-            text-align: right;
-            flex: 1;
-            word-break: break-word;
-        }
-
-        .info-value.highlight {
-            color: #00ff88;
-            font-weight: 700;
-        }
-
-        /* Message Box */
-        .message-content {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(107, 33, 255, 0.05) 100%);
-            border: 1px solid rgba(0, 212, 255, 0.15);
-            border-radius: 8px;
-            padding: 25px;
-            margin-top: 20px;
-            color: #e0e0e0;
-            font-size: 14px;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        /* Action Section */
-        .action-section {
-            text-align: center;
-            margin: 40px 0;
-            padding: 30px;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 8px;
-        }
-
-        .action-label {
-            color: rgba(224, 224, 224, 0.7);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: block;
-        }
-
-        .action-buttons {
-            display: inline-flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .action-btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-            color: #0a0e27;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
-        }
-
-        /* Metadata */
-        .metadata {
-            font-size: 12px;
-            color: rgba(224, 224, 224, 0.5);
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 30px 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .footer p {
-            font-size: 12px;
-            color: rgba(224, 224, 224, 0.5);
-            margin: 8px 0;
-        }
-
-        /* Responsive */
-        @media only screen and (max-width: 600px) {
-            .email-container {
-                margin: 10px;
-            }
-
-            .content {
-                padding: 30px 20px;
-            }
-
-            .header {
-                padding: 40px 20px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .header-text h1 {
-                font-size: 22px;
-            }
-
-            .section-content {
-                padding: 20px;
-            }
-
-            .info-row {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .info-label {
-                text-align: left;
-            }
-
-            .info-value {
-                text-align: left;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .action-btn {
-                width: 100%;
-                text-align: center;
-            }
-
-            .metadata {
-                flex-direction: column;
-                gap: 8px;
-            }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New contact form submission</title>
+<style>
+  @media only screen and (max-width: 620px) {
+    .container { width: 100% !important; }
+    .content { padding: 24px 0 !important; }
+  }
+</style>
 </head>
-<body>
-    <div class="email-wrapper">
-        <div class="email-container">
-            <!-- Header -->
-            <div class="header">
-                <div class="header-content">
-                    <span class="header-icon">📬</span>
-                    <div class="header-text">
-                        <h1>NEW SUBMISSION</h1>
-                        <p class="header-subtitle">Contact form received</p>
-                    </div>
-                </div>
-            </div>
+<body style="margin:0; padding:0; background-color:#ffffff;">
 
-            <!-- Content -->
-            <div class="content">
-                <!-- Visitor Information -->
-                <div class="section">
-                    <div class="section-header">👤 Visitor Information</div>
-                    <div class="section-content">
-                        <div class="info-row">
-                            <span class="info-label">Name</span>
-                            <span class="info-value highlight">{{from_name}}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Email</span>
-                            <span class="info-value">{{from_email}}</span>
-                        </div>
-                    </div>
-                </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px;">
 
-                <!-- Message Content -->
-                <div class="section">
-                    <div class="section-header">💬 Message Content</div>
-                    <div class="section-content">
-                        <div class="message-content">{{message}}</div>
-                    </div>
-                </div>
+          <!-- Plaintext header block -->
+          <tr>
+            <td style="padding:0 0 16px; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:13px; color:#57606a; line-height:1.7;">
+              From: {{from_name}} &lt;{{from_email}}&gt;<br>
+              Subject: New contact form submission
+            </td>
+          </tr>
+          <tr>
+            <td style="border-top:1px solid #d0d7de; font-size:0; line-height:0;">&nbsp;</td>
+          </tr>
 
-                <!-- Action -->
-                <div class="action-section">
-                    <span class="action-label">Quick Action</span>
-                    <div class="action-buttons">
-                        <a href="mailto:{{from_email}}" class="action-btn">Reply to {{from_name}}</a>
-                    </div>
-                </div>
+          <!-- Body -->
+          <tr>
+            <td class="content" style="padding:28px 0; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:15px; color:#24292f; line-height:1.8;">
+              <p style="margin:0 0 24px; font-weight:700;">New message from {{from_name}}</p>
 
-                <!-- Metadata -->
-                <div class="metadata">
-                    <div><strong>Sent via:</strong> yukanthan.dev contact form</div>
-                </div>
-            </div>
+              <p style="margin:0 0 2px;">Name: {{from_name}}</p>
+              <p style="margin:0 0 24px;">Email: <a href="mailto:{{from_email}}" style="color:#0969da; text-decoration:none;">{{from_email}}</a></p>
 
-            <!-- Footer -->
-            <div class="footer">
-                <p>This is an automated notification from your portfolio contact form.</p>
-                <p>&copy; 2026 Yukanthan Portfolio System</p>
-            </div>
-        </div>
-    </div>
+              <p style="margin:0 0 8px; font-size:12px; color:#57606a;">Message</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:16px 20px; background-color:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:14px; color:#24292f; line-height:1.7; white-space:pre-line;">{{message}}</td>
+                </tr>
+              </table>
+
+              <!-- Reply -->
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:28px;">
+                <tr>
+                  <td bgcolor="#0969da" style="border-radius:6px;">
+                    <a href="mailto:{{from_email}}" style="display:inline-block; padding:12px 24px; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:13px; font-weight:700; color:#ffffff; text-decoration:none;">Reply to {{from_name}}</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="border-top:1px solid #d0d7de; padding:16px 0 0; font-family:Consolas,Menlo,Monaco,'Courier New',monospace; font-size:12px; color:#8b949e; text-align:center;">Automated notification from the portfolio contact form.</td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
