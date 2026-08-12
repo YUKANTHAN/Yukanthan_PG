@@ -27,11 +27,25 @@
   --size: 24px;
 }
 
-[data-cursor="disable"]:not(input):not(textarea),
-[data-cursor="disable"] a,
-[data-cursor="icons"],
-[data-cursor="icons"] a {
-  cursor: none;
+@media (hover: hover) and (pointer: fine) {
+  [data-cursor="disable"]:not(input):not(textarea),
+  [data-cursor="disable"] a,
+  [data-cursor="icons"],
+  [data-cursor="icons"] a {
+    cursor: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .cursor-main {
+    display: none !important;
+  }
+  [data-cursor="disable"]:not(input):not(textarea),
+  [data-cursor="disable"] a,
+  [data-cursor="icons"],
+  [data-cursor="icons"] a {
+    cursor: auto;
+  }
 }
 .cursor-bright {
   background-color: #ffffff;

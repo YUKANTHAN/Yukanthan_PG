@@ -453,3 +453,37 @@
     line-height: 6.8rem;
   }
 }
+
+/* Mobile: show all skill cards expanded, no accordion clipping */
+@media only screen and (max-width: 900px) {
+  .whatIDO {
+    padding: 60px 0;
+  }
+
+  .what-box-in {
+    height: auto;
+    margin-left: 0;
+    gap: 14px;
+    padding: 0 12px;
+  }
+
+  .what-content,
+  .what-noTouch:hover,
+  .what-content-active,
+  .what-noTouch:hover~.what-content,
+  .what-box-in:hover .what-noTouch:not(:hover),
+  .what-content.what-sibling {
+    min-height: auto;
+    height: auto;
+    padding: 24px 20px;
+  }
+
+  .what-content h5,
+  .what-content-flex {
+    opacity: 1;
+  }
+
+  .what-box h2 {
+    margin: 10px 0 30px;
+  }
+}

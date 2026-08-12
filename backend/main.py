@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, UTC
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import httpx
 from dotenv import load_dotenv
@@ -9,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from pymongo import MongoClient
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "")
@@ -95,7 +96,7 @@ async def chat(request: ChatRequest):
                     "model": "meta/llama-3.1-8b-instruct",
                     "temperature": 1,
                     "top_p": 0.95,
-                    "max_tokens": 16384,
+                    "max_tokens": 2048,
                     "stream": False,
                 },
                 timeout=60.0,

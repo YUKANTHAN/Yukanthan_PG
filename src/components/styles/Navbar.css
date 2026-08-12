@@ -15,13 +15,13 @@
 .header ul {
   font-size: 11px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin: 0;
   padding: 0;
   list-style: none;
-  column-gap: 20px;
+  column-gap: 14px;
   row-gap: 6px;
-  align-items: end;
+  align-items: center;
 }
 .header ul li {
   margin-left: 0px;
@@ -50,8 +50,7 @@
     padding: 20px 0px;
   }
   .header ul {
-    flex-direction: row;
-    align-items: center;
+    column-gap: 20px;
     font-size: 14px;
   }
   .header ul li {

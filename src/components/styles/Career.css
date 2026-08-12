@@ -245,6 +245,7 @@
     font-size: 45px;
     line-height: 45px;
     margin-top: 0px;
+    margin-bottom: 50px;
   }
 
   .career-info-in {
@@ -253,6 +254,19 @@
 
   .career-info h3 {
     font-size: 33px;
+  }
+
+  .career-info h5 {
+    font-size: 16px;
+  }
+
+  .career-info-box p {
+    font-size: 13px;
+    line-height: 19px;
+  }
+
+  .career-info-box {
+    margin-bottom: 44px;
   }
 
   .career-info-in,

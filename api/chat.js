@@ -22,7 +22,7 @@ export default async function handler(req, res) {
                 model: 'meta/llama-3.1-8b-instruct',
                 temperature: 1,
                 top_p: 0.95,
-                max_tokens: 16384,
+                max_tokens: 2048,
                 stream: false
             })
         });

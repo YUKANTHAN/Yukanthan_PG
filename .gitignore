@@ -33,5 +33,4 @@ chat.md
 __pycache__/
 *.pyc
 *.pyo
-backend/.env
 venv/

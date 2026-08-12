@@ -177,3 +177,24 @@
     grid-template-columns: 1fr;
   }
 }
+@media only screen and (max-width: 480px) {
+  .myworks-page {
+    padding: 40px 16px;
+  }
+
+  .myworks-header h1 {
+    font-size: 36px;
+  }
+
+  .myworks-header p {
+    font-size: 15px;
+  }
+
+  .myworks-card-links {
+    flex-direction: column;
+  }
+
+  .myworks-card-link {
+    justify-content: center;
+  }
+}

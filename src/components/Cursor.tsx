@@ -1,10 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/Cursor.css";
 import gsap from "gsap";
 
 const Cursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
+
   useEffect(() => {
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      setEnabled(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
     let hover = false;
     const cursor = cursorRef.current!;
     const mousePos = { x: 0, y: 0 };
@@ -51,12 +60,13 @@ const Cursor = () => {
       element.addEventListener("mouseenter", () => {
         cursor.classList.add("cursor-bright");
       });
-      element.addEventListener("mouseleave", () => {
+        element.addEventListener("mouseleave", () => {
         cursor.classList.remove("cursor-bright");
       });
     });
-  }, []);
+  }, [enabled]);
 
+  if (!enabled) return null;
   return <div className="cursor-main" ref={cursorRef}></div>;
 };
 

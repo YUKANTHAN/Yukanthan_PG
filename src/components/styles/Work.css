@@ -349,4 +349,24 @@
   .see-all-works p {
     font-size: 14px;
   }
+
+  .work-section h2 {
+    text-align: center;
+  }
+
+  .work-image-in {
+    width: 100%;
+  }
+
+  .work-image img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .see-all-btn {
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    padding: 14px 20px;
+  }
 }

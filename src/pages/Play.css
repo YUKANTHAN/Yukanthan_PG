@@ -607,6 +607,39 @@ body:has(.play-page) {
   }
 }
 
+@media only screen and (max-width: 400px) {
+  .play-page {
+    padding: 16px 10px 30px;
+  }
+
+  .play-header .back-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .player-info,
+  .player-bar {
+    padding: 6px 8px;
+    gap: 8px;
+  }
+
+  .captured-pieces {
+    padding: 4px 6px;
+  }
+
+  .game-over-content {
+    padding: 24px 20px;
+  }
+
+  .game-over-title {
+    font-size: 28px;
+  }
+
+  .trophy {
+    font-size: 60px;
+  }
+}
+
 /* Chat Panel */
 .chat-panel {
   flex: 1;

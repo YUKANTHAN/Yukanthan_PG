@@ -185,3 +185,10 @@ body {
     font-size: 40px;
   }
 }
+
+/* Touch devices: use the default cursor (the custom cursor is mouse-only) */
+@media (hover: none) and (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+}

@@ -99,3 +99,15 @@
     line-height: 2.7rem;
   }
 }
+@media only screen and (max-width: 600px) {
+  .about-section {
+    padding: 50px 0 20px;
+  }
+  .about-me {
+    padding: 0 5px;
+  }
+  .about-me p {
+    font-size: 18px;
+    line-height: 27px;
+  }
+}

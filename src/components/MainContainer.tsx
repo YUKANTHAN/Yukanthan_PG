@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import About from "./About";
 import Career from "./Career";
 import Contact from "./Contact";
@@ -16,15 +16,9 @@ import CallToAction from "./CallToAction";
 import setSplitText from "./utils/splitText";
 
 const MainContainer = ({ children }: PropsWithChildren) => {
-  const [isDesktopView, setIsDesktopView] = useState<boolean>(
-    window.innerWidth > 1024
-  );
-
   useEffect(() => {
     const resizeHandler = () => {
       setSplitText();
-      const desktop = window.innerWidth > 1024;
-      setIsDesktopView(desktop);
     };
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
@@ -38,10 +32,9 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {isDesktopView && children}
 
       <div>
-        <Landing />
+        <Landing>{children}</Landing>
         <About />
         <WhatIDo />
         <Career />
