@@ -4,7 +4,7 @@ export class TextSplitter {
   words: Element[] = [];
   lines: Element[] = [];
   elements: Element[] = [];
-  selector: string | Function;
+  selector: string;
   private originalHTML: Map<Element, string> = new Map();
 
   constructor(target: string | Element | NodeListOf<Element> | Element[], vars?: { type?: string; linesClass?: string }) {

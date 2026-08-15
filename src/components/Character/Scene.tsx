@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
-import { useLoading } from "../../context/LoadingProvider";
+import { useLoading } from "../../context/LoadingContext";
 import handleResize from "./utils/resizeUtils";
 import {
   handleMouseMove,
@@ -11,7 +11,7 @@ import {
   handleTouchMove,
 } from "./utils/mouseUtils";
 import setAnimations from "./utils/animationUtils";
-import { setProgress } from "../Loading";
+import { setProgress } from "../utils/progress";
 
 const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
@@ -22,8 +22,9 @@ const Scene = () => {
   const resizeRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    if (canvasDiv.current) {
-      const rect = canvasDiv.current.getBoundingClientRect();
+    const canvasElement = canvasDiv.current;
+    if (canvasElement) {
+      const rect = canvasElement.getBoundingClientRect();
       const container = { width: rect.width, height: rect.height };
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
@@ -37,7 +38,7 @@ const Scene = () => {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
-      canvasDiv.current.appendChild(renderer.domElement);
+      canvasElement.appendChild(renderer.domElement);
 
       const camera = new THREE.PerspectiveCamera(14.5, aspect, 0.1, 1000);
       camera.position.z = 10;
@@ -46,7 +47,7 @@ const Scene = () => {
       camera.updateProjectionMatrix();
 
       let headBone: THREE.Object3D | null = null;
-      let screenLight: any | null = null;
+      let screenLight: THREE.Object3D | null = null;
       let mixer: THREE.AnimationMixer;
 
       const clock = new THREE.Clock();
@@ -58,7 +59,9 @@ const Scene = () => {
       loadCharacter().then((gltf) => {
         if (gltf) {
           const animations = setAnimations(gltf);
-          hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
+          if (hoverDivRef.current) {
+            animations.hover(gltf, hoverDivRef.current);
+          }
           mixer = animations.mixer;
           const character = gltf.scene;
           scene.add(character);
@@ -111,7 +114,7 @@ const Scene = () => {
       }
       const animate = () => {
         requestAnimationFrame(animate);
-        if (headBone) {
+        if (headBone && screenLight) {
           handleHeadRotation(
             headBone,
             mouse.x,
@@ -136,8 +139,8 @@ const Scene = () => {
         if (resizeRef.current) {
           window.removeEventListener("resize", resizeRef.current);
         }
-        if (canvasDiv.current) {
-          canvasDiv.current.removeChild(renderer.domElement);
+        if (canvasElement.contains(renderer.domElement)) {
+          canvasElement.removeChild(renderer.domElement);
         }
         if (landingDiv) {
           document.removeEventListener("mousemove", onMouseMove);
@@ -146,7 +149,7 @@ const Scene = () => {
         }
       };
     }
-  }, []);
+  }, [setLoading]);
 
   return (
     <>

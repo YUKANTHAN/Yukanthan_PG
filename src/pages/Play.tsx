@@ -166,6 +166,42 @@ const Play = () => {
     };
   }, []);
 
+  const makeMove = useCallback((from: Square, to: Square) => {
+    try {
+      const gameCopy = new Chess(game.fen());
+      const move = gameCopy.move({ from, to, promotion: 'q' }); // Auto-promote to queen
+
+      if (move) {
+        // Update captured pieces
+        if (move.captured) {
+          if (move.color === 'w') {
+            setCapturedBlack(prev => [...prev, move.captured!]);
+          } else {
+            setCapturedWhite(prev => [...prev, move.captured!]);
+          }
+        }
+
+        // Update move history
+        setMoveHistory(prev => [...prev, {
+          from: move.from,
+          to: move.to,
+          piece: move.piece,
+          captured: move.captured,
+          san: move.san
+        }]);
+
+        setLastMove({ from: from, to: to });
+        setGame(gameCopy);
+        setSelectedSquare(null);
+        setPossibleMoves([]);
+      }
+    } catch {
+      setSelectedSquare(null);
+      setPossibleMoves([]);
+      setToast('Illegal move');
+    }
+  }, [game]);
+
   useEffect(() => {
     if (game.turn() === 'b' && !game.isGameOver() && redoxchessRef.current) {
       setEngineThinking(true);
@@ -177,7 +213,7 @@ const Play = () => {
         setEngineThinking(false);
       }, config.engineDepth);
     }
-  }, [game]);
+  }, [game, makeMove]);
 
   const getPieceAt = (square: Square): { type: PieceSymbol; color: Color } | null => {
     return game.get(square) || null;
@@ -216,42 +252,6 @@ const Play = () => {
       } else {
         setToast('Select one of your pieces');
       }
-    }
-  };
-
-  const makeMove = (from: Square, to: Square) => {
-    try {
-      const gameCopy = new Chess(game.fen());
-      const move = gameCopy.move({ from, to, promotion: 'q' }); // Auto-promote to queen
-
-      if (move) {
-        // Update captured pieces
-        if (move.captured) {
-          if (move.color === 'w') {
-            setCapturedBlack(prev => [...prev, move.captured!]);
-          } else {
-            setCapturedWhite(prev => [...prev, move.captured!]);
-          }
-        }
-
-        // Update move history
-        setMoveHistory(prev => [...prev, {
-          from: move.from,
-          to: move.to,
-          piece: move.piece,
-          captured: move.captured,
-          san: move.san
-        }]);
-
-        setLastMove({ from: from, to: to });
-        setGame(gameCopy);
-        setSelectedSquare(null);
-        setPossibleMoves([]);
-      }
-    } catch {
-      setSelectedSquare(null);
-      setPossibleMoves([]);
-      setToast('Illegal move');
     }
   };
 

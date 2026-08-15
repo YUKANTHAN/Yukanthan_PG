@@ -13,37 +13,35 @@ const setCharacter = (
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
 
-  const loadCharacter = () => {
-    return new Promise<GLTF | null>(async (resolve, reject) => {
-      try {
-        const encryptedBlob = await decryptFile(
-          "/models/character.enc",
-          "Character3D#@"
-        );
-        const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
+  const loadCharacter = async () => {
+    try {
+      const encryptedBlob = await decryptFile(
+        "/models/character.enc",
+        "Character3D#@"
+      );
+      const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
 
-        let character: THREE.Object3D;
+      return await new Promise<GLTF | null>((resolve, reject) => {
         loader.load(
           blobUrl,
           async (gltf) => {
-            character = gltf.scene;
+            const character = gltf.scene;
             await renderer.compileAsync(character, camera, scene);
-            character.traverse((child: any) => {
-              if (child.isMesh) {
-                const mesh = child as THREE.Mesh;
+            character.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
                 child.castShadow = false;
                 child.receiveShadow = false;
-                mesh.frustumCulled = true;
-                if (mesh.material && !Array.isArray(mesh.material)) {
-                  (mesh.material as THREE.ShaderMaterial).precision = 'mediump';
+                child.frustumCulled = true;
+                if (child.material && !Array.isArray(child.material)) {
+                  child.material.precision = 'mediump';
                 }
               }
             });
             resolve(gltf);
             setCharTimeline(character, camera);
             setAllTimeline();
-            character!.getObjectByName("footR")!.position.y = 3.36;
-            character!.getObjectByName("footL")!.position.y = 3.36;
+            character.getObjectByName("footR")!.position.y = 3.36;
+            character.getObjectByName("footL")!.position.y = 3.36;
             dracoLoader.dispose();
           },
           undefined,
@@ -52,11 +50,11 @@ const setCharacter = (
             reject(error);
           }
         );
-      } catch (err) {
-        reject(err);
-        console.error(err);
-      }
-    });
+      });
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   };
 
   return { loadCharacter };
