@@ -26,7 +26,6 @@ const setCharacter = (
           blobUrl,
           async (gltf) => {
             const character = gltf.scene;
-            await renderer.compileAsync(character, camera, scene);
             character.traverse((child) => {
               if (child instanceof THREE.Mesh) {
                 child.castShadow = false;
@@ -38,10 +37,21 @@ const setCharacter = (
               }
             });
             resolve(gltf);
-            setCharTimeline(character, camera);
-            setAllTimeline();
-            character.getObjectByName("footR")!.position.y = 3.36;
-            character.getObjectByName("footL")!.position.y = 3.36;
+            (async () => {
+              try {
+                await renderer.compileAsync(character, camera, scene);
+              } catch (err) {
+                console.warn("compileAsync failed:", err);
+              }
+            })();
+            try {
+              setCharTimeline(character, camera);
+              setAllTimeline();
+              character.getObjectByName("footR")!.position.y = 3.36;
+              character.getObjectByName("footL")!.position.y = 3.36;
+            } catch (err) {
+              console.warn("Character setup failed:", err);
+            }
             dracoLoader.dispose();
           },
           undefined,

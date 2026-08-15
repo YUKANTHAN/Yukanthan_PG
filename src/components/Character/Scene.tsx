@@ -56,9 +56,42 @@ const Scene = () => {
       const progress = setProgress((value) => setLoading(value));
       const { loadCharacter } = setCharacter(renderer, scene, camera);
 
-      loadCharacter().then((gltf) => {
-        if (gltf) {
+      let modelReady = false;
+      let loadFinished = false;
+      let disposed = false;
+      let startIntroRef: (() => void) | null = null;
+
+      const tryReveal = () => {
+        if (modelReady && loadFinished && !disposed) {
+          setTimeout(() => {
+            if (disposed) return;
+            light.turnOnLights();
+            if (startIntroRef) startIntroRef();
+          }, 2500);
+        }
+      };
+
+      const finishLoading = () => {
+        if (loadFinished) return;
+        loadFinished = true;
+        clearTimeout(guaranteeTimer);
+        progress.stop();
+        setLoading(100);
+        tryReveal();
+      };
+
+      const guaranteeTimer = setTimeout(() => {
+        finishLoading();
+      }, 12000);
+
+      loadCharacter()
+        .then((gltf) => {
+          if (disposed || !gltf) {
+            finishLoading();
+            return;
+          }
           const animations = setAnimations(gltf);
+          startIntroRef = animations.startIntro;
           if (hoverDivRef.current) {
             animations.hover(gltf, hoverDivRef.current);
           }
@@ -67,19 +100,22 @@ const Scene = () => {
           scene.add(character);
           headBone = character.getObjectByName("spine006") || null;
           screenLight = character.getObjectByName("screenlight") || null;
-          progress.loaded().then(() => {
-            setTimeout(() => {
-              light.turnOnLights();
-              animations.startIntro();
-            }, 2500);
-          });
+          modelReady = true;
 
           const handleWindowResize = () =>
             handleResize(renderer, camera, canvasDiv, character);
           resizeRef.current = handleWindowResize;
           window.addEventListener("resize", handleWindowResize);
-        }
-      });
+
+          finishLoading();
+          tryReveal();
+        })
+        .catch((err) => {
+          console.error("Character failed to load:", err);
+          if (!disposed) {
+            finishLoading();
+          }
+        });
 
       let mouse = { x: 0, y: 0 },
         interpolation = { x: 0.1, y: 0.2 };
@@ -133,7 +169,10 @@ const Scene = () => {
       };
       animate();
       return () => {
+        disposed = true;
         clearTimeout(debounce);
+        clearTimeout(guaranteeTimer);
+        progress.stop();
         scene.clear();
         renderer.dispose();
         if (resizeRef.current) {

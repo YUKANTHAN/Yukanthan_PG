@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ElementType } from "react";
 import "./styles/Loading.css";
 import { useLoading } from "../context/LoadingContext";
@@ -30,6 +30,7 @@ const Loading = ({ percent }: { percent: number }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [langIndex, setLangIndex] = useState(0);
+  const dismissStarted = useRef(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,14 +39,18 @@ const Loading = ({ percent }: { percent: number }) => {
     return () => clearInterval(interval);
   }, []);
 
-  if (percent >= 100) {
-    setTimeout(() => {
-      setLoaded(true);
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 1000);
-    }, 600);
-  }
+  useEffect(() => {
+    if (percent >= 100 && !dismissStarted.current) {
+      dismissStarted.current = true;
+      const t1 = setTimeout(() => {
+        setLoaded(true);
+        setTimeout(() => {
+          setIsLoaded(true);
+        }, 1000);
+      }, 600);
+      return () => clearTimeout(t1);
+    }
+  }, [percent]);
 
   useEffect(() => {
     import("./utils/initialFX").then((module) => {
