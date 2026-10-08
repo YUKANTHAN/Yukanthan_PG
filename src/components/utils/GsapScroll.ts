@@ -77,6 +77,7 @@ export function setCharTimeline(
   });
   const neckBone = character?.getObjectByName("spine005");
   if (window.innerWidth > 1024) {
+    gsap.set(".character-model", { xPercent: -50 });
     if (character) {
       tl1
         .fromTo(character.rotation, { y: 0 }, { y: 0.7, duration: 1 }, 0)
@@ -134,6 +135,7 @@ export function setCharTimeline(
         .to(character.rotation, { x: -0.04, duration: 2, delay: 1 }, 0);
     }
   } else {
+    gsap.set(".character-model", { clearProps: "transform" });
     if (character) {
       const tM2 = gsap.timeline({
         scrollTrigger: {

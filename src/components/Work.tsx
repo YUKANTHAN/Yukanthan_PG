@@ -91,7 +91,7 @@ const Work = () => {
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
             const box = (
-              <div className="work-box" key={project.id} style={{ cursor: projectUrl ? 'pointer' : 'default' }}>
+              <div className="work-box" key={project.id} style={{ cursor: 'pointer' }}>
                 <div className="work-info">
                   <div className="work-title">
                     <h3>0{index + 1}</h3>

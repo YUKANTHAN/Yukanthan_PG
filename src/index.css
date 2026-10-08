@@ -59,8 +59,12 @@ a:hover {
   color: var(--accentColor);
 }
 
+.see-all-btn:hover {
+  color: #000 !important;
+}
+
 input, textarea {
-  cursor: text;
+  cursor: text !important;
 }
 
 main {

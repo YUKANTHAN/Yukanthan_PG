@@ -56,7 +56,7 @@
   line-height: 15px;
   font-weight: 600;
   color: #5e5e5e;
-  cursor: pointer;
+  cursor: none;
   transition: 0.5s;
   transform-origin: left bottom;
   transform: translateX(100%) rotateZ(-90deg);
@@ -70,6 +70,7 @@ div.resume-button span {
   margin-top: -1px;
   display: flex;
   align-items: center;
+  cursor: none;
 }
 .check-line {
   position: fixed;

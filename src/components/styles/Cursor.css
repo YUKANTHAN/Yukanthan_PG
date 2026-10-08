@@ -1,5 +1,5 @@
 .cursor-main {
-  --size: 0px;
+  --size: 32px;
   position: fixed;
   top: calc(var(--size) / -2);
   left: calc(var(--size) / -2);
@@ -9,7 +9,7 @@
   pointer-events: none;
   z-index: 100000;
   background-color: #e6c3ff;
-  box-shadow: 0px 0px 30px 0px rgb(175, 131, 255);
+  box-shadow: 0px 0px 40px 0px rgb(175, 131, 255);
   mix-blend-mode: difference;
   transition: top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out,
     height 0.3s ease-out;
@@ -20,32 +20,37 @@
   height: calc(var(--cursorH) - 20px);
   background-color: rgba(194, 164, 255, 0.15);
   mix-blend-mode: normal;
-  box-shadow: 0 0 0 1px rgba(194, 164, 255, 0.7), 0 0 25px rgba(194, 164, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(194, 164, 255, 0.7), 0 0 30px rgba(194, 164, 255, 0.45);
   transition: all 0.5s ease-out, height 0.5s ease-in-out;
 }
 .cursor-disable {
-  --size: 24px;
+  --size: 20px;
+}
+.cursor-hidden {
+  opacity: 0 !important;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  [data-cursor="disable"]:not(input):not(textarea),
-  [data-cursor="disable"] a,
-  [data-cursor="icons"],
-  [data-cursor="icons"] a {
-    cursor: none;
-  }
+/* CSS cursor none for disable elements - applies immediately */
+[data-cursor="disable"],
+[data-cursor="disable"] *:not(input):not(textarea),
+[data-cursor="disable"] a,
+[data-cursor="disable"] svg,
+[data-cursor="disable"] path,
+[data-cursor="disable"] button,
+[data-cursor="disable"] i {
+  cursor: none !important;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  .cursor-main {
-    display: none !important;
-  }
-  [data-cursor="disable"]:not(input):not(textarea),
-  [data-cursor="disable"] a,
-  [data-cursor="icons"],
-  [data-cursor="icons"] a {
-    cursor: auto;
-  }
+input,
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="number"] {
+  cursor: text !important;
 }
 .cursor-bright {
   background-color: #ffffff;
@@ -54,9 +59,9 @@
 }
 @media only screen and (min-width: 600px) {
   .cursor-main {
-    --size: 50px;
+    --size: 32px;
   }
   .cursor-disable {
-    --size: 24px;
+    --size: 16px;
   }
 }

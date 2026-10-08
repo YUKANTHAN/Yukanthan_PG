@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { config } from "../config";
 import "./MyWorks.css";
+import Cursor from "../components/Cursor";
 
 const MyWorks = () => {
   return (
     <div className="myworks-page">
+      <Cursor />
       <div className="myworks-header">
         <Link to="/" className="back-button" data-cursor="disable">
           ← Back to Home

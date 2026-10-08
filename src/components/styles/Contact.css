@@ -78,6 +78,7 @@ a.contact-social {
   transition: border-color 0.3s ease;
   user-select: text;
   -webkit-user-select: text;
+  cursor: text;
 }
 .contact-form-box input::placeholder {
   color: rgba(234, 229, 236, 0.4);
@@ -99,6 +100,7 @@ a.contact-social {
   -webkit-user-select: text;
   resize: vertical;
   min-height: 80px;
+  cursor: text;
 }
 .contact-form-box textarea::placeholder {
   color: rgba(234, 229, 236, 0.4);
@@ -115,7 +117,7 @@ a.contact-social {
   font-family: "Geist", sans-serif;
   font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
+  cursor: none;
   transition: opacity 0.3s ease;
 }
 .contact-form-box button:hover {

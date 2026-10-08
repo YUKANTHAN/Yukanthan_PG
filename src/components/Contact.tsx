@@ -212,7 +212,7 @@ const Contact = () => {
                   rows={4}
                 />
               </div>
-              <button type="submit" disabled={status === "sending"}>
+              <button type="submit" disabled={status === "sending"} data-cursor="disable">
                 {status === "sending" ? "Sending..." : "Send"}
               </button>
             </form>

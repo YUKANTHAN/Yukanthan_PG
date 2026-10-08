@@ -7,9 +7,7 @@ const Cursor = () => {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      setEnabled(true);
-    }
+    setEnabled(true);
   }, []);
 
   useEffect(() => {
@@ -18,10 +16,19 @@ const Cursor = () => {
     const cursor = cursorRef.current!;
     const mousePos = { x: 0, y: 0 };
     const cursorPos = { x: 0, y: 0 };
+    const updateTextCursor = (target: Element | null) => {
+      const isTextField = !!target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.getAttribute("contenteditable") === "true");
+      cursor.classList.toggle("cursor-hidden", isTextField);
+      if (isTextField) hover = false;
+    };
     document.addEventListener("mousemove", (e) => {
       mousePos.x = e.clientX;
       mousePos.y = e.clientY;
+      updateTextCursor(e.target as Element);
     });
+    document.addEventListener("scroll", () => {
+      updateTextCursor(document.elementFromPoint(mousePos.x, mousePos.y));
+    }, true);
     requestAnimationFrame(function loop() {
       if (!hover) {
         const delay = 6;
@@ -50,7 +57,8 @@ const Cursor = () => {
           cursor.classList.add("cursor-disable");
         }
       });
-      element.addEventListener("mouseout", () => {
+      element.addEventListener("mouseout", (e) => {
+        // Don't let form fields interfere globally
         cursor.classList.remove("cursor-disable", "cursor-icons");
         hover = false;
       });
@@ -60,7 +68,7 @@ const Cursor = () => {
       element.addEventListener("mouseenter", () => {
         cursor.classList.add("cursor-bright");
       });
-        element.addEventListener("mouseleave", () => {
+      element.addEventListener("mouseleave", () => {
         cursor.classList.remove("cursor-bright");
       });
     });

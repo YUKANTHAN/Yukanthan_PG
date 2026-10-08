@@ -270,7 +270,6 @@ body:has(.play-page) {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
@@ -473,7 +472,6 @@ body:has(.play-page) {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(194, 164, 255, 0.15);
   border-radius: 10px;
-  cursor: pointer;
   transition: all 0.2s ease;
 }
 
@@ -794,7 +792,6 @@ body:has(.play-page) {
   border-radius: 8px;
   color: #0b080c;
   font-size: 16px;
-  cursor: pointer;
   transition: all 0.2s;
 }
 

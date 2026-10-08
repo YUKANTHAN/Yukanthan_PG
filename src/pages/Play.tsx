@@ -4,6 +4,7 @@ import { Chess, Square, PieceSymbol, Color } from "chess.js";
 import RedoxChessEngine from "../utils/redoxchessEngine";
 import { config } from "../config";
 import "./Play.css";
+import Cursor from "../components/Cursor";
 
 // Piece SVG components matching chess.com style with custom colors
 const PIECES: Record<string, string> = {
@@ -369,6 +370,7 @@ const Play = () => {
 
   return (
     <div className="play-page">
+      <Cursor />
       {/* Header */}
       <div className="play-header">
         <Link to="/" className="back-button" data-cursor="disable">
