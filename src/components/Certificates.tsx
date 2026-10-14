@@ -304,7 +304,7 @@ const Certificates = () => {
       {showAllModal && createPortal(
         <div className="modal-overlay" onClick={() => setShowAllModal(false)} data-cursor-section="bright">
           <div className="modal-content" ref={modalContentRef} onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setShowAllModal(false)} aria-label="Close modal">
+            <button className="modal-close" onClick={() => setShowAllModal(false)} aria-label="Close modal" data-cursor="disable">
               ✕
             </button>
             <h2>All <span>Certificates</span></h2>
@@ -318,6 +318,7 @@ const Certificates = () => {
                   role="button"
                   tabIndex={0}
                   aria-label={`View ${cert.title} certificate from ${cert.organization}`}
+                  data-cursor="disable"
                 >
                   <div className="modal-card-image">
                     <img

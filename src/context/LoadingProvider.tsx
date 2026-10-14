@@ -4,6 +4,8 @@ import { LoadingContext } from "./LoadingContext";
 
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(() => {
+    // Only show the loading overlay when landing on the home page
+    if (window.location.pathname !== "/") return false;
     // Skip loading on mobile
     if (window.innerWidth <= 768) return false;
     return true;

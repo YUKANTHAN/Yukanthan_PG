@@ -15,6 +15,12 @@
   will-change: transform;
 }
 
+.work-section,
+.work-section a,
+.work-section * {
+  cursor: none;
+}
+
 .work-container {
   margin: auto;
   display: flex;

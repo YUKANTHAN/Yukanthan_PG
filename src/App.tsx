@@ -4,32 +4,19 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./App.css";
 import ErrorBoundary from "./components/ErrorBoundary";
+import HomeRoute from "./components/HomeRoute";
+import Cursor from "./components/Cursor";
 
-const CharacterModel = lazy(() => import("./components/Character"));
-const MainContainer = lazy(() => import("./components/MainContainer"));
 const MyWorks = lazy(() => import("./pages/MyWorks"));
 const Play = lazy(() => import("./pages/Play"));
-import { LoadingProvider } from "./context/LoadingProvider";
 
 const App = () => {
   return (
     <BrowserRouter>
       <a href="#main-content" className="skip-link">Skip to main content</a>
+      <Cursor />
+      <HomeRoute />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <LoadingProvider>
-              <ErrorBoundary>
-                <Suspense>
-                  <MainContainer>
-                    <CharacterModel />
-                  </MainContainer>
-                </Suspense>
-              </ErrorBoundary>
-            </LoadingProvider>
-          }
-        />
         <Route
           path="/myworks"
           element={

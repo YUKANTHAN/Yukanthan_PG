@@ -11,6 +11,8 @@
   background-color: #e6c3ff;
   box-shadow: 0px 0px 40px 0px rgb(175, 131, 255);
   mix-blend-mode: difference;
+  backdrop-filter: opacity(1);
+  -webkit-backdrop-filter: opacity(1);
   transition: top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out,
     height 0.3s ease-out;
 }
@@ -39,6 +41,10 @@
 [data-cursor="disable"] button,
 [data-cursor="disable"] i {
   cursor: none !important;
+}
+
+label {
+  cursor: none;
 }
 
 input,

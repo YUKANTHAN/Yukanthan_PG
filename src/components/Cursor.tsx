@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import "./styles/Cursor.css";
 import gsap from "gsap";
 
@@ -35,47 +36,55 @@ const Cursor = () => {
         cursorPos.x += (mousePos.x - cursorPos.x) / delay;
         cursorPos.y += (mousePos.y - cursorPos.y) / delay;
         gsap.to(cursor, { x: cursorPos.x, y: cursorPos.y, duration: 0.1 });
-        // cursor.style.transform = `translate(${cursorPos.x}px, ${cursorPos.y}px)`;
       }
       requestAnimationFrame(loop);
     });
-    document.querySelectorAll("[data-cursor]").forEach((item) => {
-      const element = item as HTMLElement;
-      element.addEventListener("mouseover", (e: MouseEvent) => {
-        const target = e.currentTarget as HTMLElement;
-        const rect = target.getBoundingClientRect();
-
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as Element;
+      const element = target.closest("[data-cursor]") as HTMLElement | null;
+      if (element) {
         if (element.dataset.cursor === "icons") {
+          const rect = element.getBoundingClientRect();
           cursor.classList.add("cursor-icons");
-
           gsap.to(cursor, { x: rect.left, y: rect.top, duration: 0.1 });
-          //   cursor.style.transform = `translate(${rect.left}px,${rect.top}px)`;
           cursor.style.setProperty("--cursorH", `${rect.height}px`);
           hover = true;
         }
         if (element.dataset.cursor === "disable") {
           cursor.classList.add("cursor-disable");
         }
-      });
-      element.addEventListener("mouseout", (e) => {
-        // Don't let form fields interfere globally
+      }
+      if (target.closest("[data-cursor-section='bright']")) {
+        cursor.classList.add("cursor-bright");
+      }
+    };
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as Element;
+      const related = e.relatedTarget as Element | null;
+      if (related && target.contains(related)) return;
+      const element = target.closest("[data-cursor]");
+      if (element && !(related && related.closest("[data-cursor]") === element)) {
         cursor.classList.remove("cursor-disable", "cursor-icons");
         hover = false;
-      });
-    });
-    document.querySelectorAll("[data-cursor-section='bright']").forEach((item) => {
-      const element = item as HTMLElement;
-      element.addEventListener("mouseenter", () => {
-        cursor.classList.add("cursor-bright");
-      });
-      element.addEventListener("mouseleave", () => {
+      }
+      const bright = target.closest("[data-cursor-section='bright']");
+      if (bright && !(related && related.closest("[data-cursor-section='bright']") === bright)) {
         cursor.classList.remove("cursor-bright");
-      });
-    });
+      }
+    };
+    document.addEventListener("mouseover", handleMouseOver);
+    document.addEventListener("mouseout", handleMouseOut);
+    return () => {
+      document.removeEventListener("mouseover", handleMouseOver);
+      document.removeEventListener("mouseout", handleMouseOut);
+    };
   }, [enabled]);
 
   if (!enabled) return null;
-  return <div className="cursor-main" ref={cursorRef}></div>;
+  return createPortal(
+    <div className="cursor-main" ref={cursorRef}></div>,
+    document.body
+  );
 };
 
 export default Cursor;
