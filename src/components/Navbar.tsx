@@ -26,6 +26,19 @@ const Navbar = () => {
     // Start paused
     lenis.stop();
 
+    // The navbar is lazy-mounted, so on mobile the intro (initialFX) can run
+    // before Lenis exists. Resume scrolling once both are ready.
+    const startWhenReady = () => {
+      if (
+        (window as unknown as { __initialFXStarted?: boolean })
+          .__initialFXStarted
+      ) {
+        lenis?.start();
+      }
+    };
+    startWhenReady();
+    window.addEventListener("initialfx:started", startWhenReady);
+
     // Handle smooth scroll animation frame
     function raf(time: number) {
       lenis?.raf(time);
@@ -61,6 +74,7 @@ const Navbar = () => {
     });
 
     return () => {
+      window.removeEventListener("initialfx:started", startWhenReady);
       lenis?.destroy();
     };
   }, []);

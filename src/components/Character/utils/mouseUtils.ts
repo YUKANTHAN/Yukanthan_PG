@@ -2,19 +2,39 @@ import * as THREE from "three";
 
 export const handleMouseMove = (
   event: MouseEvent,
-  setMousePosition: (x: number, y: number) => void
+  setMousePosition: (x: number, y: number) => void,
+  reference?: { x: number; y: number }
 ) => {
-  const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-  const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-  setMousePosition(mouseX, mouseY);
+  applyPointerPosition(
+    event.clientX,
+    event.clientY,
+    setMousePosition,
+    reference
+  );
 };
 
 export const handleTouchMove = (
   event: TouchEvent,
-  setMousePosition: (x: number, y: number) => void
+  setMousePosition: (x: number, y: number) => void,
+  reference?: { x: number; y: number }
 ) => {
-  const mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
-  const mouseY = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+  const touch = event.touches[0];
+  if (!touch) return;
+  applyPointerPosition(touch.clientX, touch.clientY, setMousePosition, reference);
+};
+
+const applyPointerPosition = (
+  clientX: number,
+  clientY: number,
+  setMousePosition: (x: number, y: number) => void,
+  reference?: { x: number; y: number }
+) => {
+  const centerX = reference ? reference.x : window.innerWidth / 2;
+  const centerY = reference ? reference.y : window.innerHeight / 2;
+  const rawX = (clientX - centerX) / (window.innerWidth / 2);
+  const rawY = -((clientY - centerY) / (window.innerHeight / 2));
+  const mouseX = Math.max(-1, Math.min(1, rawX));
+  const mouseY = Math.max(-1, Math.min(1, rawY));
   setMousePosition(mouseX, mouseY);
 };
 

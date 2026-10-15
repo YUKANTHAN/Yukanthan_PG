@@ -6,10 +6,13 @@ export let initialFXStarted = false;
 
 export function initialFX() {
   initialFXStarted = true;
+  (window as unknown as { __initialFXStarted?: boolean }).__initialFXStarted =
+    true;
   document.body.style.overflowY = "auto";
   if (lenis) {
     lenis.start();
   }
+  window.dispatchEvent(new Event("initialfx:started"));
   document.getElementsByTagName("main")[0].classList.add("main-active");
   gsap.to("body", {
     backgroundColor: "#0b080c",

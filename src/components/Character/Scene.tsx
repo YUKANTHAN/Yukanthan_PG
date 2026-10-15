@@ -119,38 +119,84 @@ const Scene = () => {
 
       let mouse = { x: 0, y: 0 },
         interpolation = { x: 0.1, y: 0.2 };
+      let lastTouchTime = 0;
+
+      const headScreenPos = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      };
+      const headWorldPos = new THREE.Vector3();
+
+      const getReference = () =>
+        window.innerWidth <= 1024 ? headScreenPos : undefined;
+
+      const updateReference = () => {
+        if (!headBone || window.innerWidth > 1024 || window.scrollY >= 200) {
+          return;
+        }
+        headBone.getWorldPosition(headWorldPos);
+        headWorldPos.project(camera);
+        const rect = renderer.domElement.getBoundingClientRect();
+        headScreenPos.x = rect.left + (headWorldPos.x * 0.5 + 0.5) * rect.width;
+        headScreenPos.y = rect.top + (-headWorldPos.y * 0.5 + 0.5) * rect.height;
+      };
+
+      const isTouchGenerated = (event: MouseEvent) => {
+        if (Date.now() - lastTouchTime < 800) return true;
+        const sourceCapabilities = (
+          event as MouseEvent & {
+            sourceCapabilities?: { firesTouchEvents?: boolean };
+          }
+        ).sourceCapabilities;
+        return !!sourceCapabilities?.firesTouchEvents;
+      };
 
       const onMouseMove = (event: MouseEvent) => {
-        handleMouseMove(event, (x, y) => (mouse = { x, y }));
+        if (isTouchGenerated(event)) return;
+        handleMouseMove(event, (x, y) => (mouse = { x, y }), getReference());
       };
-      let debounce: number | undefined;
+
       const onTouchStart = (event: TouchEvent) => {
-        const element = event.target as HTMLElement;
-        debounce = setTimeout(() => {
-          element?.addEventListener("touchmove", (e: TouchEvent) =>
-            handleTouchMove(e, (x, y) => (mouse = { x, y }))
+        lastTouchTime = Date.now();
+        if (event.touches.length) {
+          handleTouchMove(
+            event,
+            (x, y) => (mouse = { x, y }),
+            getReference()
           );
-        }, 200);
+        }
+      };
+
+      const onTouchMove = (event: TouchEvent) => {
+        lastTouchTime = Date.now();
+        if (event.touches.length) {
+          handleTouchMove(
+            event,
+            (x, y) => (mouse = { x, y }),
+            getReference()
+          );
+        }
       };
 
       const onTouchEnd = () => {
+        lastTouchTime = Date.now();
         handleTouchEnd((x, y, ix, iy) => {
           mouse = { x, y };
           interpolation = { x: ix, y: iy };
         });
       };
 
-      document.addEventListener("mousemove", (event) => {
-        onMouseMove(event);
-      });
+      document.addEventListener("mousemove", onMouseMove);
       const landingDiv = document.getElementById("landingDiv");
       if (landingDiv) {
-        landingDiv.addEventListener("touchstart", onTouchStart);
+        landingDiv.addEventListener("touchstart", onTouchStart, { passive: true });
+        landingDiv.addEventListener("touchmove", onTouchMove, { passive: true });
         landingDiv.addEventListener("touchend", onTouchEnd);
       }
       const animate = () => {
         requestAnimationFrame(animate);
         if (headBone && screenLight) {
+          updateReference();
           handleHeadRotation(
             headBone,
             mouse.x,
@@ -170,7 +216,6 @@ const Scene = () => {
       animate();
       return () => {
         disposed = true;
-        clearTimeout(debounce);
         clearTimeout(guaranteeTimer);
         progress.stop();
         scene.clear();
@@ -184,6 +229,7 @@ const Scene = () => {
         if (landingDiv) {
           document.removeEventListener("mousemove", onMouseMove);
           landingDiv.removeEventListener("touchstart", onTouchStart);
+          landingDiv.removeEventListener("touchmove", onTouchMove);
           landingDiv.removeEventListener("touchend", onTouchEnd);
         }
       };
