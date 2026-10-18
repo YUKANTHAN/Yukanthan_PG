@@ -298,7 +298,7 @@
   color: #000 !important;
 }
 
-/* Mobile: Horizontal card carousel with snap scroll */
+/* Mobile: Horizontal card carousel with snap scroll + universal design */
 @media only screen and (max-width: 768px) {
   .work-section {
     height: auto;
@@ -318,6 +318,42 @@
     margin-left: 0;
     padding-right: 16px;
     padding-bottom: 16px;
+
+    /* Scroll fade edges via CSS custom properties */
+    position: relative;
+    --fade-start: 0;
+    --fade-end: 0;
+  }
+
+  .work-flex::before,
+  .work-flex::after {
+    content: "";
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+  }
+  .work-flex::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      var(--backgroundColor) var(--fade-start, 0),
+      transparent
+    );
+    opacity: var(--fade-start, 0);
+  }
+  .work-flex::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      var(--backgroundColor) var(--fade-end, 0),
+      transparent
+    );
+    opacity: var(--fade-end, 0);
   }
 
   .work-box {
@@ -333,6 +369,14 @@
     gap: 16px;
     scroll-snap-align: start;
     box-sizing: border-box;
+
+    /* Focus visible for keyboard */
+    outline: none;
+  }
+  .work-box:focus-visible {
+    outline: 3px solid var(--accentColor);
+    outline-offset: 2px;
+    z-index: 2;
   }
 
   .work-flex .work-box:nth-child(even) {
@@ -371,6 +415,15 @@
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .work-image img {
+      transition: none;
+    }
+    .work-flex {
+      scroll-behavior: auto;
+    }
+  }
+
   .work-box:hover .work-image img {
     transform: scale(1.02);
   }
@@ -402,6 +455,7 @@
     font-size: 14px;
   }
 
+  /* Hide scrollbar but keep scroll function */
   .work-flex::-webkit-scrollbar {
     display: none;
   }

@@ -1,14 +1,16 @@
+import { useEffect, useRef } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect } from "react";
 import { config } from "../config";
 import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
+  const flexRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const isDesktop = window.innerWidth > 768;
     let tl: gsap.core.Timeline | null = null;
@@ -54,7 +56,47 @@ const Work = () => {
         });
       } else {
         // Mobile: horizontal scroll with CSS snap (no GSAP pin needed)
-        // Handled entirely by CSS scroll-snap
+        // Universal design enhancements for mobile carousel
+        const flex = flexRef.current;
+        if (!flex) return;
+
+        // Keyboard navigation
+        const handleKeyDown = (e: KeyboardEvent) => {
+          const cards = flex.querySelectorAll<HTMLElement>(".work-box");
+          const activeIdx = Array.from(cards).findIndex((c) =>
+            c.matches(":focus, :focus-within")
+          );
+          if (activeIdx === -1) return;
+
+          let nextIdx = activeIdx;
+          if (e.key === "ArrowRight") nextIdx = Math.min(activeIdx + 1, cards.length - 1);
+          else if (e.key === "ArrowLeft") nextIdx = Math.max(activeIdx - 1, 0);
+          else if (e.key === "Home") nextIdx = 0;
+          else if (e.key === "End") nextIdx = cards.length - 1;
+          else return;
+
+          e.preventDefault();
+          cards[nextIdx]?.focus();
+          cards[nextIdx]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        };
+
+        flex.addEventListener("keydown", handleKeyDown);
+
+        // Scroll indicators: fade edges when not at boundaries
+        const updateEdgeFade = () => {
+          const { scrollLeft, scrollWidth, clientWidth } = flex;
+          const atStart = scrollLeft <= 4;
+          const atEnd = scrollLeft + clientWidth >= scrollWidth - 4;
+          flex.style.setProperty("--fade-start", atStart ? "0" : "1");
+          flex.style.setProperty("--fade-end", atEnd ? "0" : "1");
+        };
+        flex.addEventListener("scroll", updateEdgeFade, { passive: true });
+        updateEdgeFade();
+
+        return () => {
+          flex.removeEventListener("keydown", handleKeyDown);
+          flex.removeEventListener("scroll", updateEdgeFade);
+        };
       }
 
       ScrollTrigger.refresh();
@@ -83,22 +125,26 @@ const Work = () => {
         tl.kill();
         ScrollTrigger.getById("work")?.kill();
       }
-      ScrollTrigger.getAll().forEach((st) => {
-        if (st.vars.id?.toString().startsWith("work-")) st.kill();
-      });
     };
   }, []);
+
   return (
     <div className="work-section" id="work" data-cursor-section="bright">
       <div className="work-container section-container">
         <h2>
           My <span>Work</span>
         </h2>
-        <div className="work-flex">
+        <div
+          className="work-flex"
+          ref={flexRef}
+          role="region"
+          aria-label="Projects"
+          aria-roledescription="carousel"
+        >
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
             return (
-              <div className="work-box" key={project.id}>
+              <div className="work-box" key={project.id} tabIndex={0}>
                 <div className="work-info">
                   <div className="work-title">
                     <h3>0{index + 1}</h3>
@@ -116,7 +162,7 @@ const Work = () => {
             );
           })}
           {/* See All Works Button */}
-          <div className="work-box work-box-cta">
+          <div className="work-box work-box-cta" tabIndex={0}>
             <div className="see-all-works">
               <h3>Want to see more?</h3>
               <p>Explore all of my projects and creations</p>
