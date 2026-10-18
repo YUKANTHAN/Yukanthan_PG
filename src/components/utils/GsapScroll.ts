@@ -3,6 +3,7 @@ import gsap from "gsap";
 
 let intensityInterval: number | undefined;
 let screenLightTimeline: gsap.core.Timeline | undefined;
+let mobileTransitionTimeline: gsap.core.Timeline | undefined;
 
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
@@ -10,6 +11,11 @@ export function setCharTimeline(
 ) {
   if (intensityInterval) clearInterval(intensityInterval);
   if (screenLightTimeline) screenLightTimeline.kill();
+  if (mobileTransitionTimeline) {
+    mobileTransitionTimeline.scrollTrigger?.kill();
+    mobileTransitionTimeline.kill();
+    mobileTransitionTimeline = undefined;
+  }
 
   let intensity: number = 0;
   intensityInterval = setInterval(() => {
@@ -146,6 +152,38 @@ export function setCharTimeline(
       });
       tM2.to(".what-box-in", { display: "flex", duration: 0.1, delay: 0 }, 0);
     }
+
+    mobileTransitionTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".landing-section",
+        start: "top top",
+        end: "bottom top",
+        scrub: 0.5,
+        invalidateOnRefresh: true,
+      },
+    });
+    mobileTransitionTimeline
+      .to(".landing-container", { opacity: 0, yPercent: -10, duration: 1 }, 0)
+      .to(".character-container", { opacity: 0, duration: 1 }, 0);
+
+    // Separate entrance for About when it enters the viewport
+    gsap.fromTo(
+      ".about-me",
+      { opacity: 0, yPercent: 15 },
+      {
+        opacity: 1,
+        yPercent: 0,
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".about-section",
+          start: "top 85%",
+          end: "top 30%",
+          scrub: 0.3,
+          invalidateOnRefresh: true,
+        },
+      }
+    );
   }
 }
 
