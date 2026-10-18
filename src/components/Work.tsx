@@ -53,40 +53,8 @@ const Work = () => {
           ease: "none",
         });
       } else {
-        // Mobile: refined vertical reveal with parallax
-        const boxes = gsap.utils.toArray<HTMLElement>(".work-box");
-        boxes.forEach((box, i) => {
-          // Card reveal
-          ScrollTrigger.create({
-            trigger: box,
-            start: "top 90%",
-            end: "top 40%",
-            onEnter: () => box.classList.add("work-box-visible"),
-            once: true,
-            id: `work-reveal-${i}`,
-          });
-
-          // Subtle parallax on image
-          const img = box.querySelector<HTMLImageElement>(".work-image img");
-          if (img) {
-            gsap.to(img, {
-              yPercent: 15,
-              ease: "none",
-              scrollTrigger: {
-                trigger: box,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 0.8,
-                id: `work-parallax-${i}`,
-              },
-            });
-          }
-        });
-
-        // Stagger the reveal delays via CSS
-        boxes.forEach((box, i) => {
-          box.style.setProperty("--reveal-delay", `${i * 80}ms`);
-        });
+        // Mobile: horizontal scroll with CSS snap (no GSAP pin needed)
+        // Handled entirely by CSS scroll-snap
       }
 
       ScrollTrigger.refresh();
@@ -129,7 +97,7 @@ const Work = () => {
         <div className="work-flex">
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
-            const box = (
+            return (
               <div className="work-box" key={project.id}>
                 <div className="work-info">
                   <div className="work-title">
@@ -143,14 +111,9 @@ const Work = () => {
                   <h4>Tools and features</h4>
                   <p>{project.technologies}</p>
                 </div>
-                <WorkImage image={project.image} alt={project.title} />
+                <WorkImage image={project.image} alt={project.title} link={projectUrl} />
               </div>
             );
-            return projectUrl ? (
-              <a href={projectUrl} key={project.id} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-                {box}
-              </a>
-            ) : box;
           })}
           {/* See All Works Button */}
           <div className="work-box work-box-cta">
