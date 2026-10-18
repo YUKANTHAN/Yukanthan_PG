@@ -2,66 +2,86 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { config } from "../config";
 import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const flexRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // Disable pinning on mobile to allow scrolling
-    if (window.innerWidth <= 768) return;
-
-    let translateX: number = 0;
-    let timeline: gsap.core.Timeline | null = null;
-
-    let resizeTimeout: number;
+    const isMobile = window.innerWidth <= 768;
+    let tl: gsap.core.Timeline | null = null;
 
     function setTranslateX() {
       const boxes = document.querySelectorAll<HTMLElement>(".work-box");
-      const container = document.querySelector<HTMLElement>(".work-container");
-      const flex = document.querySelector<HTMLElement>(".work-flex");
+      const container = containerRef.current;
+      const flex = flexRef.current;
       if (!boxes.length || !container || !flex) return;
 
       const boxWidth = boxes[0].offsetWidth;
       const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
-
-      translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
+      return boxWidth * boxes.length + marginLeft - container.clientWidth;
     }
 
     function createTimeline() {
-      if (timeline) {
-        timeline.kill();
+      if (tl) {
+        tl.kill();
         ScrollTrigger.getById("work")?.kill();
       }
 
-      setTranslateX();
+      const translateX = setTranslateX();
+      if (translateX === undefined) return;
 
-      timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".work-section",
-          start: "top top",
-          end: `+=${translateX}`,
-          scrub: 1,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          id: "work",
-          invalidateOnRefresh: true,
-        },
-      });
-
-      timeline.to(".work-flex", {
-        x: -translateX,
-        ease: "none",
-      });
+      if (isMobile) {
+        // Mobile: horizontal swipe carousel (pinned)
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: `+=${translateX}`,
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            id: "work",
+            invalidateOnRefresh: true,
+          },
+        });
+        tl.to(".work-flex", {
+          x: -translateX,
+          ease: "none",
+        });
+      } else {
+        // Desktop: existing horizontal scroll
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: `+=${translateX}`,
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            id: "work",
+            invalidateOnRefresh: true,
+          },
+        });
+        tl.to(".work-flex", {
+          x: -translateX,
+          ease: "none",
+        });
+      }
 
       ScrollTrigger.refresh();
     }
 
     createTimeline();
 
+    let resizeTimeout: number;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = window.setTimeout(() => {
@@ -71,12 +91,11 @@ const Work = () => {
 
     window.addEventListener("resize", handleResize);
 
-    // Clean up
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimeout);
-      if (timeline) {
-        timeline.kill();
+      if (tl) {
+        tl.kill();
         ScrollTrigger.getById("work")?.kill();
       }
     };

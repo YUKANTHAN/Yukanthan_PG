@@ -88,9 +88,81 @@ const Certificates = () => {
     ...(config.certificates.modalOnly || []).map(c => ({ ...c, category: "Certificate" })),
   ];
   useEffect(() => {
-    // Only animate stacks on desktop viewports
-    if (window.innerWidth <= 1024) return;
+    const isMobile = window.innerWidth <= 768;
+    const isTablet = window.innerWidth <= 1024 && window.innerWidth > 768;
 
+    if (isMobile) {
+      // Mobile: vertical peel-off stack
+      const leftCardsCount = config.certificates.events.length;
+      const rightCardsCount = config.certificates.learnings.length;
+      const maxCards = Math.max(leftCardsCount, rightCardsCount);
+
+      // Calculate total scroll distance based on number of cards
+      const scrollDistance = maxCards * 450;
+
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".certificates-section",
+          start: "top top",
+          end: `+=${scrollDistance}`,
+          scrub: 1,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          id: "certificates",
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Animate cards to peel off vertically (slide up and fade)
+      for (let i = 0; i < maxCards; i++) {
+        const staggerTime = i * 1.2;
+
+        // Animate left card (events) to slide up and fade out (skip last card)
+        if (i < leftCardsCount - 1) {
+          timeline.to(
+            `.left-card-${i}`,
+            {
+              y: "-200%",
+              rotation: -15,
+              opacity: 0,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            staggerTime
+          );
+        }
+
+        // Animate right card (learnings) to slide up and fade out (skip last card)
+        if (i < rightCardsCount - 1) {
+          timeline.to(
+            `.right-card-${i}`,
+            {
+              y: "-200%",
+              rotation: 15,
+              opacity: 0,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            staggerTime
+          );
+        }
+      }
+
+      ScrollTrigger.refresh();
+
+      return () => {
+        timeline.kill();
+        ScrollTrigger.getById("certificates")?.kill();
+      };
+    }
+
+    if (isTablet) {
+      // Tablet: disable pinning, allow normal scroll
+      return;
+    }
+
+    // Desktop: horizontal peel-off stack
     const leftCardsCount = config.certificates.events.length;
     const rightCardsCount = config.certificates.learnings.length;
     const maxCards = Math.max(leftCardsCount, rightCardsCount);
