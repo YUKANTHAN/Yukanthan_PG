@@ -53,17 +53,39 @@ const Work = () => {
           ease: "none",
         });
       } else {
-        // Mobile: vertical stagger reveal (no pin)
+        // Mobile: refined vertical reveal with parallax
         const boxes = gsap.utils.toArray<HTMLElement>(".work-box");
         boxes.forEach((box, i) => {
+          // Card reveal
           ScrollTrigger.create({
             trigger: box,
-            start: "top 85%",
-            end: "top 30%",
-            toggleClass: { targets: box, className: "work-box-visible" },
+            start: "top 90%",
+            end: "top 40%",
+            onEnter: () => box.classList.add("work-box-visible"),
             once: true,
             id: `work-reveal-${i}`,
           });
+
+          // Subtle parallax on image
+          const img = box.querySelector<HTMLImageElement>(".work-image img");
+          if (img) {
+            gsap.to(img, {
+              yPercent: 15,
+              ease: "none",
+              scrollTrigger: {
+                trigger: box,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.8,
+                id: `work-parallax-${i}`,
+              },
+            });
+          }
+        });
+
+        // Stagger the reveal delays via CSS
+        boxes.forEach((box, i) => {
+          box.style.setProperty("--reveal-delay", `${i * 80}ms`);
         });
       }
 
@@ -94,7 +116,7 @@ const Work = () => {
         ScrollTrigger.getById("work")?.kill();
       }
       ScrollTrigger.getAll().forEach((st) => {
-        if (st.vars.id?.toString().startsWith("work-reveal")) st.kill();
+        if (st.vars.id?.toString().startsWith("work-")) st.kill();
       });
     };
   }, []);

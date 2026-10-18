@@ -320,15 +320,40 @@
     border-bottom: 1px solid #363636;
     gap: 20px;
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform;
   }
 
   .work-box.work-box-visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Stagger via CSS custom property set by JS */
+  .work-box {
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* First project: featured hero style */
+  .work-box:first-child {
+    padding: 40px 15px;
+    border-bottom: 1px solid #363636;
+  }
+
+  .work-box:first-child .work-image img {
+    max-height: 280px;
+    border-radius: 16px;
+  }
+
+  .work-box:first-child .work-title h3 {
+    font-size: 40px;
+    line-height: 40px;
+  }
+
+  .work-box:first-child .work-info h4 {
+    font-size: 22px;
   }
 
   .work-flex .work-box:nth-child(even) {
@@ -373,11 +398,18 @@
 
   .work-image-in {
     width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
   }
 
   .work-image img {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 12px;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .work-box:hover .work-image img {
+    transform: scale(1.03);
   }
 
   .see-all-btn {
@@ -385,5 +417,11 @@
     max-width: 320px;
     text-align: center;
     padding: 14px 20px;
+  }
+
+  /* Parallax image container */
+  .work-image {
+    position: relative;
+    overflow: hidden;
   }
 }
