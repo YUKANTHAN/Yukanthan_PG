@@ -303,6 +303,8 @@
   .work-section {
     height: auto;
     min-height: auto;
+    /* DEBUG: confirms media query active */
+    border-top: 3px solid lime;
   }
 
   .work-flex {
@@ -323,6 +325,8 @@
     position: relative;
     --fade-start: 0;
     --fade-end: 0;
+    /* DEBUG */
+    border: 2px solid cyan;
   }
 
   .work-flex::before,
