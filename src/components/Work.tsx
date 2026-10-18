@@ -55,10 +55,28 @@ const Work = () => {
           ease: "none",
         });
       } else {
-        // Mobile: horizontal scroll with CSS snap (no GSAP pin needed)
-        // Universal design enhancements for mobile carousel
+        // Mobile: horizontal scroll with CSS snap + universal design + parallax
         const flex = flexRef.current;
         if (!flex) return;
+
+        // Parallax on images
+        const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
+        boxes.forEach((box) => {
+          const img = box.querySelector<HTMLImageElement>(".work-image img");
+          if (img) {
+            gsap.to(img, {
+              yPercent: 15,
+              ease: "none",
+              scrollTrigger: {
+                trigger: box,
+                start: "left right",
+                end: "right left",
+                scrub: 0.8,
+                id: `work-parallax-${box.dataset.key || Math.random()}`,
+              },
+            });
+          }
+        });
 
         // Keyboard navigation
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -96,6 +114,9 @@ const Work = () => {
         return () => {
           flex.removeEventListener("keydown", handleKeyDown);
           flex.removeEventListener("scroll", updateEdgeFade);
+          ScrollTrigger.getAll().forEach((st) => {
+            if (st.vars.id?.toString().startsWith("work-parallax")) st.kill();
+          });
         };
       }
 
@@ -144,7 +165,7 @@ const Work = () => {
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
             return (
-              <div className="work-box" key={project.id} tabIndex={0}>
+              <div className="work-box" key={project.id} tabIndex={0} data-key={project.id}>
                 <div className="work-info">
                   <div className="work-title">
                     <h3>0{index + 1}</h3>
@@ -162,7 +183,7 @@ const Work = () => {
             );
           })}
           {/* See All Works Button */}
-          <div className="work-box work-box-cta" tabIndex={0}>
+          <div className="work-box work-box-cta" tabIndex={0} data-key="cta">
             <div className="see-all-works">
               <h3>Want to see more?</h3>
               <p>Explore all of my projects and creations</p>
