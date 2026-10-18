@@ -283,3 +283,32 @@
     justify-content: left;
   }
 }
+
+.career-view-all {
+  display: block;
+  margin: 24px auto 0;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--accentColor);
+  background: transparent;
+  border: 1px solid var(--accentColor);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.career-view-all:hover,
+.career-view-all:focus {
+  background: var(--accentColor);
+  color: var(--backgroundColor);
+  outline: none;
+}
+
+@media only screen and (min-width: 769px) {
+  .career-view-all {
+    display: none;
+  }
+}
