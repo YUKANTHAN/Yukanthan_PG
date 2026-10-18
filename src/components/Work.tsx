@@ -2,24 +2,21 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { config } from "../config";
 import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const flexRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
+    const isDesktop = window.innerWidth > 768;
     let tl: gsap.core.Timeline | null = null;
 
     function setTranslateX() {
       const boxes = document.querySelectorAll<HTMLElement>(".work-box");
-      const container = containerRef.current;
-      const flex = flexRef.current;
+      const container = document.querySelector<HTMLElement>(".work-container");
+      const flex = document.querySelector<HTMLElement>(".work-flex");
       if (!boxes.length || !container || !flex) return;
 
       const boxWidth = boxes[0].offsetWidth;
@@ -33,11 +30,11 @@ const Work = () => {
         ScrollTrigger.getById("work")?.kill();
       }
 
-      const translateX = setTranslateX();
-      if (translateX === undefined) return;
+      if (isDesktop) {
+        // Desktop: horizontal pinned scroll
+        const translateX = setTranslateX();
+        if (translateX === undefined) return;
 
-      if (isMobile) {
-        // Mobile: horizontal swipe carousel (pinned)
         tl = gsap.timeline({
           scrollTrigger: {
             trigger: ".work-section",
@@ -56,23 +53,17 @@ const Work = () => {
           ease: "none",
         });
       } else {
-        // Desktop: existing horizontal scroll
-        tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".work-section",
-            start: "top top",
-            end: `+=${translateX}`,
-            scrub: 1,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            id: "work",
-            invalidateOnRefresh: true,
-          },
-        });
-        tl.to(".work-flex", {
-          x: -translateX,
-          ease: "none",
+        // Mobile: vertical stagger reveal (no pin)
+        const boxes = gsap.utils.toArray<HTMLElement>(".work-box");
+        boxes.forEach((box, i) => {
+          ScrollTrigger.create({
+            trigger: box,
+            start: "top 85%",
+            end: "top 30%",
+            toggleClass: { targets: box, className: "work-box-visible" },
+            once: true,
+            id: `work-reveal-${i}`,
+          });
         });
       }
 
@@ -82,7 +73,11 @@ const Work = () => {
     createTimeline();
 
     let resizeTimeout: number;
+    let lastIsDesktop = isDesktop;
     const handleResize = () => {
+      const nowDesktop = window.innerWidth > 768;
+      if (nowDesktop === lastIsDesktop) return;
+      lastIsDesktop = nowDesktop;
       clearTimeout(resizeTimeout);
       resizeTimeout = window.setTimeout(() => {
         createTimeline();
@@ -98,6 +93,9 @@ const Work = () => {
         tl.kill();
         ScrollTrigger.getById("work")?.kill();
       }
+      ScrollTrigger.getAll().forEach((st) => {
+        if (st.vars.id?.toString().startsWith("work-reveal")) st.kill();
+      });
     };
   }, []);
   return (

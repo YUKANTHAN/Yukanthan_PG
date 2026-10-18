@@ -319,6 +319,16 @@
     border-right: none;
     border-bottom: 1px solid #363636;
     gap: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .work-box.work-box-visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .work-flex .work-box:nth-child(even) {
