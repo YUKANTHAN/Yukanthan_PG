@@ -19,7 +19,8 @@ export const config = {
             period: "Jan 2026 - Present",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Launched my career as a professional full‑stack developer and freelancer, delivering web applications for clients while continuing my studies.",
-            technologies: ["React", "Next.js", "Node.js", "MongoDB", "Docker"]
+            technologies: ["React", "Next.js", "Node.js", "MongoDB", "Docker"],
+            featured: true
         },
         {
             position: "Networking Engineer Intern",
@@ -59,14 +60,16 @@ export const config = {
             period: "2025",
             location: "Tirunelveli, Tamil Nadu, India",
             description: "Started learning full‑stack development concepts on my own, building small projects to solidify front‑end and back‑end skills.",
-            technologies: ["HTML", "CSS", "JavaScript", "React", "Node.js"]
+            technologies: ["HTML", "CSS", "JavaScript", "React", "Node.js"],
+            featured: true
         },
         {
             position: "B.Tech (IT) Student",
             company: "P.S.R. Engineering College",
             period: "2024 - 2028",
             location: "Tirunelveli, Tamil Nadu, India",
-            description: "Pursuing a B.Tech in Information Technology, focusing on software engineering, networks, and emerging technologies."
+            description: "Pursuing a B.Tech in Information Technology, focusing on software engineering, networks, and emerging technologies.",
+            featured: true
         },
         {
             position: "Python Learner",

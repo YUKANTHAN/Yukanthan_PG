@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles/Career.css";
 import { config } from "../config";
 
@@ -10,17 +10,22 @@ const getDisplayYear = (period: string) => {
   return period;
 };
 
-const MOBILE_VISIBLE_COUNT = 3;
-
 const Career = () => {
   const [expanded, setExpanded] = useState(false);
-  const isMobile = window.innerWidth <= 768;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const featuredExperiences = config.experiences.filter((e) => e.featured);
   const visibleExperiences = expanded || !isMobile
     ? config.experiences
-    : config.experiences.slice(0, MOBILE_VISIBLE_COUNT);
+    : featuredExperiences;
 
-  const showToggle = isMobile && config.experiences.length > MOBILE_VISIBLE_COUNT;
+  const showToggle = isMobile && featuredExperiences.length < config.experiences.length;
 
   return (
     <div className="career-section section-container">
