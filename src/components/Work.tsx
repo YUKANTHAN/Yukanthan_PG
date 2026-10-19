@@ -12,7 +12,6 @@ const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
-  const [startOffset, setStartOffset] = useState(0);
 
 // Mobile: synchronous setup before paint
   useLayoutEffect(() => {
