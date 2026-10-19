@@ -10,6 +10,22 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
+  const [startOffset, setStartOffset] = useState(0);
+
+  // Calculate initial centered offset in layout effect (before paint)
+  useLayoutEffect(() => {
+    const boxes = document.querySelectorAll<HTMLElement>(".work-box");
+    const container = document.querySelector<HTMLElement>(".work-container");
+    const flex = flexRef.current;
+    if (boxes.length && container && flex) {
+      const boxWidth = boxes[0].offsetWidth;
+      const offset = (container.clientWidth - boxWidth) / 2;
+      setStartOffset(offset);
+      // Apply immediately via inline style (before ScrollTrigger creates pin)
+      flex.style.transform = `translateX(${offset}px)`;
+      flex.style.willChange = "transform";
+    }
+  }, []);
 
   useEffect(() => {
     const isDesktop = window.innerWidth > 768;
@@ -79,10 +95,6 @@ const Work = () => {
             anticipatePin: 1,
             id: "work",
             invalidateOnRefresh: true,
-            // Set initial centered position BEFORE pin captures state
-            onRefreshInit: () => {
-              gsap.set(".work-flex", { x: startOffset, immediateRender: false });
-            },
             onRefresh: (self) => {
               const spacer = document.querySelector(".pin-spacer") as HTMLElement;
               if (spacer) {
@@ -90,6 +102,11 @@ const Work = () => {
               }
             },
           },
+        });
+        tl.to(".work-flex", {
+          x: startOffset - translateX,
+          ease: "none",
+          immediateRender: false,
         });
         tl.to(".work-flex", {
           x: startOffset - translateX,
@@ -146,6 +163,7 @@ const Work = () => {
           aria-label="Projects"
           aria-roledescription="carousel"
           id="work-flex"
+          style={{ transform: `translateX(${startOffset}px)`, willChange: "transform" }}
         >
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
