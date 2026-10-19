@@ -110,7 +110,7 @@ const Work = () => {
         tl.kill();
         ScrollTrigger.getById("work")?.kill();
       }
-    };
+    }
   }, []);
 
   return (
