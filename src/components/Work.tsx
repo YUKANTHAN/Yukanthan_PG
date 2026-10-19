@@ -57,6 +57,7 @@ const Work = () => {
       } else {
         // Mobile: pinned horizontal scroll on vertical page scroll (same as desktop)
         let translateX = 0;
+        let startOffset = 0;
         const boxes = document.querySelectorAll<HTMLElement>(".work-box");
         const container = document.querySelector<HTMLElement>(".work-container");
         const flex = document.querySelector<HTMLElement>(".work-flex");
@@ -64,6 +65,8 @@ const Work = () => {
           const boxWidth = boxes[0].offsetWidth;
           const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
           translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
+          // Center first card initially, center last card at end
+          startOffset = (container.clientWidth - boxWidth) / 2;
         }
 
         tl = gsap.timeline({
@@ -79,8 +82,10 @@ const Work = () => {
             invalidateOnRefresh: true,
           },
         });
+        // Set initial centered position
+        gsap.set(".work-flex", { x: startOffset });
         tl.to(".work-flex", {
-          x: -translateX,
+          x: startOffset - translateX,
           ease: "none",
         });
       }
