@@ -9,10 +9,8 @@ import { Link } from "react-router-dom";
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
-const flexRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   const setupMobileScroll = (flex: HTMLDivElement) => {
     const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
