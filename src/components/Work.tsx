@@ -79,6 +79,10 @@ const Work = () => {
             anticipatePin: 1,
             id: "work",
             invalidateOnRefresh: true,
+            // Set initial centered position BEFORE pin captures state
+            onRefreshInit: () => {
+              gsap.set(".work-flex", { x: startOffset, immediateRender: false });
+            },
             onRefresh: (self) => {
               const spacer = document.querySelector(".pin-spacer") as HTMLElement;
               if (spacer) {
@@ -87,7 +91,6 @@ const Work = () => {
             },
           },
         });
-        // immediateRender: false prevents GSAP from overriding initial CSS position
         tl.to(".work-flex", {
           x: startOffset - translateX,
           ease: "none",

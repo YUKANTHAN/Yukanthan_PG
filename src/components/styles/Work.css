@@ -333,8 +333,6 @@
     margin-left: 0;
     padding-right: 16px;
     will-change: transform;
-    /* Initial centered position (approximate, JS will set exact value) */
-    transform: translateX(calc((100vw - 280px) / 2));
   }
 
   .work-box {
