@@ -69,6 +69,9 @@ const Work = () => {
           startOffset = (container.clientWidth - boxWidth) / 2;
         }
 
+        // Set initial centered position BEFORE creating timeline (before pin)
+        gsap.set(".work-flex", { x: startOffset });
+
         tl = gsap.timeline({
           scrollTrigger: {
             trigger: ".work-section",
@@ -89,7 +92,6 @@ const Work = () => {
             },
           },
         });
-        gsap.set(".work-flex", { x: startOffset });
         tl.to(".work-flex", {
           x: startOffset - translateX,
           ease: "none",
