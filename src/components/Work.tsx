@@ -54,7 +54,7 @@ const Work = () => {
           x: -translateX,
           ease: "none",
         });
-      } else {
+} else {
         // Mobile: pinned horizontal scroll on vertical page scroll (same as desktop)
         let translateX = 0;
         let startOffset = 0;
@@ -66,13 +66,6 @@ const Work = () => {
           const gap = 16;
           translateX = (boxes.length - 1) * (boxWidth + gap);
           startOffset = (container.clientWidth - boxWidth) / 2;
-        }
-
-        // Set initial centered position via CSS class (before pin)
-        const flexEl = document.querySelector(".work-flex") as HTMLElement;
-        if (flexEl) {
-          flexEl.style.transform = `translateX(${startOffset}px)`;
-          flexEl.style.willChange = "transform";
         }
 
         tl = gsap.timeline({
@@ -93,6 +86,12 @@ const Work = () => {
               }
             },
           },
+        });
+        // immediateRender: false prevents GSAP from overriding initial CSS position
+        tl.to(".work-flex", {
+          x: startOffset - translateX,
+          ease: "none",
+          immediateRender: false,
         });
         // immediateRender: false prevents GSAP from overriding initial CSS position
         tl.to(".work-flex", {
