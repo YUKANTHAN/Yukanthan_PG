@@ -59,23 +59,35 @@ const Work = () => {
         const flex = flexRef.current;
         if (!flex) return;
 
-        // Parallax on images
-        const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
-        boxes.forEach((box) => {
-          const img = box.querySelector<HTMLImageElement>(".work-image img");
-          if (img) {
-            gsap.to(img, {
-              yPercent: 15,
-              ease: "none",
-              scrollTrigger: {
-                trigger: box,
-                start: "left right",
-                end: "right left",
-                scrub: 0.8,
-                id: `work-parallax-${box.dataset.key || Math.random()}`,
-              },
+        // Create a ScrollTrigger that tracks horizontal scroll of the flex container
+        const flexScrollTrigger = ScrollTrigger.create({
+          trigger: flex,
+          start: "left left",
+          end: "right right",
+          horizontal: true,
+          scrub: true,
+          id: "work-flex-scroll",
+          onUpdate: (self) => {
+            // Drive parallax for all images based on horizontal scroll progress
+            const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
+            boxes.forEach((box) => {
+              const img = box.querySelector<HTMLImageElement>(".work-image img");
+              if (img) {
+                // Calculate how far this box is from center of viewport
+                const boxRect = box.getBoundingClientRect();
+                const flexRect = flex.getBoundingClientRect();
+                const boxCenter = boxRect.left + boxRect.width / 2;
+                const viewportCenter = flexRect.left + flexRect.width / 2;
+                const distanceFromCenter = (boxCenter - viewportCenter) / (flexRect.width / 2);
+                
+                // Apply parallax based on horizontal position
+                gsap.set(img, {
+                  yPercent: distanceFromCenter * 15,
+                  overwrite: "auto",
+                });
+              }
             });
-          }
+          },
         });
 
         // Keyboard navigation
@@ -114,9 +126,7 @@ const Work = () => {
         return () => {
           flex.removeEventListener("keydown", handleKeyDown);
           flex.removeEventListener("scroll", updateEdgeFade);
-          ScrollTrigger.getAll().forEach((st) => {
-            if (st.vars.id?.toString().startsWith("work-parallax")) st.kill();
-          });
+          flexScrollTrigger?.kill();
         };
       }
 
