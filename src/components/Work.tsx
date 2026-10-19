@@ -64,13 +64,16 @@ const Work = () => {
         if (boxes.length && container && flex) {
           const boxWidth = boxes[0].offsetWidth;
           const gap = 16;
-          // Total horizontal travel: from first card centered to last card centered
           translateX = (boxes.length - 1) * (boxWidth + gap);
           startOffset = (container.clientWidth - boxWidth) / 2;
         }
 
-        // Set initial centered position BEFORE creating timeline (before pin)
-        gsap.set(".work-flex", { x: startOffset });
+        // Set initial centered position via CSS class (before pin)
+        const flexEl = document.querySelector(".work-flex") as HTMLElement;
+        if (flexEl) {
+          flexEl.style.transform = `translateX(${startOffset}px)`;
+          flexEl.style.willChange = "transform";
+        }
 
         tl = gsap.timeline({
           scrollTrigger: {
@@ -84,7 +87,6 @@ const Work = () => {
             id: "work",
             invalidateOnRefresh: true,
             onRefresh: (self) => {
-              // Force pin spacer height to match scroll distance exactly
               const spacer = document.querySelector(".pin-spacer") as HTMLElement;
               if (spacer) {
                 spacer.style.height = `${self.end - self.start}px`;
@@ -92,9 +94,11 @@ const Work = () => {
             },
           },
         });
+        // immediateRender: false prevents GSAP from overriding initial CSS position
         tl.to(".work-flex", {
           x: startOffset - translateX,
           ease: "none",
+          immediateRender: false,
         });
       }
 
