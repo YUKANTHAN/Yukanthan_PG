@@ -55,80 +55,34 @@ const Work = () => {
           ease: "none",
         });
       } else {
-        // Mobile: horizontal scroll with CSS snap + universal design + parallax
-        const flex = flexRef.current;
-        if (!flex) return;
+        // Mobile: pinned horizontal scroll on vertical page scroll (same as desktop)
+        let translateX = 0;
+        const boxes = document.querySelectorAll<HTMLElement>(".work-box");
+        const container = document.querySelector<HTMLElement>(".work-container");
+        const flex = document.querySelector<HTMLElement>(".work-flex");
+        if (boxes.length && container && flex) {
+          const boxWidth = boxes[0].offsetWidth;
+          const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
+          translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
+        }
 
-        // Create a ScrollTrigger that tracks horizontal scroll of the flex container
-        const flexScrollTrigger = ScrollTrigger.create({
-          trigger: flex,
-          start: "left left",
-          end: "right right",
-          horizontal: true,
-          scrub: true,
-          id: "work-flex-scroll",
-          onUpdate: (self) => {
-            // Drive parallax for all images based on horizontal scroll progress
-            const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
-            boxes.forEach((box) => {
-              const img = box.querySelector<HTMLImageElement>(".work-image img");
-              if (img) {
-                // Calculate how far this box is from center of viewport
-                const boxRect = box.getBoundingClientRect();
-                const flexRect = flex.getBoundingClientRect();
-                const boxCenter = boxRect.left + boxRect.width / 2;
-                const viewportCenter = flexRect.left + flexRect.width / 2;
-                const distanceFromCenter = (boxCenter - viewportCenter) / (flexRect.width / 2);
-                
-                // Apply parallax based on horizontal position
-                gsap.set(img, {
-                  yPercent: distanceFromCenter * 15,
-                  overwrite: "auto",
-                });
-              }
-            });
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: `+=${translateX}`,
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            id: "work",
+            invalidateOnRefresh: true,
           },
         });
-
-        // Keyboard navigation
-        const handleKeyDown = (e: KeyboardEvent) => {
-          const cards = flex.querySelectorAll<HTMLElement>(".work-box");
-          const activeIdx = Array.from(cards).findIndex((c) =>
-            c.matches(":focus, :focus-within")
-          );
-          if (activeIdx === -1) return;
-
-          let nextIdx = activeIdx;
-          if (e.key === "ArrowRight") nextIdx = Math.min(activeIdx + 1, cards.length - 1);
-          else if (e.key === "ArrowLeft") nextIdx = Math.max(activeIdx - 1, 0);
-          else if (e.key === "Home") nextIdx = 0;
-          else if (e.key === "End") nextIdx = cards.length - 1;
-          else return;
-
-          e.preventDefault();
-          cards[nextIdx]?.focus();
-          cards[nextIdx]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-        };
-
-        flex.addEventListener("keydown", handleKeyDown);
-
-        // Scroll indicators: fade edges when not at boundaries
-        const updateEdgeFade = () => {
-          const { scrollLeft, scrollWidth, clientWidth } = flex;
-          const atStart = scrollLeft <= 4;
-          const atEnd = scrollLeft + clientWidth >= scrollWidth - 4;
-          flex.style.setProperty("--fade-start", atStart ? "0" : "1");
-          flex.style.setProperty("--fade-end", atEnd ? "0" : "1");
-        };
-        flex.addEventListener("scroll", updateEdgeFade, { passive: true });
-        updateEdgeFade();
-
-        return () => {
-          flex.removeEventListener("keydown", handleKeyDown);
-          flex.removeEventListener("scroll", updateEdgeFade);
-          flexScrollTrigger?.kill();
-        };
-      }
+        tl.to(".work-flex", {
+          x: -translateX,
+          ease: "none",
+        });
 
       ScrollTrigger.refresh();
     }

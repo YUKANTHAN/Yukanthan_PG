@@ -298,7 +298,7 @@
   color: #000 !important;
 }
 
-/* Mobile: Horizontal card carousel with snap scroll + universal design */
+/* Mobile: GSAP pinned horizontal scroll (vertical page scroll → horizontal carousel) */
 @media only screen and (max-width: 768px) {
   .work-section {
     height: auto;
@@ -309,51 +309,10 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scroll-padding: 0 16px;
     gap: 16px;
     margin-left: 0;
     padding-right: 16px;
-    padding-bottom: 16px;
-
-    /* Scroll fade edges via CSS custom properties */
-    position: relative;
-    --fade-start: 0;
-    --fade-end: 0;
-  }
-
-  .work-flex::before,
-  .work-flex::after {
-    content: "";
-    position: sticky;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    transition: opacity 0.2s ease;
-  }
-  .work-flex::before {
-    left: 0;
-    background: linear-gradient(
-      to right,
-      var(--backgroundColor) var(--fade-start, 0),
-      transparent
-    );
-    opacity: var(--fade-start, 0);
-  }
-  .work-flex::after {
-    right: 0;
-    background: linear-gradient(
-      to left,
-      var(--backgroundColor) var(--fade-end, 0),
-      transparent
-    );
-    opacity: var(--fade-end, 0);
+    will-change: transform;
   }
 
   .work-box {
@@ -367,7 +326,6 @@
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.02);
     gap: 16px;
-    scroll-snap-align: start;
     box-sizing: border-box;
 
     /* Focus visible for keyboard */
@@ -419,9 +377,6 @@
     .work-image img {
       transition: none;
     }
-    .work-flex {
-      scroll-behavior: auto;
-    }
   }
 
   .work-box:hover .work-image img {
@@ -436,7 +391,6 @@
     border: 1px solid var(--accentColor);
     border-radius: 16px;
     background: rgba(194, 164, 255, 0.08);
-    scroll-snap-align: start;
   }
 
   .see-all-works h3 {
@@ -453,14 +407,5 @@
     text-align: center;
     padding: 12px 16px;
     font-size: 14px;
-  }
-
-  /* Hide scrollbar but keep scroll function */
-  .work-flex::-webkit-scrollbar {
-    display: none;
-  }
-  .work-flex {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 }
