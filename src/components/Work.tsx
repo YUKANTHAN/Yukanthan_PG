@@ -64,6 +64,7 @@ const Work = () => {
         if (boxes.length && container && flex) {
           const boxWidth = boxes[0].offsetWidth;
           const gap = 16;
+          // Total horizontal travel: from first card centered to last card centered
           translateX = (boxes.length - 1) * (boxWidth + gap);
           startOffset = (container.clientWidth - boxWidth) / 2;
         }
@@ -79,6 +80,13 @@ const Work = () => {
             anticipatePin: 1,
             id: "work",
             invalidateOnRefresh: true,
+            onRefresh: (self) => {
+              // Force pin spacer height to match scroll distance exactly
+              const spacer = document.querySelector(".pin-spacer");
+              if (spacer) {
+                spacer.style.height = `${self.end - self.start}px`;
+              }
+            },
           },
         });
         gsap.set(".work-flex", { x: startOffset });
@@ -129,6 +137,7 @@ const Work = () => {
           role="region"
           aria-label="Projects"
           aria-roledescription="carousel"
+          id="work-flex"
         >
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
