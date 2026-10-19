@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
@@ -11,24 +11,67 @@ gsap.registerPlugin(ScrollTrigger);
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
   const [startOffset, setStartOffset] = useState(0);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
-  // Calculate initial centered offset in layout effect (before paint)
-  useLayoutEffect(() => {
-    const boxes = document.querySelectorAll<HTMLElement>(".work-box");
-    const container = document.querySelector<HTMLElement>(".work-container");
-    const flex = flexRef.current;
-    if (boxes.length && container && flex) {
-      const boxWidth = boxes[0].offsetWidth;
-      const offset = (container.clientWidth - boxWidth) / 2;
-      setStartOffset(offset);
-      // Apply immediately via inline style (before ScrollTrigger creates pin)
-      flex.style.transform = `translateX(${offset}px)`;
-      flex.style.willChange = "transform";
+  const setupMobileScroll = (flex: HTMLDivElement) => {
+    const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
+    const container = flex.closest<HTMLElement>(".work-container");
+    if (!boxes.length || !container) return;
+
+    const boxWidth = boxes[0].offsetWidth;
+    const gap = 16;
+    const translateX = (boxes.length - 1) * (boxWidth + gap);
+    const startOffset = (container.clientWidth - boxWidth) / 2;
+
+    // Set initial centered position immediately (before ScrollTrigger)
+    gsap.set(flex, { x: startOffset, overwrite: "auto" });
+
+    // Kill existing
+    if (timelineRef.current) timelineRef.current.kill();
+    if (scrollTriggerRef.current) scrollTriggerRef.current.kill();
+
+    // Create ScrollTrigger with pin
+    scrollTriggerRef.current = ScrollTrigger.create({
+      trigger: ".work-section",
+      start: "top top",
+      end: `+=${translateX}`,
+      scrub: 1,
+      pin: true,
+      pinSpacing: true,
+      anticipatePin: 1,
+      id: "work",
+      invalidateOnRefresh: true,
+      onRefresh: (self) => {
+        const spacer = document.querySelector(".pin-spacer") as HTMLElement;
+        if (spacer) spacer.style.height = `${self.end - self.start}px`;
+      },
+    });
+
+    // Animate from centered start to centered end
+    timelineRef.current = gsap.timeline({
+      scrollTrigger: { id: "work" },
+    });
+    timelineRef.current.to(flex, {
+      x: startOffset - translateX,
+      ease: "none",
+      immediateRender: false,
+    });
+  };
+
+  // Ref callback: runs synchronously when element mounts
+  const handleFlexRef = (el: HTMLDivElement | null) => {
+    if (!el) return;
+    if (window.innerWidth <= 768) {
+      // Small delay to ensure layout is settled
+      requestAnimationFrame(() => setupMobileScroll(el));
     }
-  }, []);
+  };
 
+  // Desktop scroll handler
   useEffect(() => {
-    const isDesktop = window.innerWidth > 768;
+    if (window.innerWidth <= 768) return;
+
     let tl: gsap.core.Timeline | null = null;
 
     function setTranslateX() {
@@ -48,86 +91,29 @@ const Work = () => {
         ScrollTrigger.getById("work")?.kill();
       }
 
-      if (isDesktop) {
-        // Desktop: horizontal pinned scroll
-        const translateX = setTranslateX();
-        if (translateX === undefined) return;
+      const translateX = setTranslateX();
+      if (translateX === undefined) return;
 
-        tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".work-section",
-            start: "top top",
-            end: `+=${translateX}`,
-            scrub: 1,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            id: "work",
-            invalidateOnRefresh: true,
-          },
+      tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".work-section",
+          start: "top top",
+          end: `+=${translateX}`,
+          scrub: 1,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          id: "work",
+          invalidateOnRefresh: true,
         });
-        tl.to(".work-flex", {
-          x: -translateX,
-          ease: "none",
-        });
-} else {
-        // Mobile: pinned horizontal scroll on vertical page scroll (same as desktop)
-        let translateX = 0;
-        let startOffset = 0;
-        const boxes = document.querySelectorAll<HTMLElement>(".work-box");
-        const container = document.querySelector<HTMLElement>(".work-container");
-        const flex = document.querySelector<HTMLElement>(".work-flex");
-        if (boxes.length && container && flex) {
-          const boxWidth = boxes[0].offsetWidth;
-          const gap = 16;
-          translateX = (boxes.length - 1) * (boxWidth + gap);
-          startOffset = (container.clientWidth - boxWidth) / 2;
-        }
-
-        tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".work-section",
-            start: "top top",
-            end: `+=${translateX}`,
-            scrub: 1,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            id: "work",
-            invalidateOnRefresh: true,
-            onRefresh: (self) => {
-              const spacer = document.querySelector(".pin-spacer") as HTMLElement;
-              if (spacer) {
-                spacer.style.height = `${self.end - self.start}px`;
-              }
-            },
-          },
-        });
-        tl.to(".work-flex", {
-          x: startOffset - translateX,
-          ease: "none",
-          immediateRender: false,
-        });
-        tl.to(".work-flex", {
-          x: startOffset - translateX,
-          ease: "none",
-          immediateRender: false,
-        });
-        // immediateRender: false prevents GSAP from overriding initial CSS position
-        tl.to(".work-flex", {
-          x: startOffset - translateX,
-          ease: "none",
-          immediateRender: false,
-        });
-      }
-
+      tl.to(".work-flex", { x: -translateX, ease: "none" });
       ScrollTrigger.refresh();
     }
 
     createTimeline();
 
     let resizeTimeout: number;
-    let lastIsDesktop = isDesktop;
+    let lastIsDesktop = true;
     const handleResize = () => {
       const nowDesktop = window.innerWidth > 768;
       if (nowDesktop === lastIsDesktop) return;
@@ -147,7 +133,7 @@ const Work = () => {
         tl.kill();
         ScrollTrigger.getById("work")?.kill();
       }
-    }
+    };
   }, []);
 
   return (
@@ -158,12 +144,11 @@ const Work = () => {
         </h2>
         <div
           className="work-flex"
-          ref={flexRef}
+          ref={handleFlexRef}
           role="region"
           aria-label="Projects"
           aria-roledescription="carousel"
           id="work-flex"
-          style={{ transform: `translateX(${startOffset}px)`, willChange: "transform" }}
         >
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
@@ -172,7 +157,6 @@ const Work = () => {
                 <div className="work-info">
                   <div className="work-title">
                     <h3>0{index + 1}</h3>
-
                     <div>
                       <h4>{project.title}</h4>
                       <p>{project.category}</p>
