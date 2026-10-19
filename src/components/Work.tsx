@@ -63,9 +63,8 @@ const Work = () => {
         const flex = document.querySelector<HTMLElement>(".work-flex");
         if (boxes.length && container && flex) {
           const boxWidth = boxes[0].offsetWidth;
-          const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
-          translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
-          // Center first card initially, center last card at end
+          const gap = 16;
+          translateX = (boxes.length - 1) * (boxWidth + gap);
           startOffset = (container.clientWidth - boxWidth) / 2;
         }
 
@@ -82,7 +81,6 @@ const Work = () => {
             invalidateOnRefresh: true,
           },
         });
-        // Set initial centered position
         gsap.set(".work-flex", { x: startOffset });
         tl.to(".work-flex", {
           x: startOffset - translateX,
