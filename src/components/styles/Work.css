@@ -302,7 +302,14 @@
 @media only screen and (max-width: 768px) {
   .work-section {
     height: auto;
-    min-height: auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .work-container {
+    width: 100%;
   }
 
   .work-flex {
