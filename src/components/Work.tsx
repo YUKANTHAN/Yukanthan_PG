@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useEffect, useRef } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
@@ -14,7 +14,7 @@ const Work = () => {
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const [startOffset, setStartOffset] = useState(0);
 
-  // Mobile: synchronous setup before paint
+// Mobile: synchronous setup before paint
   useLayoutEffect(() => {
     if (window.innerWidth > 768) return;
 
@@ -28,10 +28,11 @@ const Work = () => {
     const boxWidth = boxes[0].offsetWidth;
     const gap = 16;
     const translateX = (boxes.length - 1) * (boxWidth + gap);
-    const offset = (container.clientWidth - boxWidth) / 2;
+    const startOffset = (container.clientWidth - boxWidth) / 2;
 
-    // Set initial centered position in state (for inline style)
-    setStartOffset(offset);
+    // Set initial centered position immediately (synchronous, before ScrollTrigger)
+    flex.style.transform = `translateX(${startOffset}px)`;
+    flex.style.willChange = "transform";
 
     // Kill existing
     if (timelineRef.current) timelineRef.current.kill();
@@ -59,7 +60,7 @@ const Work = () => {
       scrollTrigger: { id: "work" },
     });
     timelineRef.current.to(flex, {
-      x: offset - translateX,
+      x: startOffset - translateX,
       ease: "none",
       immediateRender: false,
     });
@@ -147,7 +148,6 @@ const Work = () => {
           aria-label="Projects"
           aria-roledescription="carousel"
           id="work-flex"
-          style={{ transform: `translateX(${startOffset}px)`, willChange: "transform" }}
         >
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
