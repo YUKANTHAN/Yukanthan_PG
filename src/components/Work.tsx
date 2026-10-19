@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useEffect, useRef } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
@@ -9,10 +9,17 @@ import { Link } from "react-router-dom";
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
+  const flexRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
-  const setupMobileScroll = (flex: HTMLDivElement) => {
+  // Mobile: synchronous setup before paint
+  useLayoutEffect(() => {
+    if (window.innerWidth > 768) return;
+
+    const flex = flexRef.current;
+    if (!flex) return;
+
     const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
     const container = flex.closest<HTMLElement>(".work-container");
     if (!boxes.length || !container) return;
@@ -55,16 +62,7 @@ const Work = () => {
       ease: "none",
       immediateRender: false,
     });
-  };
-
-  // Ref callback: runs synchronously when element mounts
-  const handleFlexRef = (el: HTMLDivElement | null) => {
-    if (!el) return;
-    if (window.innerWidth <= 768) {
-      // Small delay to ensure layout is settled
-      requestAnimationFrame(() => setupMobileScroll(el));
-    }
-  };
+  }, []);
 
   // Desktop scroll handler
   useEffect(() => {
@@ -141,9 +139,9 @@ const Work = () => {
         <h2>
           My <span>Work</span>
         </h2>
-<div
+        <div
           className="work-flex"
-          ref={handleFlexRef}
+          ref={flexRef}
           role="region"
           aria-label="Projects"
           aria-roledescription="carousel"
