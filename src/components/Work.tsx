@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
-  const flexRef = useRef<HTMLDivElement>(null);
-  const [startOffset, setStartOffset] = useState(0);
+const flexRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
@@ -105,7 +105,8 @@ const Work = () => {
           anticipatePin: 1,
           id: "work",
           invalidateOnRefresh: true,
-        });
+        },
+      });
       tl.to(".work-flex", { x: -translateX, ease: "none" });
       ScrollTrigger.refresh();
     }
@@ -142,7 +143,7 @@ const Work = () => {
         <h2>
           My <span>Work</span>
         </h2>
-        <div
+<div
           className="work-flex"
           ref={handleFlexRef}
           role="region"
