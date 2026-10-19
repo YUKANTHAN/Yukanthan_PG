@@ -82,7 +82,7 @@ const Work = () => {
             invalidateOnRefresh: true,
             onRefresh: (self) => {
               // Force pin spacer height to match scroll distance exactly
-              const spacer = document.querySelector(".pin-spacer");
+              const spacer = document.querySelector(".pin-spacer") as HTMLElement;
               if (spacer) {
                 spacer.style.height = `${self.end - self.start}px`;
               }
