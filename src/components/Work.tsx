@@ -83,6 +83,7 @@ const Work = () => {
           x: -translateX,
           ease: "none",
         });
+      }
 
       ScrollTrigger.refresh();
     }
