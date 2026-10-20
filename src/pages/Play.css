@@ -560,8 +560,8 @@ body:has(.play-page) {
   }
 
   .chess-board {
-    width: calc(100vw - 50px);
-    height: calc(100vw - 50px);
+    width: calc(100% - 50px);
+    height: calc(100% - 50px);
     max-width: 400px;
     max-height: 400px;
   }

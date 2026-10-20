@@ -62,7 +62,7 @@
   transition-delay: 0ms;
   transition-timing-function: cubic-bezier(0.33, 0.11, 1, 0.72);
   transform: scale(1);
-  min-width: 100vw;
+  min-width: 100%;
   border-radius: 5000px;
   min-height: 100vh;
   box-shadow: none;
