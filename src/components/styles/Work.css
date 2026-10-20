@@ -311,8 +311,8 @@
 /* Mobile: GSAP pinned horizontal scroll (vertical page scroll → horizontal carousel) */
 @media only screen and (max-width: 768px) {
   .work-section {
-    height: 100vh;
-    min-height: 100vh;
+    height: 100svh;
+    min-height: 100svh;
     width: 100%;
     overflow: hidden;
     position: relative;

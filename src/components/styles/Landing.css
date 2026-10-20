@@ -441,7 +441,7 @@ h2.landing-info-h2 {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    height: 54vh;
+    height: 54svh;
     min-height: 300px;
     max-height: 540px;
     z-index: 0;

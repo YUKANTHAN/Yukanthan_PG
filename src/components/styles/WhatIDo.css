@@ -5,7 +5,7 @@
   place-items: center;
   position: relative;
   opacity: 1;
-  height: 100vh;
+  min-height: 100svh;
   width: var(--cWidth);
   max-width: 1920px;
   margin: auto;

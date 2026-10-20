@@ -64,7 +64,7 @@
   transform: scale(1);
   min-width: 100%;
   border-radius: 5000px;
-  min-height: 100vh;
+  min-height: 100svh;
   box-shadow: none;
 }
 .loading-clicked .loading-button {
