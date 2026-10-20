@@ -13,7 +13,7 @@ const Work = () => {
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
-// Mobile: synchronous setup before paint
+  // Mobile: synchronous setup before paint
   useLayoutEffect(() => {
     if (window.innerWidth > 768) return;
 
@@ -29,7 +29,7 @@ const Work = () => {
     const translateX = (boxes.length - 1) * (boxWidth + gap);
     const startOffset = (container.clientWidth - boxWidth) / 2;
 
-    // Set initial centered position immediately (synchronous, before ScrollTrigger)
+    // Set initial centered position immediately (before ScrollTrigger)
     flex.style.transform = `translateX(${startOffset}px)`;
     flex.style.willChange = "transform";
 
@@ -65,7 +65,7 @@ const Work = () => {
     });
   }, []);
 
-  // Desktop scroll handler
+  // Desktop scroll handler (restored from working version)
   useEffect(() => {
     if (window.innerWidth <= 768) return;
 
