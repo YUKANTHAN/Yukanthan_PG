@@ -30,6 +30,8 @@ const Work = () => {
       const translateX = (boxes.length - 1) * (boxWidth + 16);
       const startOffset = (container.clientWidth - boxWidth) / 2;
 
+      console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, startOffset, boxes: boxes.length });
+
       // Set initial centered position BEFORE ScrollTrigger
       gsap.set(flex, { x: startOffset, overwrite: "auto" });
 
@@ -56,6 +58,8 @@ const Work = () => {
         scrollTrigger: { id: "work" },
         immediateRender: false,
       });
+
+      console.log('[Work Mobile] Setup complete');
     };
 
     // Small delay to ensure layout is computed
