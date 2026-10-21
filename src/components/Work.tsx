@@ -29,24 +29,20 @@ const Work = () => {
     const translateX = (boxes.length - 1) * (boxWidth + gap);
     const startOffset = (container.clientWidth - boxWidth) / 2;
 
-    // Set initial centered position immediately (before ScrollTrigger)
-    flex.style.transform = `translateX(${startOffset}px)`;
-    flex.style.willChange = "transform";
-
     // Kill existing
     if (timelineRef.current) timelineRef.current.kill();
     if (scrollTriggerRef.current) scrollTriggerRef.current.kill();
 
-    // Create ScrollTrigger with pin
-    scrollTriggerRef.current = ScrollTrigger.create({
+    // Create ScrollTrigger for pin
+    ScrollTrigger.create({
       trigger: ".work-section",
       start: "top top",
-      end: `+=${translateX}`,
+      end: () => translateX + boxWidth,
       scrub: 1,
       pin: true,
       pinSpacing: true,
       anticipatePin: 1,
-      id: "work",
+      id: "work-mobile",
       invalidateOnRefresh: true,
       onRefresh: (self) => {
         const spacer = document.querySelector(".pin-spacer") as HTMLElement;
@@ -54,15 +50,23 @@ const Work = () => {
       },
     });
 
-    // Animate from centered start to centered end
+    // Animate from centered start to centered end (including last card)
     timelineRef.current = gsap.timeline({
-      scrollTrigger: { id: "work" },
+      scrollTrigger: { id: "work-mobile" } as gsap.TimelineVars["scrollTrigger"],
     });
     timelineRef.current.to(flex, {
-      x: startOffset - translateX,
+      x: startOffset - translateX - boxWidth,
       ease: "none",
       immediateRender: false,
     });
+
+    // Entry animation for each work card (at timeline start)
+    timelineRef.current.from(".work-box", {
+      opacity: 0,
+      y: 30,
+      stagger: 0.15,
+      ease: "power2.out",
+    }, 0);
   }, []);
 
   // Desktop scroll handler (restored from working version)
@@ -105,10 +109,26 @@ const Work = () => {
         },
       });
       tl.to(".work-flex", { x: -translateX, ease: "none" });
+      // Animate each work card on entry
+      tl.from(".work-box", { opacity: 0, y: 30, stagger: 0.2, ease: "power2.out" }, 0);
       ScrollTrigger.refresh();
     }
 
     createTimeline();
+    // Add scroll-triggered entry animation for each work card (desktop)
+    gsap.utils.toArray<HTMLElement>(".work-box").forEach((box) => {
+      gsap.from(box, {
+        opacity: 0,
+        y: 30,
+        duration: 0.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: box,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    });
 
     let resizeTimeout: number;
     let lastIsDesktop = true;
