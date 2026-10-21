@@ -28,7 +28,6 @@ const Work = () => {
       if (!boxWidth || !containerWidth) return;
 
       // Original working formula from 16d828a (matches desktop logic)
-      const boxWidth = boxes[0].offsetWidth;
       const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
       const translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
       const startOffset = (containerWidth - boxes[0].offsetWidth) / 2;
