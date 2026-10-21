@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
 
-  // Mobile: synchronous setup before paint
+// Mobile: synchronous setup before paint
   useLayoutEffect(() => {
     if (window.innerWidth > 768) return;
 
@@ -32,10 +32,6 @@ const Work = () => {
 
       console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, startOffset, boxes: boxes.length });
 
-      // Set initial centered position via inline style (before ScrollTrigger)
-      flex.style.transform = `translateX(${startOffset}px)`;
-      flex.style.willChange = "transform";
-
       // Kill existing
       ScrollTrigger.getById("work")?.kill();
 
@@ -52,34 +48,21 @@ const Work = () => {
         invalidateOnRefresh: true,
       });
 
-      // Animate from centered start to centered end
-      gsap.to(flex, {
-        x: -translateX,
-        ease: "none",
-        scrollTrigger: { id: "work" },
-        immediateRender: false,
-      });
+      // Animate from centered start to centered end (single fromTo)
+      gsap.fromTo(flex,
+        { x: startOffset },
+        { x: -translateX, ease: "none", scrollTrigger: { id: "work" } }
+      );
 
-      // Entry animation for each work card
-      gsap.from(".work-box", {
-        opacity: 0,
-        y: 30,
-        stagger: 0.15,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".work-section",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      // Entry animation for each work card (immediate, no ScrollTrigger)
+      // Entry animation for each work card (immediate)
       gsap.from(".work-box", {
         opacity: 0,
         y: 30,
         stagger: 0.15,
         ease: "power2.out",
       });
+
+      console.log('[Work Mobile] Setup complete');
     };
 
     // Small delay to ensure layout is computed
