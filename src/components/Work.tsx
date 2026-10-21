@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
 
-// Mobile: synchronous setup before paint
+  // Mobile: synchronous setup before paint
   useLayoutEffect(() => {
     if (window.innerWidth > 768) return;
 
@@ -27,10 +27,17 @@ const Work = () => {
       const containerWidth = container.clientWidth;
       if (!boxWidth || !containerWidth) return;
 
-      const translateX = (boxes.length - 1) * (boxWidth + 16);
-      const startOffset = (container.clientWidth - boxWidth) / 2;
+      // Use original working formula: total content width - viewport width
+      // Correct scroll distance: total flex width - container width
+      // flex width = boxes.length * boxWidth + (boxes.length - 1) * gap + paddingRight
+      const translateX = boxes.length * (boxWidth + 16) - containerWidth;
+      const startOffset = (containerWidth - boxWidth) / 2;
 
       console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, startOffset, boxes: boxes.length });
+
+      // Set initial centered position via inline style
+      flex.style.transform = `translateX(${startOffset}px)`;
+      flex.style.willChange = "transform";
 
       // Kill existing
       ScrollTrigger.getById("work")?.kill();
@@ -48,7 +55,7 @@ const Work = () => {
         invalidateOnRefresh: true,
       });
 
-      // Animate from centered start to centered end (single fromTo)
+      // Animate from centered start to centered end
       gsap.fromTo(flex,
         { x: startOffset },
         { x: -translateX, ease: "none", scrollTrigger: { id: "work" } }
@@ -65,12 +72,12 @@ const Work = () => {
       console.log('[Work Mobile] Setup complete');
     };
 
-    // Small delay to ensure layout is computed
     requestAnimationFrame(() => {
       requestAnimationFrame(setupMobile);
     });
   }, []);
 
+  // Desktop scroll handler
   useEffect(() => {
     if (window.innerWidth <= 768) return;
 
