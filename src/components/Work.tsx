@@ -73,7 +73,13 @@ const Work = () => {
         },
       });
 
-      console.log('[Work Mobile] Setup complete');
+      // Entry animation for each work card (immediate, no ScrollTrigger)
+      gsap.from(".work-box", {
+        opacity: 0,
+        y: 30,
+        stagger: 0.15,
+        ease: "power2.out",
+      });
     };
 
     // Small delay to ensure layout is computed
