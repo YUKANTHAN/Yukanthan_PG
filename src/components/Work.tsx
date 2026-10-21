@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
@@ -10,72 +10,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
-  // Mobile: synchronous setup before paint
-  useLayoutEffect(() => {
-    if (window.innerWidth > 768) return;
-
-    const flex = flexRef.current;
-    if (!flex) return;
-
-    const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
-    const container = flex.closest<HTMLElement>(".work-container");
-    if (!boxes.length || !container) return;
-
-    const boxWidth = boxes[0].offsetWidth;
-    const gap = 16;
-    const translateX = (boxes.length - 1) * (boxWidth + gap);
-    const startOffset = (container.clientWidth - boxWidth) / 2;
-
-    // Kill existing
-    if (timelineRef.current) timelineRef.current.kill();
-    if (scrollTriggerRef.current) scrollTriggerRef.current.kill();
-
-    // Set initial centered position BEFORE creating ScrollTrigger
-    gsap.set(flex, { x: startOffset, overwrite: "auto" });
-
-    // Create ScrollTrigger for pin
-    ScrollTrigger.create({
-      trigger: ".work-section",
-      start: "top top",
-      end: () => translateX + boxWidth,
-      scrub: 1,
-      pin: true,
-      pinSpacing: true,
-      anticipatePin: 1,
-      id: "work-mobile",
-      invalidateOnRefresh: true,
-      onRefresh: (self) => {
-        const spacer = document.querySelector(".pin-spacer") as HTMLElement;
-        if (spacer) spacer.style.height = `${self.end - self.start}px`;
-      },
-    });
-
-    // Animate from centered start to centered end (including last card)
-    timelineRef.current = gsap.timeline({
-      scrollTrigger: { id: "work-mobile" } as gsap.TimelineVars["scrollTrigger"],
-    });
-    timelineRef.current.to(flex, {
-      x: startOffset - translateX - boxWidth,
-      ease: "none",
-      immediateRender: false,
-    });
-
-    // Entry animation for each work card (at timeline start)
-    timelineRef.current.from(".work-box", {
-      opacity: 0,
-      y: 30,
-      stagger: 0.15,
-      ease: "power2.out",
-    }, 0);
-  }, []);
-
-  // Desktop scroll handler (restored from working version)
   useEffect(() => {
-    if (window.innerWidth <= 768) return;
-
+    const isDesktop = window.innerWidth > 768;
     let tl: gsap.core.Timeline | null = null;
 
     function setTranslateX() {
@@ -95,46 +32,67 @@ const Work = () => {
         ScrollTrigger.getById("work")?.kill();
       }
 
-      const translateX = setTranslateX();
-      if (translateX === undefined) return;
+      if (isDesktop) {
+        // Desktop: horizontal pinned scroll
+        const translateX = setTranslateX();
+        if (translateX === undefined) return;
 
-      tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".work-section",
-          start: "top top",
-          end: `+=${translateX}`,
-          scrub: 1,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          id: "work",
-          invalidateOnRefresh: true,
-        },
-      });
-      tl.to(".work-flex", { x: -translateX, ease: "none" });
-      // Animate each work card on entry
-      tl.from(".work-box", { opacity: 0, y: 30, stagger: 0.2, ease: "power2.out" }, 0);
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: `+=${translateX}`,
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            id: "work",
+            invalidateOnRefresh: true,
+          },
+        });
+        tl.to(".work-flex", {
+          x: -translateX,
+          ease: "none",
+        });
+      } else {
+        // Mobile: pinned horizontal scroll on vertical page scroll (same as desktop)
+        let translateX = 0;
+        const boxes = document.querySelectorAll<HTMLElement>(".work-box");
+        const container = document.querySelector<HTMLElement>(".work-container");
+        const flex = document.querySelector<HTMLElement>(".work-flex");
+        if (boxes.length && container && flex) {
+          const boxWidth = boxes[0].offsetWidth;
+          const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
+          translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
+        }
+
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: `+=${translateX}`,
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            id: "work",
+            invalidateOnRefresh: true,
+          },
+        });
+        tl.to(".work-flex", {
+          x: -translateX,
+          ease: "none",
+        });
+
+      }
+
       ScrollTrigger.refresh();
     }
 
     createTimeline();
-    // Add scroll-triggered entry animation for each work card (desktop)
-    gsap.utils.toArray<HTMLElement>(".work-box").forEach((box) => {
-      gsap.from(box, {
-        opacity: 0,
-        y: 30,
-        duration: 0.5,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: box,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      });
-    });
 
     let resizeTimeout: number;
-    let lastIsDesktop = true;
+    let lastIsDesktop = isDesktop;
     const handleResize = () => {
       const nowDesktop = window.innerWidth > 768;
       if (nowDesktop === lastIsDesktop) return;
@@ -169,7 +127,6 @@ const Work = () => {
           role="region"
           aria-label="Projects"
           aria-roledescription="carousel"
-          id="work-flex"
         >
           {config.projects.slice(0, 5).map((project, index) => {
             const projectUrl = 'demoLink' in project && project.demoLink ? project.demoLink : project.link;
@@ -178,6 +135,7 @@ const Work = () => {
                 <div className="work-info">
                   <div className="work-title">
                     <h3>0{index + 1}</h3>
+
                     <div>
                       <h4>{project.title}</h4>
                       <p>{project.category}</p>
