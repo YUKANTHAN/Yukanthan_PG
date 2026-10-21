@@ -27,16 +27,17 @@ const Work = () => {
       const containerWidth = container.clientWidth;
       if (!boxWidth || !containerWidth) return;
 
-      // Total flex width = n * (boxWidth + gap) + paddingRight
-      // gap = 16, paddingRight = 16, n = boxes.length
-      // Total = n * (boxWidth + 16) + 16 - 16 = n * (boxWidth + 16)
       const translateX = boxes.length * (boxWidth + 16) - container.clientWidth;
-      const startOffset = (container.clientWidth - boxes[0].offsetWidth) / 2;
+      const startOffset = (containerWidth - boxes[0].offsetWidth) / 2;
 
-      console.log('[Work Mobile] Setup:', { boxWidth: boxes[0].offsetWidth, containerWidth, translateX, startOffset: (container.clientWidth - boxes[0].offsetWidth) / 2, boxes: boxes.length });
+      console.log('[Work Mobile] Setup:', { boxWidth: boxes[0].offsetWidth, containerWidth, translateX, startOffset: (containerWidth - boxes[0].offsetWidth) / 2, boxes: boxes.length });
 
       // Kill existing
       ScrollTrigger.getById("work")?.kill();
+
+      // Reset inline style to ensure clean state
+      flex.style.transform = "";
+      flex.style.willChange = "transform";
 
       // Set initial centered position via inline style (before ScrollTrigger)
       flex.style.transform = `translateX(${startOffset}px)`;
@@ -78,6 +79,11 @@ const Work = () => {
     requestAnimationFrame(() => {
       requestAnimationFrame(setupMobile);
     });
+
+    // Cleanup function
+    return () => {
+      ScrollTrigger.getById("work")?.kill();
+    };
   }, []);
 
   // Desktop scroll handler
