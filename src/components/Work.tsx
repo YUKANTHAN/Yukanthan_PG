@@ -33,11 +33,7 @@ const Work = () => {
       const translateX = boxes.length * (boxWidth + 16) - containerWidth;
       const startOffset = (containerWidth - boxWidth) / 2;
 
-      console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, startOffset, boxes: boxes.length });
-
-      // Set initial centered position via inline style
-      flex.style.transform = `translateX(${startOffset}px)`;
-      flex.style.willChange = "transform";
+console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, startOffset, boxes: boxes.length });
 
       // Kill existing
       ScrollTrigger.getById("work")?.kill();
@@ -55,10 +51,13 @@ const Work = () => {
         invalidateOnRefresh: true,
       });
 
-      // Animate from centered start to centered end
-      gsap.fromTo(flex,
+      // Animate from centered start to centered end (using timeline like desktop)
+      const tl = gsap.timeline({
+        scrollTrigger: { id: "work" },
+      });
+      tl.fromTo(flex,
         { x: startOffset },
-        { x: -translateX, ease: "none", scrollTrigger: { id: "work" } }
+        { x: -translateX, ease: "none" }
       );
 
       // Entry animation for each work card (immediate)
@@ -67,7 +66,7 @@ const Work = () => {
         y: 30,
         stagger: 0.15,
         ease: "power2.out",
-      });
+      );
 
       console.log('[Work Mobile] Setup complete');
     };
