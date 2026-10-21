@@ -32,8 +32,9 @@ const Work = () => {
 
       console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, startOffset, boxes: boxes.length });
 
-      // Set initial centered position BEFORE ScrollTrigger
-      gsap.set(flex, { x: startOffset, overwrite: "auto" });
+      // Set initial centered position via inline style (before ScrollTrigger)
+      flex.style.transform = `translateX(${startOffset}px)`;
+      flex.style.willChange = "transform";
 
       // Kill existing
       ScrollTrigger.getById("work")?.kill();
