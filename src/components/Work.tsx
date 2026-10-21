@@ -41,7 +41,7 @@ const Work = () => {
       flex.style.transform = `translateX(${startOffset}px)`;
       flex.style.willChange = "transform";
 
-      // Create ScrollTrigger with pin
+// Create ScrollTrigger with pin
       ScrollTrigger.create({
         trigger: ".work-section",
         start: "top top",
@@ -55,20 +55,10 @@ const Work = () => {
       });
 
       // Animate from centered start to centered end
-      gsap.to(flex, {
-        x: -translateX,
-        ease: "none",
-        scrollTrigger: { id: "work" },
-        immediateRender: false,
-      });
-
-      // Entry animation for each work card (immediate)
-      gsap.from(".work-box", {
-        opacity: 0,
-        y: 30,
-        stagger: 0.15,
-        ease: "power2.out"
-      });
+      gsap.fromTo(flex,
+        { x: startOffset },
+        { x: -translateX, ease: "none", scrollTrigger: { id: "work" }, immediateRender: false }
+      );
 
       console.log('[Work Mobile] Setup complete');
     };
