@@ -60,6 +60,19 @@ const Work = () => {
         immediateRender: false,
       });
 
+      // Entry animation for each work card
+      gsap.from(".work-box", {
+        opacity: 0,
+        y: 30,
+        stagger: 0.15,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".work-section",
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
       console.log('[Work Mobile] Setup complete');
     };
 
