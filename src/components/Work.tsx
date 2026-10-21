@@ -15,42 +15,52 @@ const Work = () => {
   useLayoutEffect(() => {
     if (window.innerWidth > 768) return;
 
-    const flex = flexRef.current;
-    if (!flex) return;
+    const setupMobile = () => {
+      const flex = flexRef.current;
+      if (!flex) return;
 
-    const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
-    const container = flex.closest<HTMLElement>(".work-container");
-    if (!boxes.length || !container) return;
+      const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
+      const container = flex.closest<HTMLElement>(".work-container");
+      if (!boxes.length || !container) return;
 
-    const boxWidth = boxes[0].offsetWidth;
-    const translateX = (boxes.length - 1) * (boxWidth + 16);
-    const startOffset = (container.clientWidth - boxWidth) / 2;
+      const boxWidth = boxes[0].offsetWidth;
+      const containerWidth = container.clientWidth;
+      if (!boxWidth || !containerWidth) return;
 
-    // Set initial centered position BEFORE ScrollTrigger
-    gsap.set(flex, { x: startOffset, overwrite: "auto" });
+      const translateX = (boxes.length - 1) * (boxWidth + 16);
+      const startOffset = (container.clientWidth - boxWidth) / 2;
 
-    // Kill existing
-    ScrollTrigger.getById("work")?.kill();
+      // Set initial centered position BEFORE ScrollTrigger
+      gsap.set(flex, { x: startOffset, overwrite: "auto" });
 
-    // Create ScrollTrigger with pin
-    ScrollTrigger.create({
-      trigger: ".work-section",
-      start: "top top",
-      end: `+=${translateX}`,
-      scrub: 1,
-      pin: true,
-      pinSpacing: true,
-      anticipatePin: 1,
-      id: "work",
-      invalidateOnRefresh: true,
-    });
+      // Kill existing
+      ScrollTrigger.getById("work")?.kill();
 
-    // Animate from centered start to centered end
-    gsap.to(flex, {
-      x: -translateX,
-      ease: "none",
-      scrollTrigger: { id: "work" },
-      immediateRender: false,
+      // Create ScrollTrigger with pin
+      ScrollTrigger.create({
+        trigger: ".work-section",
+        start: "top top",
+        end: () => translateX,
+        scrub: 1,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        id: "work",
+        invalidateOnRefresh: true,
+      });
+
+      // Animate from centered start to centered end
+      gsap.to(flex, {
+        x: -translateX,
+        ease: "none",
+        scrollTrigger: { id: "work" },
+        immediateRender: false,
+      });
+    };
+
+    // Small delay to ensure layout is computed
+    requestAnimationFrame(() => {
+      requestAnimationFrame(setupMobile);
     });
   }, []);
 
