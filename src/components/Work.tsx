@@ -58,15 +58,17 @@ const Work = () => {
         // Mobile: pinned horizontal scroll with centered cards
         let translateX = 0;
         let boxWidth = 0;
-        let gap = 16;
         const boxes = document.querySelectorAll<HTMLElement>(".work-box");
         const container = document.querySelector<HTMLElement>(".work-container");
         const flex = document.querySelector<HTMLElement>(".work-flex");
         if (boxes.length && container && flex) {
           boxWidth = boxes[0].offsetWidth;
-          gap = 16;
           // Mobile: distance from first card centered to last card centered
           translateX = (boxes.length - 1) * (boxWidth + 16);
+          const startOffset = (container.clientWidth - boxWidth) / 2;
+
+          // Set initial centered position BEFORE ScrollTrigger
+          gsap.set(flex, { x: startOffset, overwrite: "auto" });
         }
 
         tl = gsap.timeline({
