@@ -65,8 +65,8 @@ console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, star
         opacity: 0,
         y: 30,
         stagger: 0.15,
-        ease: "power2.out",
-      );
+        ease: "power2.out"
+      });
 
       console.log('[Work Mobile] Setup complete');
     };
