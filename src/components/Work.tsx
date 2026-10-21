@@ -27,16 +27,20 @@ const Work = () => {
       const containerWidth = container.clientWidth;
       if (!boxWidth || !containerWidth) return;
 
-      // Use original working formula: total content width - viewport width
-      // Correct scroll distance: total flex width - container width
-      // flex width = boxes.length * boxWidth + (boxes.length - 1) * gap + paddingRight
-      const translateX = boxes.length * (boxWidth + 16) - containerWidth;
-      const startOffset = (containerWidth - boxWidth) / 2;
+      // Total flex width = n * (boxWidth + gap) + paddingRight
+      // gap = 16, paddingRight = 16, n = boxes.length
+      // Total = n * (boxWidth + 16) + 16 - 16 = n * (boxWidth + 16)
+      const translateX = boxes.length * (boxWidth + 16) - container.clientWidth;
+      const startOffset = (container.clientWidth - boxes[0].offsetWidth) / 2;
 
-console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, startOffset, boxes: boxes.length });
+      console.log('[Work Mobile] Setup:', { boxWidth: boxes[0].offsetWidth, containerWidth, translateX, startOffset: (container.clientWidth - boxes[0].offsetWidth) / 2, boxes: boxes.length });
 
       // Kill existing
       ScrollTrigger.getById("work")?.kill();
+
+      // Set initial centered position via inline style (before ScrollTrigger)
+      flex.style.transform = `translateX(${startOffset}px)`;
+      flex.style.willChange = "transform";
 
       // Create ScrollTrigger with pin
       ScrollTrigger.create({
@@ -66,7 +70,7 @@ console.log('[Work Mobile] Setup:', { boxWidth, containerWidth, translateX, star
         y: 30,
         stagger: 0.15,
         ease: "power2.out"
-      });
+      );
 
       console.log('[Work Mobile] Setup complete');
     };
