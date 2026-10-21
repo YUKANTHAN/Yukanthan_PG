@@ -70,7 +70,7 @@ const Work = () => {
         y: 30,
         stagger: 0.15,
         ease: "power2.out"
-      );
+      });
 
       console.log('[Work Mobile] Setup complete');
     };
