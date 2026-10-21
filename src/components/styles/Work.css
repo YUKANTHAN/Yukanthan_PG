@@ -300,10 +300,6 @@
     margin-left: 0;
     padding-right: 16px;
     will-change: transform;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   .work-flex::before,
   .work-flex::after {
