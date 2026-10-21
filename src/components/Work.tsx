@@ -27,17 +27,16 @@ const Work = () => {
       const containerWidth = container.clientWidth;
       if (!boxWidth || !containerWidth) return;
 
-      const translateX = boxes.length * (boxWidth + 16) - container.clientWidth;
+      // Original working formula from 16d828a (matches desktop logic)
+      const boxWidth = boxes[0].offsetWidth;
+      const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
+      const translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
       const startOffset = (containerWidth - boxes[0].offsetWidth) / 2;
 
       console.log('[Work Mobile] Setup:', { boxWidth: boxes[0].offsetWidth, containerWidth, translateX, startOffset: (containerWidth - boxes[0].offsetWidth) / 2, boxes: boxes.length });
 
       // Kill existing
       ScrollTrigger.getById("work")?.kill();
-
-      // Reset inline style to ensure clean state
-      flex.style.transform = "";
-      flex.style.willChange = "transform";
 
       // Set initial centered position via inline style (before ScrollTrigger)
       flex.style.transform = `translateX(${startOffset}px)`;
@@ -47,7 +46,7 @@ const Work = () => {
       ScrollTrigger.create({
         trigger: ".work-section",
         start: "top top",
-        end: () => translateX,
+        end: `+=${translateX}`,
         scrub: 1,
         pin: true,
         pinSpacing: true,
@@ -56,14 +55,13 @@ const Work = () => {
         invalidateOnRefresh: true,
       });
 
-      // Animate from centered start to centered end (using timeline like desktop)
-      const tl = gsap.timeline({
+      // Animate from centered start to centered end
+      gsap.to(flex, {
+        x: -translateX,
+        ease: "none",
         scrollTrigger: { id: "work" },
+        immediateRender: false,
       });
-      tl.fromTo(flex,
-        { x: startOffset },
-        { x: -translateX, ease: "none" }
-      );
 
       // Entry animation for each work card (immediate)
       gsap.from(".work-box", {
@@ -71,7 +69,7 @@ const Work = () => {
         y: 30,
         stagger: 0.15,
         ease: "power2.out"
-      });
+      );
 
       console.log('[Work Mobile] Setup complete');
     };
@@ -79,11 +77,6 @@ const Work = () => {
     requestAnimationFrame(() => {
       requestAnimationFrame(setupMobile);
     });
-
-    // Cleanup function
-    return () => {
-      ScrollTrigger.getById("work")?.kill();
-    };
   }, []);
 
   // Desktop scroll handler
