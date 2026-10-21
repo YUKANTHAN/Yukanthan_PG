@@ -33,6 +33,9 @@ const Work = () => {
     if (timelineRef.current) timelineRef.current.kill();
     if (scrollTriggerRef.current) scrollTriggerRef.current.kill();
 
+    // Set initial centered position BEFORE creating ScrollTrigger
+    gsap.set(flex, { x: startOffset, overwrite: "auto" });
+
     // Create ScrollTrigger for pin
     ScrollTrigger.create({
       trigger: ".work-section",
