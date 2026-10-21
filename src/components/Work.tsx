@@ -55,15 +55,18 @@ const Work = () => {
           ease: "none",
         });
       } else {
-        // Mobile: pinned horizontal scroll on vertical page scroll (same as desktop)
+        // Mobile: pinned horizontal scroll with centered cards
         let translateX = 0;
+        let boxWidth = 0;
+        let gap = 16;
         const boxes = document.querySelectorAll<HTMLElement>(".work-box");
         const container = document.querySelector<HTMLElement>(".work-container");
         const flex = document.querySelector<HTMLElement>(".work-flex");
         if (boxes.length && container && flex) {
-          const boxWidth = boxes[0].offsetWidth;
-          const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
-          translateX = boxWidth * boxes.length + marginLeft - container.clientWidth;
+          boxWidth = boxes[0].offsetWidth;
+          gap = 16;
+          // Mobile: distance from first card centered to last card centered
+          translateX = (boxes.length - 1) * (boxWidth + 16);
         }
 
         tl = gsap.timeline({
