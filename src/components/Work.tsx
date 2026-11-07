@@ -62,33 +62,47 @@ const Work = () => {
           const centerY = (viewportHeight - cardHeight) / 2;
           const titleHeight = title.offsetHeight;
           const gap = 20;
-
-          // Distance for title to move from normal position to pinned at top
           const titleMoveDistance = titleHeight + gap;
 
-          // Total distance before horizontal scrub starts
-          // = cards enter from bottom to center + title moves to pinned
-          const enterDistance = centerY + titleMoveDistance;
-
-          // Initial: cards below viewport, title at normal position
+          // Initial states
           gsap.set(boxes, { y: viewportHeight, opacity: 0 });
           gsap.set(title, { y: 0 });
 
+          // Single pin ScrollTrigger spanning all phases
+          ScrollTrigger.create({
+            trigger: ".work-section",
+            start: "top top",
+            end: () => `+=${titleMoveDistance + centerY + distance}`,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            id: "work-pin",
+            invalidateOnRefresh: true,
+          });
+
+          // Phase 1: Title moves up to pinned position (0 to titleMoveDistance)
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
               start: "top top",
-              end: `+=${enterDistance}`,
+              end: `+=${titleMoveDistance}`,
               scrub: 1,
-              pin: true,
-              pinSpacing: true,
+              id: "work-title",
+              invalidateOnRefresh: true,
+            },
+          }).to(title, { y: -titleMoveDistance, ease: "none" }, 0);
+
+          // Phase 2: Cards enter from bottom to center (titleMoveDistance to titleMoveDistance + centerY)
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: `top top+=${titleMoveDistance}`,
+              end: `+=${centerY}`,
+              scrub: 1,
               id: "work-cards-enter",
               invalidateOnRefresh: true,
             },
           })
-            // Title moves up to pinned position at top
-            .to(title, { y: -titleMoveDistance, ease: "none" }, 0)
-            // Cards enter from bottom to center
             .to(
               boxes,
               {
@@ -100,16 +114,13 @@ const Work = () => {
               0
             );
 
-          // Phase 2: Horizontal scrub with title pinned at top
+          // Phase 3: Horizontal scrub (after titleMoveDistance + centerY)
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
-              start: `top top+=${enterDistance}`,
+              start: `top top+=${titleMoveDistance + centerY}`,
               end: () => `+=${measure().distance}`,
               scrub: 1,
-              pin: true,
-              pinSpacing: true,
-              anticipatePin: 1,
               id: "work",
               invalidateOnRefresh: true,
             },
@@ -159,6 +170,7 @@ const Work = () => {
       ScrollTrigger.getById("work")?.kill();
       ScrollTrigger.getById("work-title")?.kill();
       ScrollTrigger.getById("work-cards-enter")?.kill();
+      ScrollTrigger.getById("work-pin")?.kill();
     };
   }, []);
 
