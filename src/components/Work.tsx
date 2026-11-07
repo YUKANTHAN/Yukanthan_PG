@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
@@ -10,10 +10,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
     const flex = flexRef.current;
-    if (!flex) return;
+    const title = titleRef.current;
+    if (!flex || !title) return;
 
     const container = flex.closest<HTMLElement>(".work-container");
     if (!container) return;
@@ -49,28 +51,93 @@ const Work = () => {
     const createAnimation = () => {
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
+      ScrollTrigger.getById("work-title")?.kill();
+      ScrollTrigger.getById("work-cards-enter")?.kill();
 
       ctx = gsap.context(() => {
-        const { startX, endX, distance } = measure();
+        if (isMobile()) {
+          const { startX, endX, distance } = measure();
+          const cardHeight = boxes[0].offsetHeight;
+          const viewportHeight = window.innerHeight;
+          const centerY = (viewportHeight - cardHeight) / 2;
+          const titleHeight = title.offsetHeight;
+          const gap = 20;
 
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: ".work-section",
-            start: "top top",
-            end: () => `+=${measure().distance}`,
-            scrub: 1,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            id: "work",
-            invalidateOnRefresh: true,
-          },
-        }).fromTo(
-          flex,
-          { x: () => measure().startX },
-          { x: () => measure().endX, ease: "none" },
-          0
-        );
+          // Phase 1: Title pinned at top, cards enter and center vertically
+          const enterDistance = centerY + titleHeight + gap;
+
+          // Title stays fixed at top during enter
+          gsap.set(title, { position: "sticky", top: 0, zIndex: 10 });
+
+          // Cards start below viewport, animate to center
+          gsap.set(boxes, { y: viewportHeight, opacity: 0 });
+
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: "top top",
+              end: `+=${enterDistance}`,
+              scrub: 1,
+              pin: true,
+              pinSpacing: true,
+              id: "work-cards-enter",
+              invalidateOnRefresh: true,
+            },
+          })
+            .to(title, { y: 0, ease: "none" }, 0)
+            .to(
+              boxes,
+              {
+                y: centerY,
+                opacity: 1,
+                stagger: 0.08,
+                ease: "power2.out",
+              },
+              0
+            );
+
+          // Phase 2: Horizontal scrub with title pinned
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: `top top+=${enterDistance}`,
+              end: () => `+=${measure().distance}`,
+              scrub: 1,
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              id: "work",
+              invalidateOnRefresh: true,
+            },
+          }).fromTo(
+            flex,
+            { x: () => measure().startX },
+            { x: () => measure().endX, ease: "none" },
+            0
+          );
+        } else {
+          // Desktop: single horizontal scrub
+          const { startX, endX, distance } = measure();
+
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: "top top",
+              end: () => `+=${measure().distance}`,
+              scrub: 1,
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              id: "work",
+              invalidateOnRefresh: true,
+            },
+          }).fromTo(
+            flex,
+            { x: () => measure().startX },
+            { x: () => measure().endX, ease: "none" },
+            0
+          );
+        }
       });
     };
 
@@ -86,13 +153,15 @@ const Work = () => {
       window.removeEventListener("resize", handleResize);
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
+      ScrollTrigger.getById("work-title")?.kill();
+      ScrollTrigger.getById("work-cards-enter")?.kill();
     };
   }, []);
 
   return (
     <div className="work-section" id="work" data-cursor-section="bright">
       <div className="work-container section-container">
-        <h2>
+        <h2 ref={titleRef}>
           My <span>Work</span>
         </h2>
         <div
