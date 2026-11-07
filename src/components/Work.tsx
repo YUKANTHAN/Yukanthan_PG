@@ -53,6 +53,15 @@ const Work = () => {
       ctx = gsap.context(() => {
         const { startX, endX, distance } = measure();
 
+        if (isMobile()) {
+          // Vertically center the flex container on mobile during pin
+          const cardHeight = boxes[0].offsetHeight;
+          const viewportHeight = window.innerHeight;
+          const centerY = (viewportHeight - cardHeight) / 2;
+          
+          gsap.set(flex, { y: centerY, immediateRender: false });
+        }
+
         gsap.timeline({
           scrollTrigger: {
             trigger: ".work-section",
