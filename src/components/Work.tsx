@@ -66,14 +66,20 @@ const Work = () => {
           const gap = 20;
           const titleMoveDistance = titleHeight + gap;
 
-          // Total scroll distance for all phases
-          const totalDistance = titleMoveDistance + centerY + distance;
+          // Initial position of flex relative to container top
+          // title has margin-top: 40px, margin-bottom: 16px (gap)
+          const initialFlexY = 40 + titleHeight + gap; // 40 = title margin-top
+
+          // Phase 1: title moves to top (titleMoveDistance), flex moves same amount (stays below title)
+          // Phase 2: flex moves from below title (y=40) to centerY
+          const phase2Dist = centerY - 40;
+          const totalDistance = titleMoveDistance + Math.max(0, phase2Dist) + distance;
 
           // Initial states
-          gsap.set(flex, { y: 0, immediateRender: false });
           gsap.set(title, { y: 0, immediateRender: false });
+          gsap.set(flex, { y: 0, immediateRender: false });
 
-          // Single pin ScrollTrigger spanning all phases
+          // Single pin spanning all phases
           ScrollTrigger.create({
             trigger: ".work-section",
             start: "top top",
@@ -85,8 +91,7 @@ const Work = () => {
             invalidateOnRefresh: true,
           });
 
-          // Phase 1: Title moves up to pinned position at top
-          // Cards stay in normal flow (y: 0)
+          // Phase 1: Title moves up to pin at top, flex moves with it (stays attached below)
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
@@ -96,32 +101,34 @@ const Work = () => {
               id: "work-title",
               invalidateOnRefresh: true,
             },
-          }).to(title, { y: -titleMoveDistance, ease: "none", immediateRender: false }, 0);
-
-          // Phase 2: Cards move up to vertical center
-          // Starts AFTER title is pinned
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: ".work-section",
-              start: `top top+=${titleMoveDistance}`,
-              end: `+=${centerY}`,
-              scrub: 1,
-              id: "work-cards-center",
-              invalidateOnRefresh: true,
-            },
           })
-            .to(
+            .to(title, { y: -titleMoveDistance, ease: "none", immediateRender: false }, 0)
+            .to(flex, { y: -titleMoveDistance, ease: "none", immediateRender: false }, 0);
+
+          // Phase 2: Flex moves from below title (y=40 after phase 1) to vertical center
+          if (phase2Dist > 0) {
+            gsap.timeline({
+              scrollTrigger: {
+                trigger: ".work-section",
+                start: `top top+=${titleMoveDistance}`,
+                end: `+=${phase2Dist}`,
+                scrub: 1,
+                id: "work-cards-center",
+                invalidateOnRefresh: true,
+              },
+            }).to(
               flex,
-              { y: -centerY, ease: "power2.out", immediateRender: false },
+              { y: -titleMoveDistance - phase2Dist, ease: "power2.out", immediateRender: false },
               0
             );
+          }
 
           // Phase 3: Horizontal scrub
-          // Starts AFTER cards are centered
+          const phase3Start = titleMoveDistance + Math.max(0, phase2Dist);
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
-              start: `top top+=${titleMoveDistance + centerY}`,
+              start: `top top+=${phase3Start}`,
               end: () => `+=${distance}`,
               scrub: 1,
               id: "work",
