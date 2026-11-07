@@ -51,8 +51,6 @@ const Work = () => {
     const createAnimation = () => {
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
-      ScrollTrigger.getById("work-title")?.kill();
-      ScrollTrigger.getById("work-cards-enter")?.kill();
 
       ctx = gsap.context(() => {
         if (isMobile()) {
@@ -64,45 +62,37 @@ const Work = () => {
           const gap = 20;
           const titleMoveDistance = titleHeight + gap;
 
+          // Total scroll distance for all phases
+          const totalDistance = titleMoveDistance + centerY + distance;
+
+          // Progress markers (0 to 1)
+          const p1End = titleMoveDistance / totalDistance;
+          const p2End = (titleMoveDistance + centerY) / totalDistance;
+
           // Initial states
           gsap.set(boxes, { y: viewportHeight, opacity: 0 });
           gsap.set(title, { y: 0 });
 
-          // Single pin ScrollTrigger spanning all phases
-          ScrollTrigger.create({
-            trigger: ".work-section",
-            start: "top top",
-            end: () => `+=${titleMoveDistance + centerY + distance}`,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            id: "work-pin",
-            invalidateOnRefresh: true,
-          });
-
-          // Phase 1: Title moves up to pinned position (0 to titleMoveDistance)
+          // Single pinned ScrollTrigger with one timeline covering all phases
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
               start: "top top",
-              end: `+=${titleMoveDistance}`,
+              end: () => `+=${totalDistance}`,
               scrub: 1,
-              id: "work-title",
-              invalidateOnRefresh: true,
-            },
-          }).to(title, { y: -titleMoveDistance, ease: "none" }, 0);
-
-          // Phase 2: Cards enter from bottom to center (titleMoveDistance to titleMoveDistance + centerY)
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: ".work-section",
-              start: `top top+=${titleMoveDistance}`,
-              end: `+=${centerY}`,
-              scrub: 1,
-              id: "work-cards-enter",
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              id: "work",
               invalidateOnRefresh: true,
             },
           })
+            // Phase 1: Title moves up to top (0 → p1End)
+            .to(title, {
+              y: -titleMoveDistance,
+              ease: "none",
+            }, 0)
+            // Phase 2: Cards enter from bottom to center (p1End → p2End)
             .to(
               boxes,
               {
@@ -110,26 +100,17 @@ const Work = () => {
                 opacity: 1,
                 stagger: 0.08,
                 ease: "power2.out",
+                immediateRender: false,
               },
-              0
+              p1End
+            )
+            // Phase 3: Horizontal scrub (p2End → 1)
+            .fromTo(
+              flex,
+              { x: () => measure().startX },
+              { x: () => measure().endX, ease: "none" },
+              p2End
             );
-
-          // Phase 3: Horizontal scrub (after titleMoveDistance + centerY)
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: ".work-section",
-              start: `top top+=${titleMoveDistance + centerY}`,
-              end: () => `+=${measure().distance}`,
-              scrub: 1,
-              id: "work",
-              invalidateOnRefresh: true,
-            },
-          }).fromTo(
-            flex,
-            { x: () => measure().startX },
-            { x: () => measure().endX, ease: "none" },
-            0
-          );
         } else {
           // Desktop: single horizontal scrub
           const { startX, endX, distance } = measure();
@@ -138,7 +119,7 @@ const Work = () => {
             scrollTrigger: {
               trigger: ".work-section",
               start: "top top",
-              end: () => `+=${measure().distance}`,
+              end: () => `+=${distance}`,
               scrub: 1,
               pin: true,
               pinSpacing: true,
@@ -168,9 +149,6 @@ const Work = () => {
       window.removeEventListener("resize", handleResize);
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
-      ScrollTrigger.getById("work-title")?.kill();
-      ScrollTrigger.getById("work-cards-enter")?.kill();
-      ScrollTrigger.getById("work-pin")?.kill();
     };
   }, []);
 
