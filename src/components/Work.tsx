@@ -63,14 +63,16 @@ const Work = () => {
           const titleHeight = title.offsetHeight;
           const gap = 20;
 
-          // Phase 1: Title pinned at top, cards enter and center vertically
-          const enterDistance = centerY + titleHeight + gap;
+          // Distance for title to move from normal position to pinned at top
+          const titleMoveDistance = titleHeight + gap;
 
-          // Title stays fixed at top during enter
-          gsap.set(title, { position: "sticky", top: 0, zIndex: 10 });
+          // Total distance before horizontal scrub starts
+          // = cards enter from bottom to center + title moves to pinned
+          const enterDistance = centerY + titleMoveDistance;
 
-          // Cards start below viewport, animate to center
+          // Initial: cards below viewport, title at normal position
           gsap.set(boxes, { y: viewportHeight, opacity: 0 });
+          gsap.set(title, { y: 0 });
 
           gsap.timeline({
             scrollTrigger: {
@@ -84,7 +86,9 @@ const Work = () => {
               invalidateOnRefresh: true,
             },
           })
-            .to(title, { y: 0, ease: "none" }, 0)
+            // Title moves up to pinned position at top
+            .to(title, { y: -titleMoveDistance, ease: "none" }, 0)
+            // Cards enter from bottom to center
             .to(
               boxes,
               {
@@ -96,7 +100,7 @@ const Work = () => {
               0
             );
 
-          // Phase 2: Horizontal scrub with title pinned
+          // Phase 2: Horizontal scrub with title pinned at top
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
