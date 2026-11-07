@@ -54,6 +54,7 @@ const Work = () => {
 
       ctx = gsap.context(() => {
         if (isMobile()) {
+          // Measure everything once upfront
           const { startX, endX, distance } = measure();
           const cardHeight = boxes[0].offsetHeight;
           const viewportHeight = window.innerHeight;
@@ -62,23 +63,26 @@ const Work = () => {
           const gap = 20;
           const titleMoveDistance = titleHeight + gap;
 
-          // Total scroll distance for all phases
-          const totalDistance = titleMoveDistance + centerY + distance;
+          // Fixed distances for each phase
+          const phase1Dist = titleMoveDistance;
+          const phase2Dist = centerY;
+          const phase3Dist = distance;
+          const totalDist = phase1Dist + phase2Dist + phase3Dist;
 
           // Progress markers (0 to 1)
-          const p1End = titleMoveDistance / totalDistance;
-          const p2End = (titleMoveDistance + centerY) / totalDistance;
+          const p1End = phase1Dist / totalDist;
+          const p2End = (phase1Dist + phase2Dist) / totalDist;
 
-          // Initial states
-          gsap.set(boxes, { y: viewportHeight, opacity: 0 });
-          gsap.set(title, { y: 0 });
+          // Initial states - set BEFORE timeline
+          gsap.set(boxes, { y: viewportHeight, opacity: 0, immediateRender: false });
+          gsap.set(title, { y: 0, immediateRender: false });
 
-          // Single pinned ScrollTrigger with one timeline covering all phases
+          // Single timeline with all phases
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
               start: "top top",
-              end: () => `+=${totalDistance}`,
+              end: () => `+=${totalDist}`,
               scrub: 1,
               pin: true,
               pinSpacing: true,
@@ -91,6 +95,7 @@ const Work = () => {
             .to(title, {
               y: -titleMoveDistance,
               ease: "none",
+              immediateRender: false,
             }, 0)
             // Phase 2: Cards enter from bottom to center (p1End → p2End)
             .to(
@@ -107,8 +112,8 @@ const Work = () => {
             // Phase 3: Horizontal scrub (p2End → 1)
             .fromTo(
               flex,
-              { x: () => measure().startX },
-              { x: () => measure().endX, ease: "none" },
+              { x: startX, immediateRender: false },
+              { x: endX, ease: "none", immediateRender: false },
               p2End
             );
         } else {
@@ -129,8 +134,8 @@ const Work = () => {
             },
           }).fromTo(
             flex,
-            { x: () => measure().startX },
-            { x: () => measure().endX, ease: "none" },
+            { x: startX, immediateRender: false },
+            { x: endX, ease: "none", immediateRender: false },
             0
           );
         }
