@@ -66,80 +66,62 @@ const Work = () => {
           const gap = 20;
           const titleMoveDistance = titleHeight + gap;
 
-          // Initial position of flex relative to container top
-          // title has margin-top: 40px, margin-bottom: 16px (gap)
-          const initialFlexY = 40 + titleHeight + gap; // 40 = title margin-top
-
-          // Phase 1: title moves to top (titleMoveDistance), flex moves same amount (stays below title)
-          // Phase 2: flex moves from below title (y=40) to centerY
-          const phase2Dist = centerY - 40;
+          // Initial position: flex starts 40px below title (title margin-top)
+          const initialFlexY = 40;
+          
+          // Phase 1: title moves to top, flex moves with it (stays attached)
+          // Phase 2: flex moves from below title to center
+          const phase2Dist = centerY - initialFlexY;
+          
+          // Total scroll distance
           const totalDistance = titleMoveDistance + Math.max(0, phase2Dist) + distance;
+
+          // Progress markers (0 to 1)
+          const p1End = titleMoveDistance / totalDistance;
+          const p2End = (titleMoveDistance + Math.max(0, phase2Dist)) / totalDistance;
 
           // Initial states
           gsap.set(title, { y: 0, immediateRender: false });
           gsap.set(flex, { y: 0, immediateRender: false });
 
-          // Single pin spanning all phases
-          ScrollTrigger.create({
-            trigger: ".work-section",
-            start: "top top",
-            end: () => `+=${totalDistance}`,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            id: "work-pin",
-            invalidateOnRefresh: true,
-          });
-
-          // Phase 1: Title moves up to pin at top, flex moves with it (stays attached below)
+          // Single pinned ScrollTrigger with ONE timeline
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
               start: "top top",
-              end: `+=${titleMoveDistance}`,
+              end: () => `+=${totalDistance}`,
               scrub: 1,
-              id: "work-title",
-              invalidateOnRefresh: true,
-            },
-          })
-            .to(title, { y: -titleMoveDistance, ease: "none", immediateRender: false }, 0)
-            .to(flex, { y: -titleMoveDistance, ease: "none", immediateRender: false }, 0);
-
-          // Phase 2: Flex moves from below title (y=40 after phase 1) to vertical center
-          if (phase2Dist > 0) {
-            gsap.timeline({
-              scrollTrigger: {
-                trigger: ".work-section",
-                start: `top top+=${titleMoveDistance}`,
-                end: `+=${phase2Dist}`,
-                scrub: 1,
-                id: "work-cards-center",
-                invalidateOnRefresh: true,
-              },
-            }).to(
-              flex,
-              { y: -titleMoveDistance - phase2Dist, ease: "power2.out", immediateRender: false },
-              0
-            );
-          }
-
-          // Phase 3: Horizontal scrub
-          const phase3Start = titleMoveDistance + Math.max(0, phase2Dist);
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: ".work-section",
-              start: `top top+=${phase3Start}`,
-              end: () => `+=${distance}`,
-              scrub: 1,
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
               id: "work",
               invalidateOnRefresh: true,
             },
-          }).fromTo(
-            flex,
-            { x: startX, immediateRender: false },
-            { x: endX, ease: "none", immediateRender: false },
-            0
-          );
+          })
+            // Phase 1 (0 → p1End): Title moves up to pin at top, flex moves same amount
+            .to(title, {
+              y: -titleMoveDistance,
+              ease: "none",
+              immediateRender: false,
+            }, 0)
+            .to(flex, {
+              y: -titleMoveDistance,
+              ease: "none",
+              immediateRender: false,
+            }, 0)
+            // Phase 2 (p1End → p2End): Flex moves from below title to vertical center
+            .to(flex, {
+              y: -titleMoveDistance - Math.max(0, phase2Dist),
+              ease: "power2.out",
+              immediateRender: false,
+            }, p1End)
+            // Phase 3 (p2End → 1): Horizontal scrub - flex y stays fixed at center
+            .fromTo(
+              flex,
+              { x: startX, immediateRender: false },
+              { x: endX, ease: "none", immediateRender: false },
+              p2End
+            );
         } else {
           // Desktop: single horizontal scrub
           gsap.timeline({
@@ -176,9 +158,6 @@ const Work = () => {
       window.removeEventListener("resize", handleResize);
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
-      ScrollTrigger.getById("work-title")?.kill();
-      ScrollTrigger.getById("work-cards-center")?.kill();
-      ScrollTrigger.getById("work-pin")?.kill();
     };
   }, []);
 
