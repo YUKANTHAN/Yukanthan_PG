@@ -11,115 +11,80 @@ gsap.registerPlugin(ScrollTrigger);
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
 
-  // Mobile: synchronous setup before paint
   useLayoutEffect(() => {
-    if (window.innerWidth > 768) return;
+    const flex = flexRef.current;
+    if (!flex) return;
 
-    const setupMobile = () => {
-      const flex = flexRef.current;
-      if (!flex) return;
+    const container = flex.closest<HTMLElement>(".work-container");
+    if (!container) return;
 
-      const boxes = flex.querySelectorAll<HTMLElement>(".work-box");
-      const container = flex.closest<HTMLElement>(".work-container");
-      if (!boxes.length || !container) return;
+    const boxes = Array.from(flex.querySelectorAll<HTMLElement>(".work-box"));
+    if (!boxes.length) return;
 
-      const boxWidth = boxes[0].offsetWidth;
-      const containerWidth = container.clientWidth;
-      if (!boxWidth || !containerWidth) return;
+    const isMobile = () => window.innerWidth <= 768;
 
-      // Mobile: total flex width = n * (boxWidth + gap) where gap = 16px
-      // translateX = total flex width - container width
-      const translateX = boxes.length * (boxWidth + 16) - containerWidth;
-      const startOffset = (containerWidth - boxes[0].offsetWidth) / 2;
+    const measure = () => {
+      const prevTransform = flex.style.transform;
+      flex.style.transform = "none";
 
-      console.log('[Work Mobile] Setup:', { boxWidth: boxes[0].offsetWidth, containerWidth, translateX, startOffset: (containerWidth - boxes[0].offsetWidth) / 2, boxes: boxes.length });
+      const cRect = container.getBoundingClientRect();
+      const first = boxes[0].getBoundingClientRect();
+      const last = boxes[boxes.length - 1].getBoundingClientRect();
 
-      // Kill existing
-      ScrollTrigger.getById("work")?.kill();
+      flex.style.transform = prevTransform;
 
-      // Set initial centered position via inline style (before ScrollTrigger)
-      flex.style.transform = `translateX(${startOffset}px)`;
-      flex.style.willChange = "transform";
+      const startX = isMobile()
+        ? cRect.left + (cRect.width - first.width) / 2 - first.left
+        : 0;
 
-// Create ScrollTrigger with pin
-      ScrollTrigger.create({
-        trigger: ".work-section",
-        start: "top top",
-        end: `+=${translateX}`,
-        scrub: 1,
-        pin: true,
-        pinSpacing: true,
-        anticipatePin: 1,
-        id: "work",
-        invalidateOnRefresh: true,
-      });
+      const endX = isMobile()
+        ? cRect.left + (cRect.width - last.width) / 2 - last.left
+        : cRect.right - last.right;
 
-      // Animate from centered start to centered end
-      gsap.fromTo(flex,
-        { x: startOffset },
-        { x: -translateX, ease: "none", scrollTrigger: { id: "work" }, immediateRender: false }
-      );
-
-      console.log('[Work Mobile] Setup complete');
+      return { startX, endX, distance: Math.abs(endX - startX) };
     };
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(setupMobile);
-    });
-  }, []);
+    let ctx: gsap.Context | null = null;
 
-  // Desktop scroll handler
-  useEffect(() => {
-    if (window.innerWidth <= 768) return;
-
-    function getTranslateX() {
-      const boxes = document.querySelectorAll<HTMLElement>(".work-box");
-      const container = document.querySelector<HTMLElement>(".work-container");
-      const flex = document.querySelector<HTMLElement>(".work-flex");
-      if (!boxes.length || !container || !flex) return undefined;
-
-      const boxWidth = boxes[0].offsetWidth;
-      const marginLeft = parseFloat(getComputedStyle(flex).marginLeft) || 0;
-      return boxWidth * boxes.length + marginLeft - container.clientWidth;
-    }
-
-    function createTimeline() {
+    const createAnimation = () => {
+      ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
 
-      const translateX = getTranslateX();
-      if (translateX === undefined) return;
+      ctx = gsap.context(() => {
+        const { startX, endX, distance } = measure();
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".work-section",
-          start: "top top",
-          end: `+=${translateX}`,
-          scrub: 1,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          id: "work",
-          invalidateOnRefresh: true,
-        },
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: () => `+=${measure().distance}`,
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            id: "work",
+            invalidateOnRefresh: true,
+          },
+        }).fromTo(
+          flex,
+          { x: () => measure().startX },
+          { x: () => measure().endX, ease: "none" },
+          0
+        );
       });
-      tl.to(".work-flex", { x: -translateX, ease: "none" });
-      ScrollTrigger.refresh();
-    }
+    };
 
-    createTimeline();
+    createAnimation();
 
-    let lastIsDesktop = true;
     const handleResize = () => {
-      const nowDesktop = window.innerWidth > 768;
-      if (nowDesktop === lastIsDesktop) return;
-      lastIsDesktop = nowDesktop;
-      createTimeline();
+      createAnimation();
     };
 
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
     };
   }, []);

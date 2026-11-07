@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,6 +10,94 @@ gsap.registerPlugin(ScrollTrigger);
 const Certificates = () => {
   const [showAllModal, setShowAllModal] = useState(false);
   const modalContentRef = useRef<HTMLDivElement | null>(null);
+
+  // Mobile Card Deck State
+  const [mobileCategory, setMobileCategory] = useState<"all" | "events" | "learnings">("all");
+  const [deckIndex, setDeckIndex] = useState(0);
+  const [isFlinging, setIsFlinging] = useState<"left" | "right" | null>(null);
+  const [dragOffset, setDragOffset] = useState<number>(0);
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+
+  const mobileList = useMemo(() => {
+    if (mobileCategory === "events") {
+      return config.certificates.events.map((c) => ({ ...c, category: "Event" }));
+    }
+    if (mobileCategory === "learnings") {
+      return config.certificates.learnings.map((c) => ({ ...c, category: "Learning" }));
+    }
+    return [
+      ...config.certificates.events.map((c) => ({ ...c, category: "Event" })),
+      ...config.certificates.learnings.map((c) => ({ ...c, category: "Learning" })),
+    ];
+  }, [mobileCategory]);
+
+  const handleCategoryChange = (cat: "all" | "events" | "learnings") => {
+    setMobileCategory(cat);
+    setDeckIndex(0);
+    setDragOffset(0);
+    setIsFlinging(null);
+  };
+
+  const handleNextCard = useCallback(() => {
+    if (isFlinging || mobileList.length <= 1) return;
+    setIsFlinging("left");
+    setTimeout(() => {
+      setDeckIndex((prev) => (prev + 1) % mobileList.length);
+      setIsFlinging(null);
+      setDragOffset(0);
+    }, 240);
+  }, [isFlinging, mobileList.length]);
+
+  const handlePrevCard = useCallback(() => {
+    if (isFlinging || mobileList.length <= 1) return;
+    setIsFlinging("right");
+    setTimeout(() => {
+      setDeckIndex((prev) => (prev - 1 + mobileList.length) % mobileList.length);
+      setIsFlinging(null);
+      setDragOffset(0);
+    }, 240);
+  }, [isFlinging, mobileList.length]);
+
+  const handleShuffle = useCallback(() => {
+    if (isFlinging || mobileList.length <= 1) return;
+    setIsFlinging("left");
+    setTimeout(() => {
+      let nextIdx = Math.floor(Math.random() * mobileList.length);
+      if (nextIdx === deckIndex) nextIdx = (nextIdx + 1) % mobileList.length;
+      setDeckIndex(nextIdx);
+      setIsFlinging(null);
+      setDragOffset(0);
+    }, 240);
+  }, [isFlinging, mobileList.length, deckIndex]);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (isFlinging) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const deltaX = currentX - touchStartX.current;
+    const deltaY = currentY - touchStartY.current;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 8) {
+      setDragOffset(Math.max(-120, Math.min(120, deltaX)));
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (isFlinging) return;
+    if (dragOffset < -45) {
+      handleNextCard();
+    } else if (dragOffset > 45) {
+      handlePrevCard();
+    } else {
+      setDragOffset(0);
+    }
+  };
 
   useEffect(() => {
     if (showAllModal) {
@@ -231,7 +319,8 @@ const Certificates = () => {
           <p>Recognitions, hackathons, and continuous learning achievements</p>
         </div>
 
-        <div className="certificates-grid">
+        {/* Desktop Grid: Untouched & preserved */}
+        <div className="certificates-grid certificates-desktop-only">
           {/* Left Column: Event Certificates */}
           <div className="certificates-column">
             <h3>Event Certificates</h3>
@@ -305,6 +394,150 @@ const Certificates = () => {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Mobile Interactive Card Deck */}
+        <div className="certificates-mobile-deck">
+          {/* Category Filter Pills */}
+          <div className="mobile-deck-tabs">
+            <button
+              className={`deck-tab ${mobileCategory === "all" ? "active" : ""}`}
+              onClick={() => handleCategoryChange("all")}
+              data-cursor="disable"
+            >
+              All ({config.certificates.events.length + config.certificates.learnings.length})
+            </button>
+            <button
+              className={`deck-tab ${mobileCategory === "events" ? "active" : ""}`}
+              onClick={() => handleCategoryChange("events")}
+              data-cursor="disable"
+            >
+              Events ({config.certificates.events.length})
+            </button>
+            <button
+              className={`deck-tab ${mobileCategory === "learnings" ? "active" : ""}`}
+              onClick={() => handleCategoryChange("learnings")}
+              data-cursor="disable"
+            >
+              Learnings ({config.certificates.learnings.length})
+            </button>
+          </div>
+
+          {/* Interactive Stacked Cards Stage */}
+          <div
+            className="mobile-deck-stage"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            {/* Card 2 (Bottom layer) */}
+            {mobileList.length > 2 && (
+              <div className="deck-card deck-card-bottom" aria-hidden="true">
+                <div className="deck-card-preview">
+                  <img
+                    src={getImagePath(mobileList[(deckIndex + 2) % mobileList.length].file)}
+                    alt=""
+                    onError={handleImageError}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Card 1 (Middle layer) */}
+            {mobileList.length > 1 && (
+              <div className="deck-card deck-card-middle" aria-hidden="true">
+                <div className="deck-card-preview">
+                  <img
+                    src={getImagePath(mobileList[(deckIndex + 1) % mobileList.length].file)}
+                    alt=""
+                    onError={handleImageError}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Card 0 (Active Front Card) */}
+            {mobileList[deckIndex] && (
+              <div
+                className={`deck-card deck-card-top ${isFlinging ? `fling-${isFlinging}` : ""}`}
+                style={{
+                  transform:
+                    !isFlinging && dragOffset
+                      ? `translate3d(${dragOffset}px, 0, 0) rotate(${dragOffset * 0.08}deg)`
+                      : undefined,
+                }}
+              >
+                <div className="deck-card-header">
+                  <span className="deck-badge">{mobileList[deckIndex].category}</span>
+                  <span className="deck-counter">
+                    {String(deckIndex + 1).padStart(2, "0")} / {String(mobileList.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <div
+                  className="deck-card-preview"
+                  onClick={() => handleCardClick(mobileList[deckIndex].file)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${mobileList[deckIndex].title} certificate`}
+                >
+                  <img
+                    src={getImagePath(mobileList[deckIndex].file)}
+                    alt={mobileList[deckIndex].title}
+                    onError={handleImageError}
+                  />
+                  <div className="deck-preview-glass">
+                    <span>Tap to open PDF ↗</span>
+                  </div>
+                </div>
+
+                <div className="deck-card-body">
+                  <h4>{mobileList[deckIndex].title}</h4>
+                  <p className="deck-card-org">{mobileList[deckIndex].organization}</p>
+                  <div className="deck-card-footer">
+                    <span className="deck-date">{mobileList[deckIndex].date || "2026"}</span>
+                    <button
+                      className="deck-view-btn"
+                      onClick={() => handleCardClick(mobileList[deckIndex].file)}
+                      data-cursor="disable"
+                    >
+                      View PDF ↗
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Deck Controls */}
+          <div className="mobile-deck-controls">
+            <button
+              className="deck-ctrl-btn"
+              onClick={handlePrevCard}
+              aria-label="Previous certificate"
+              data-cursor="disable"
+            >
+              ←
+            </button>
+            <button
+              className="deck-shuffle-btn"
+              onClick={handleShuffle}
+              aria-label="Shuffle card deck"
+              data-cursor="disable"
+            >
+              🔀 Next
+            </button>
+            <button
+              className="deck-ctrl-btn"
+              onClick={handleNextCard}
+              aria-label="Next certificate"
+              data-cursor="disable"
+            >
+              →
+            </button>
+          </div>
+
+          <p className="mobile-deck-hint">Swipe or tap Next to shuffle deck</p>
         </div>
 
         <button className="view-all-btn" onClick={() => setShowAllModal(true)} data-cursor="disable">

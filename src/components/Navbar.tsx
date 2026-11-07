@@ -23,11 +23,13 @@ const Navbar = () => {
       infinite: false,
     });
 
-    // Start paused
-    lenis.stop();
+    // Start paused only on home page (for intro animation)
+    const isHome = window.location.pathname === "/";
+    if (isHome) {
+      lenis.stop();
+    }
 
-    // The navbar is lazy-mounted, so on mobile the intro (initialFX) can run
-    // before Lenis exists. Resume scrolling once both are ready.
+    // Resume scrolling once intro animation completes (home) or immediately (other pages)
     const startWhenReady = () => {
       if (
         (window as unknown as { __initialFXStarted?: boolean })
@@ -36,8 +38,13 @@ const Navbar = () => {
         lenis?.start();
       }
     };
-    startWhenReady();
-    window.addEventListener("initialfx:started", startWhenReady);
+    // If not on home, start immediately
+    if (!isHome) {
+      lenis.start();
+    } else {
+      startWhenReady();
+      window.addEventListener("initialfx:started", startWhenReady);
+    }
 
     // Handle smooth scroll animation frame
     function raf(time: number) {

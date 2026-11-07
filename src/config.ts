@@ -2,7 +2,7 @@ export const config = {
     name: "Yukanthan",
     fullName: "Yukanthan",
     title: "AI Engineer, Full Stack Developer, Software Engineer",
-    engineDepth: 12,
+    engineDepth: 8,
     description: "Passionate Software Engineer specialized in building scalable web applications and solving complex problems with efficient code. Experienced in full-stack development and committed to continuous learning.",
     github: "yukanthan",
     email: "pgyukanthan@gmail.com",

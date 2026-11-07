@@ -106,6 +106,14 @@ const Play = () => {
     }
   }, [chatMessages, isTyping]);
 
+  // Move history auto-scroll to latest
+  const moveHistoryRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (moveHistoryRef.current) {
+      moveHistoryRef.current.scrollTop = moveHistoryRef.current.scrollHeight;
+    }
+  }, [moveHistory]);
+
   // Auto-dismiss full-screen overlay after 2s
   useEffect(() => {
     if (gameOver) {
@@ -384,7 +392,7 @@ const Play = () => {
           <div className="chat-header">
             <span className="chat-title">💬 Talk with me</span>
           </div>
-          <div className="chat-messages" ref={chatRef}>
+          <div className="chat-messages" ref={chatRef} data-lenis-prevent>
             {chatMessages.map((msg, index) => (
               <div key={index} className={`chat-message ${msg.role}`}>
                 <div className="message-content">{msg.content}</div>
@@ -522,7 +530,7 @@ const Play = () => {
           {/* Move History */}
           <div className="move-history">
             <div className="move-history-header">Moves</div>
-            <div className="move-history-list">
+            <div className="move-history-list" ref={moveHistoryRef} data-lenis-prevent>
               {formatMoveHistory().map((move, index) => (
                 <div key={index} className="move-row">
                   <span className="move-num">{move.moveNum}.</span>
