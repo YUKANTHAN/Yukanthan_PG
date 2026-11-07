@@ -10,10 +10,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
     const flex = flexRef.current;
-    if (!flex) return;
+    const title = titleRef.current;
+    if (!flex || !title) return;
 
     const container = flex.closest<HTMLElement>(".work-container");
     if (!container) return;
@@ -49,37 +51,109 @@ const Work = () => {
     const createAnimation = () => {
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
+      ScrollTrigger.getById("work-title")?.kill();
+      ScrollTrigger.getById("work-cards-center")?.kill();
+      ScrollTrigger.getById("work-pin")?.kill();
 
       ctx = gsap.context(() => {
         const { startX, endX, distance } = measure();
 
         if (isMobile()) {
-          // Vertically center the flex container on mobile during pin
           const cardHeight = boxes[0].offsetHeight;
           const viewportHeight = window.innerHeight;
           const centerY = (viewportHeight - cardHeight) / 2;
-          
-          gsap.set(flex, { y: centerY, immediateRender: false });
-        }
+          const titleHeight = title.offsetHeight;
+          const gap = 20;
+          const titleMoveDistance = titleHeight + gap;
 
-        gsap.timeline({
-          scrollTrigger: {
+          // Total scroll distance for all phases
+          const totalDistance = titleMoveDistance + centerY + distance;
+
+          // Initial states
+          gsap.set(flex, { y: 0, immediateRender: false });
+          gsap.set(title, { y: 0, immediateRender: false });
+
+          // Single pin ScrollTrigger spanning all phases
+          ScrollTrigger.create({
             trigger: ".work-section",
             start: "top top",
-            end: () => `+=${distance}`,
-            scrub: 1,
+            end: () => `+=${totalDistance}`,
             pin: true,
             pinSpacing: true,
             anticipatePin: 1,
-            id: "work",
+            id: "work-pin",
             invalidateOnRefresh: true,
-          },
-        }).fromTo(
-          flex,
-          { x: startX, immediateRender: false },
-          { x: endX, ease: "none", immediateRender: false },
-          0
-        );
+          });
+
+          // Phase 1: Title moves up to pinned position at top
+          // Cards stay in normal flow (y: 0)
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: "top top",
+              end: `+=${titleMoveDistance}`,
+              scrub: 1,
+              id: "work-title",
+              invalidateOnRefresh: true,
+            },
+          }).to(title, { y: -titleMoveDistance, ease: "none", immediateRender: false }, 0);
+
+          // Phase 2: Cards move up to vertical center
+          // Starts AFTER title is pinned
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: `top top+=${titleMoveDistance}`,
+              end: `+=${centerY}`,
+              scrub: 1,
+              id: "work-cards-center",
+              invalidateOnRefresh: true,
+            },
+          })
+            .to(
+              flex,
+              { y: -centerY, ease: "power2.out", immediateRender: false },
+              0
+            );
+
+          // Phase 3: Horizontal scrub
+          // Starts AFTER cards are centered
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: `top top+=${titleMoveDistance + centerY}`,
+              end: () => `+=${distance}`,
+              scrub: 1,
+              id: "work",
+              invalidateOnRefresh: true,
+            },
+          }).fromTo(
+            flex,
+            { x: startX, immediateRender: false },
+            { x: endX, ease: "none", immediateRender: false },
+            0
+          );
+        } else {
+          // Desktop: single horizontal scrub
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: ".work-section",
+              start: "top top",
+              end: () => `+=${distance}`,
+              scrub: 1,
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              id: "work",
+              invalidateOnRefresh: true,
+            },
+          }).fromTo(
+            flex,
+            { x: startX, immediateRender: false },
+            { x: endX, ease: "none", immediateRender: false },
+            0
+          );
+        }
       });
     };
 
@@ -95,13 +169,16 @@ const Work = () => {
       window.removeEventListener("resize", handleResize);
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
+      ScrollTrigger.getById("work-title")?.kill();
+      ScrollTrigger.getById("work-cards-center")?.kill();
+      ScrollTrigger.getById("work-pin")?.kill();
     };
   }, []);
 
   return (
     <div className="work-section" id="work" data-cursor-section="bright">
       <div className="work-container section-container">
-        <h2>
+        <h2 ref={titleRef}>
           My <span>Work</span>
         </h2>
         <div
