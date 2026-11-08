@@ -561,3 +561,9 @@ h2.landing-info-h2 {
     padding: 0 48px 56px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .landing-intro {
+    padding-top: 120px;
+  }
+}

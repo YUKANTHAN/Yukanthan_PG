@@ -1,9 +1,11 @@
+import { useState } from "react";
 import "./styles/TechStackNew.css";
 
 interface TechItem {
   name: string;
   icon: string;
   url: string;
+  essential?: boolean;
 }
 
 // All tech stack items with their icons and official URLs
@@ -11,46 +13,46 @@ interface TechItem {
 const techStack: TechItem[][] = [
   // Row 1 - 12 items (largest)
   [
-    { name: "Python", icon: "/icons/python-original.svg", url: "https://python.org" },
-    { name: "JavaScript", icon: "/icons/javascript-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
-    { name: "TypeScript", icon: "/icons/typescript-original.svg", url: "https://typescriptlang.org" },
+    { name: "Python", icon: "/icons/python-original.svg", url: "https://python.org", essential: true },
+    { name: "JavaScript", icon: "/icons/javascript-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", essential: true },
+    { name: "TypeScript", icon: "/icons/typescript-original.svg", url: "https://typescriptlang.org", essential: true },
     { name: "C", icon: "/icons/c-original.svg", url: "https://en.cppreference.com/w/c" },
     { name: "C++", icon: "/icons/cplusplus-original.svg", url: "https://isocpp.org" },
     { name: "Kotlin", icon: "/icons/kotlin-original.svg", url: "https://kotlinlang.org" },
     { name: "HTML", icon: "/icons/html5-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
     { name: "CSS", icon: "/icons/css3-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
     { name: "Bash", icon: "/icons/bash-original.svg", url: "https://www.gnu.org/software/bash/" },
-    { name: "React", icon: "/icons/react-original.svg", url: "https://react.dev" },
-    { name: "Next.js", icon: "/icons/nextjs-original.svg", url: "https://nextjs.org" },
+    { name: "React", icon: "/icons/react-original.svg", url: "https://react.dev", essential: true },
+    { name: "Next.js", icon: "/icons/nextjs-original.svg", url: "https://nextjs.org", essential: true },
     { name: "Bootstrap", icon: "/icons/bootstrap-original.svg", url: "https://getbootstrap.com" },
   ],
   // Row 2 - 10 items
   [
-    { name: "Node.js", icon: "/icons/nodejs-original.svg", url: "https://nodejs.org" },
+    { name: "Node.js", icon: "/icons/nodejs-original.svg", url: "https://nodejs.org", essential: true },
     { name: "Django", icon: "/icons/django-plain.svg", url: "https://djangoproject.com" },
     { name: "Flask", icon: "/icons/flask-original.svg", url: "https://flask.palletsprojects.com" },
     { name: "FastAPI", icon: "/icons/fastapi-original.svg", url: "https://fastapi.tiangolo.com" },
-    { name: "TensorFlow", icon: "/icons/tensorflow-original.svg", url: "https://tensorflow.org" },
-    { name: "PyTorch", icon: "/icons/pytorch-original.svg", url: "https://pytorch.org" },
+    { name: "TensorFlow", icon: "/icons/tensorflow-original.svg", url: "https://tensorflow.org", essential: true },
+    { name: "PyTorch", icon: "/icons/pytorch-original.svg", url: "https://pytorch.org", essential: true },
     { name: "Scikit-learn", icon: "/icons/scikitlearn-original.svg", url: "https://scikit-learn.org" },
     { name: "OpenCV", icon: "/icons/opencv-original.svg", url: "https://opencv.org" },
     { name: "NumPy", icon: "/icons/numpy-original.svg", url: "https://numpy.org" },
-    { name: "Tailwind", icon: "/icons/tailwindcss-original.svg", url: "https://tailwindcss.com" },
+    { name: "Tailwind", icon: "/icons/tailwindcss-original.svg", url: "https://tailwindcss.com", essential: true },
   ],
   // Row 3 - 8 items
   [
     { name: "Pandas", icon: "/icons/pandas-original.svg", url: "https://pandas.pydata.org" },
     { name: "MySQL", icon: "/icons/mysql-original.svg", url: "https://mysql.com" },
-    { name: "PostgreSQL", icon: "/icons/postgresql-original.svg", url: "https://postgresql.org" },
-    { name: "MongoDB", icon: "/icons/mongodb-original.svg", url: "https://mongodb.com" },
+    { name: "PostgreSQL", icon: "/icons/postgresql-original.svg", url: "https://postgresql.org", essential: true },
+    { name: "MongoDB", icon: "/icons/mongodb-original.svg", url: "https://mongodb.com", essential: true },
     { name: "Firebase", icon: "/icons/firebase-plain.svg", url: "https://firebase.google.com" },
     { name: "Redis", icon: "/icons/redis-original.svg", url: "https://redis.io" },
-    { name: "Docker", icon: "/icons/docker-original.svg", url: "https://docker.com" },
+    { name: "Docker", icon: "/icons/docker-original.svg", url: "https://docker.com", essential: true },
     { name: "Azure", icon: "/icons/azure-original.svg", url: "https://azure.microsoft.com" },
   ],
   // Row 4 - 6 items
   [
-    { name: "Git", icon: "/icons/git-original.svg", url: "https://git-scm.com" },
+    { name: "Git", icon: "/icons/git-original.svg", url: "https://git-scm.com", essential: true },
     { name: "GitHub", icon: "/icons/github-original.svg", url: "https://github.com" },
     { name: "Linux", icon: "/icons/linux-original.svg", url: "https://linux.org" },
     { name: "AWS", icon: "/icons/amazonwebservices-original-wordmark.svg", url: "https://aws.amazon.com" },
@@ -72,8 +74,10 @@ const techStack: TechItem[][] = [
 ];
 
 const TechStackNew = () => {
+  const [showAll, setShowAll] = useState(false);
+
   return (
-    <div className="techstack-new">
+    <div className={`techstack-new${showAll ? " show-all" : ""}`}>
       {/* Video Background */}
       <div className="techstack-video-container">
         <video
@@ -102,7 +106,7 @@ const TechStackNew = () => {
                   href={tech.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="techstack-item"
+                  className={`techstack-item${tech.essential ? " is-essential" : ""}`}
                   title={tech.name}
                   data-cursor="disable"
                 >
@@ -113,6 +117,17 @@ const TechStackNew = () => {
             </div>
           ))}
         </div>
+
+        <button
+          type="button"
+          className="techstack-view-all"
+          onClick={() => setShowAll((v) => !v)}
+          data-cursor="disable"
+        >
+          {showAll ? "Show less" : "View all"}
+        </button>
+
+        <div className="techstack-divider"></div>
       </div>
     </div>
   );

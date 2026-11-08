@@ -16,6 +16,10 @@ const Certificates = () => {
   const [deckIndex, setDeckIndex] = useState(0);
   const [isFlinging, setIsFlinging] = useState<"left" | "right" | null>(null);
   const [dragOffset, setDragOffset] = useState<number>(0);
+  const [lightboxFile, setLightboxFile] = useState<string | null>(null);
+  const lightboxRef = useRef<HTMLDivElement | null>(null);
+  const lightboxStartY = useRef(0);
+  const lightboxDY = useRef(0);
   const touchStartX = useRef<number>(0);
   const touchStartY = useRef<number>(0);
 
@@ -97,6 +101,53 @@ const Certificates = () => {
     } else {
       setDragOffset(0);
     }
+  };
+
+  // Fullscreen lightbox: lock scroll + close on Escape
+  useEffect(() => {
+    if (!lightboxFile) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxFile(null);
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightboxFile]);
+
+  // Drag the lightbox to dismiss it (springs back below the threshold)
+  const onLightboxTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 1) return;
+    lightboxStartY.current = e.touches[0].clientY;
+    lightboxDY.current = 0;
+    if (lightboxRef.current) {
+      lightboxRef.current.style.transition = "none";
+    }
+  };
+
+  const onLightboxTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length > 1) return;
+    const dy = e.touches[0].clientY - lightboxStartY.current;
+    lightboxDY.current = dy;
+    const el = lightboxRef.current;
+    if (!el) return;
+    el.style.transform = `translateY(${dy}px)`;
+    el.style.opacity = String(Math.max(0, 1 - Math.abs(dy) / 350));
+  };
+
+  const onLightboxTouchEnd = () => {
+    const el = lightboxRef.current;
+    if (!el) return;
+    if (Math.abs(lightboxDY.current) > 90) {
+      setLightboxFile(null);
+      return;
+    }
+    el.style.transition = "transform 0.25s ease, opacity 0.25s ease";
+    el.style.transform = "translateY(0)";
+    el.style.opacity = "1";
   };
 
   useEffect(() => {
@@ -459,6 +510,7 @@ const Certificates = () => {
             {/* Card 0 (Active Front Card) */}
             {mobileList[deckIndex] && (
               <div
+                key={`deck-top-${mobileCategory}-${deckIndex}`}
                 className={`deck-card deck-card-top ${isFlinging ? `fling-${isFlinging}` : ""}`}
                 style={{
                   transform:
@@ -476,7 +528,7 @@ const Certificates = () => {
 
                 <div
                   className="deck-card-preview"
-                  onClick={() => handleCardClick(mobileList[deckIndex].file)}
+                  onClick={() => setLightboxFile(mobileList[deckIndex].file)}
                   role="button"
                   tabIndex={0}
                   aria-label={`View ${mobileList[deckIndex].title} certificate`}
@@ -584,6 +636,48 @@ const Certificates = () => {
               ))}
             </div>
           </div>
+        </div>,
+        document.body
+      )}
+
+      {lightboxFile && createPortal(
+        <div
+          className="lightbox-overlay"
+          ref={lightboxRef}
+          onClick={() => setLightboxFile(null)}
+          onTouchStart={onLightboxTouchStart}
+          onTouchMove={onLightboxTouchMove}
+          onTouchEnd={onLightboxTouchEnd}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Certificate preview"
+          data-cursor-section="bright"
+        >
+          <button
+            className="lightbox-close"
+            onClick={() => setLightboxFile(null)}
+            aria-label="Close preview"
+            data-cursor="disable"
+          >
+            ✕
+          </button>
+          <img
+            className="lightbox-img"
+            src={getImagePath(lightboxFile)}
+            alt="Certificate preview"
+            onClick={(e) => e.stopPropagation()}
+            onError={handleImageError}
+          />
+          <a
+            className="lightbox-pdf-btn"
+            href={`/certificates/${lightboxFile}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            data-cursor="disable"
+          >
+            Open PDF ↗
+          </a>
         </div>,
         document.body
       )}

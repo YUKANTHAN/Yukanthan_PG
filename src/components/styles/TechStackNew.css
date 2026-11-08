@@ -1,4 +1,8 @@
 .techstack-new {
+  --ts-gap: 10px;
+  --ts-item-max: 70px;
+  --ts-item-h: 80px;
+  --ts-icon: 30px;
   position: relative;
   width: 100%;
   min-height: 100svh;
@@ -64,6 +68,7 @@
 
 /* Content */
 .techstack-content {
+  box-sizing: border-box;
   position: relative;
   z-index: 2;
   width: 100%;
@@ -97,19 +102,21 @@
 .techstack-row {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: var(--ts-gap);
 }
 
-/* Tech Item */
+/* Tech Item - width always fits 12 items in one line, never wraps */
 .techstack-item {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 55px;
-  height: 68px;
-  padding: 8px;
+  width: min(var(--ts-item-max), calc((100% - 11 * var(--ts-gap)) / 12));
+  height: var(--ts-item-h);
+  padding: 8px 4px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -128,8 +135,9 @@
 }
 
 .techstack-item img {
-  width: 30px;
-  height: 30px;
+  width: min(var(--ts-icon), 100%);
+  height: auto;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
   filter: grayscale(100%) contrast(1.2) brightness(1.5);
   opacity: 0.85;
@@ -146,96 +154,148 @@
   color: rgba(255, 255, 255, 0.7);
   margin-top: 5px;
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 50px;
+  white-space: normal;
+  line-height: 1.25;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 .techstack-item:hover span {
   color: #fff;
 }
 
-/* Responsive */
-@media screen and (max-width: 1200px) {
-  .techstack-content {
-    max-width: 900px;
-  }
-  
-  .techstack-item {
-    width: 50px;
-    height: 62px;
-  }
-  
-  .techstack-item img {
-    width: 26px;
-    height: 26px;
-  }
-  
-  .techstack-item span {
-    font-size: 8px;
-  }
+/* View all toggle (mobile only) */
+.techstack-view-all {
+  display: none;
+  width: fit-content;
+  margin: 24px auto 0;
+  padding: 10px 34px;
+  border-radius: 30px;
+  border: 1px solid var(--accentColor);
+  background: rgba(194, 164, 255, 0.12);
+  color: var(--accentColor);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
+.techstack-view-all:hover {
+  background: var(--accentColor);
+  color: #0d0b10;
+}
+
+/* Section divider (mobile only) */
+.techstack-divider {
+  display: none;
+}
+
+/* Responsive */
 @media screen and (max-width: 900px) {
+  .techstack-new {
+    --ts-gap: 4px;
+    --ts-item-max: 60px;
+    --ts-item-h: 48px;
+    --ts-icon: 34px;
+  }
+
   .techstack-content h2 {
     font-size: 50px;
     margin-bottom: 35px;
   }
-  
+
   .techstack-pyramid {
     gap: 8px;
   }
-  
-  .techstack-row {
-    gap: 8px;
-  }
-  
+
   .techstack-item {
-    width: 45px;
-    height: 56px;
-    padding: 6px;
+    padding: 5px 3px;
   }
-  
-  .techstack-item img {
-    width: 22px;
-    height: 22px;
-  }
-  
+
+  /* Labels don't fit below 900px - icon-only tiles instead of truncated text */
   .techstack-item span {
-    font-size: 7px;
-    max-width: 42px;
+    display: none;
   }
 }
 
 @media screen and (max-width: 600px) {
+  .techstack-new {
+    --ts-gap: 4px;
+    --ts-icon: 40px;
+    min-height: auto;
+    padding-top: 40px;
+  }
+
+  .techstack-content {
+    padding: 0 12px;
+  }
+
   .techstack-content h2 {
     font-size: 36px;
   }
-  
+
   .techstack-pyramid {
     gap: 6px;
   }
-  
-  .techstack-row {
-    gap: 6px;
+
+  /* Default: only essential items in the pyramid */
+  .techstack-item:not(.is-essential) {
+    display: none;
   }
-  
+
   .techstack-item {
-    width: 40px;
-    height: 50px;
-    padding: 5px;
-    border-radius: 8px;
+    width: min(72px, calc((100% - 4 * var(--ts-gap)) / 5));
+    height: auto;
+    min-height: 66px;
+    padding: 8px 4px;
+    border-radius: 10px;
   }
-  
-  .techstack-item img {
-    width: 20px;
-    height: 20px;
-  }
-  
+
   .techstack-item span {
-    font-size: 6px;
-    max-width: 38px;
-    margin-top: 3px;
+    display: block;
+    font-size: 8px;
+    margin-top: 4px;
+    white-space: normal;
+  }
+
+  .techstack-view-all {
+    display: block;
+  }
+
+  /* Horizontal line separating tech stack from the next section */
+  .techstack-divider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin-top: 30px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 0.22) 15%,
+      rgba(255, 255, 255, 0.22) 85%,
+      transparent
+    );
+  }
+
+  /* View all: full list as a 5-column grid */
+  .techstack-new.show-all .techstack-pyramid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .techstack-new.show-all .techstack-row {
+    display: contents;
+  }
+
+  .techstack-new.show-all .techstack-item {
+    display: flex;
+    width: min(96px, calc((100% - 32px) / 5));
+    height: auto;
+    min-height: 72px;
+    padding: 10px 6px 8px;
   }
 }

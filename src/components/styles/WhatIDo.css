@@ -457,7 +457,7 @@
 /* Mobile: show all skill cards expanded, no accordion clipping */
 @media only screen and (max-width: 900px) {
   .whatIDO {
-    padding: 60px 0 160px;
+    padding: 60px 0 40px;
   }
 
   .what-box-in {
