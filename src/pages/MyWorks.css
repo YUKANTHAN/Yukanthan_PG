@@ -189,12 +189,4 @@
   .myworks-header p {
     font-size: 15px;
   }
-
-  .myworks-card-links {
-    flex-direction: column;
-  }
-
-  .myworks-card-link {
-    justify-content: center;
-  }
 }

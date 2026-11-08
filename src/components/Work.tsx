@@ -61,30 +61,27 @@ const Work = () => {
         if (isMobile()) {
           const cardHeight = boxes[0].offsetHeight;
           const viewportHeight = window.innerHeight;
-          const centerY = (viewportHeight - cardHeight) / 2;
-          const titleHeight = title.offsetHeight;
-          const gap = 20;
-          const titleMoveDistance = titleHeight + gap;
+          // Exact vertical center for the card on the mobile screen
+          const cardCenterY = (viewportHeight - cardHeight) / 2;
 
-          // Initial position: flex starts 40px below title (title margin-top)
-          const initialFlexY = 40;
-          
-          // Phase 1: title moves to top, flex moves with it (stays attached)
-          // Phase 2: flex moves from below title to center
-          const phase2Dist = centerY - initialFlexY;
-          
-          // Total scroll distance
-          const totalDistance = titleMoveDistance + Math.max(0, phase2Dist) + distance;
+          // Natural DOM top of card within work-container
+          const cardInitialTop = boxes[0].offsetTop;
+          // How much flex must move so card sits exactly at vertical center
+          const flexCenterY = cardCenterY - cardInitialTop;
 
-          // Progress markers (0 to 1)
-          const p1End = titleMoveDistance / totalDistance;
-          const p2End = (titleMoveDistance + Math.max(0, phase2Dist)) / totalDistance;
+          // Dock title right at top of viewport (16px from top)
+          const titleInitialTop = title.offsetTop;
+          const titleTopY = 16 - titleInitialTop;
 
-          // Initial states
+          // Scroll phases – card is pre‑pinned at centre, title moves first
+          const titleDist = Math.abs(titleTopY);
+          const totalDistance = titleDist + distance;
+          const p1End = titleDist / totalDistance; // when title reaches top
+
+          // Pin the card at centre from the start
+          gsap.set(flex, { y: flexCenterY, immediateRender: false });
           gsap.set(title, { y: 0, immediateRender: false });
-          gsap.set(flex, { y: 0, immediateRender: false });
 
-          // Single pinned ScrollTrigger with ONE timeline
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
@@ -98,29 +95,18 @@ const Work = () => {
               invalidateOnRefresh: true,
             },
           })
-            // Phase 1 (0 → p1End): Title moves up to pin at top, flex moves same amount
-            .to(title, {
-              y: -titleMoveDistance,
-              ease: "none",
-              immediateRender: false,
-            }, 0)
-            .to(flex, {
-              y: -titleMoveDistance,
-              ease: "none",
-              immediateRender: false,
-            }, 0)
-            // Phase 2 (p1End → p2End): Flex moves from below title to vertical center
-            .to(flex, {
-              y: -titleMoveDistance - Math.max(0, phase2Dist),
-              ease: "power2.out",
-              immediateRender: false,
-            }, p1End)
-            // Phase 3 (p2End → 1): Horizontal scrub - flex y stays fixed at center
+            // Phase 1 – move title to top while card stays pinned
+            .to(
+              title,
+              { y: titleTopY, ease: "power1.out", immediateRender: false },
+              0
+            )
+            // Phase 2 – horizontal parallax starts after title reaches top
             .fromTo(
               flex,
               { x: startX, immediateRender: false },
               { x: endX, ease: "none", immediateRender: false },
-              p2End
+              p1End
             );
         } else {
           // Desktop: single horizontal scrub
