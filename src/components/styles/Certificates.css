@@ -514,6 +514,10 @@
 
 /* Mobile deck display & styling */
 @media screen and (max-width: 768px) {
+  .certificates-container {
+    padding-top: 16px;
+  }
+
   .certificates-desktop-only {
     display: none !important;
   }

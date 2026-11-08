@@ -268,6 +268,9 @@
     overflow: hidden;
     position: relative;
     background-color: var(--backgroundColor);
+    /* Extend the background below the (JS-trimmed) section so the area
+       under it during the pin matches the section color */
+    box-shadow: 0 100svh 0 var(--backgroundColor);
     display: flex;
     flex-direction: column;
     box-sizing: border-box;

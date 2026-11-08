@@ -15,6 +15,9 @@ const Work = () => {
     const flex = flexRef.current;
     if (!flex) return;
 
+    const section = flex.closest<HTMLElement>(".work-section");
+    if (!section) return;
+
     const container = flex.closest<HTMLElement>(".work-container");
     if (!container) return;
 
@@ -32,6 +35,12 @@ const Work = () => {
       const cardCenterY = (window.innerHeight - cardHeight) / 2;
       const cardInitialTop = flex.offsetTop + boxes[0].offsetTop;
       gsap.set(flex, { y: cardCenterY - cardInitialTop });
+      // Trim the section so it ends right below the cards – otherwise the
+      // empty bottom of the 100svh section scrolls past after the pin and
+      // leaves a big gap before the next section.
+      const sectionHeight = Math.ceil(cardCenterY + cardHeight + 16);
+      section.style.height = `${sectionHeight}px`;
+      section.style.minHeight = `${sectionHeight}px`;
     };
 
     const measure = () => {
@@ -92,7 +101,9 @@ const Work = () => {
             0
           );
         } else {
-          // Desktop: single horizontal scrub (reset any leftover mobile offset)
+          // Desktop: single horizontal scrub (reset any leftover mobile sizing)
+          section.style.height = "";
+          section.style.minHeight = "";
           gsap.set(flex, { y: 0 });
           gsap.timeline({
             scrollTrigger: {
@@ -119,7 +130,11 @@ const Work = () => {
     createAnimation();
 
     // Re-center when a card's height changes (e.g. images finish loading)
-    const observer = new ResizeObserver(() => centerCards());
+    const observer = new ResizeObserver(() => {
+      if (!isMobile()) return;
+      centerCards();
+      ScrollTrigger.refresh();
+    });
     observer.observe(boxes[0]);
 
     const handleResize = () => {
