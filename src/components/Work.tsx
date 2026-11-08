@@ -10,12 +10,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
     const flex = flexRef.current;
-    const title = titleRef.current;
-    if (!flex || !title) return;
+    if (!flex) return;
 
     const container = flex.closest<HTMLElement>(".work-container");
     if (!container) return;
@@ -24,6 +22,17 @@ const Work = () => {
     if (!boxes.length) return;
 
     const isMobile = () => window.innerWidth <= 768;
+
+    // Vertically center the cards within the section.
+    // boxes[0].offsetTop is relative to .work-flex (position: relative),
+    // so add flex's own offset inside .work-section to get the true card top.
+    const centerCards = () => {
+      if (!isMobile()) return;
+      const cardHeight = boxes[0].offsetHeight;
+      const cardCenterY = (window.innerHeight - cardHeight) / 2;
+      const cardInitialTop = flex.offsetTop + boxes[0].offsetTop;
+      gsap.set(flex, { y: cardCenterY - cardInitialTop });
+    };
 
     const measure = () => {
       const prevTransform = flex.style.transform;
@@ -59,34 +68,16 @@ const Work = () => {
         const { startX, endX, distance } = measure();
 
         if (isMobile()) {
-          const cardHeight = boxes[0].offsetHeight;
-          const viewportHeight = window.innerHeight;
-          // Exact vertical center for the card on the mobile screen
-          const cardCenterY = (viewportHeight - cardHeight) / 2;
+          // Pre-position cards at the center before the pin starts
+          centerCards();
 
-          // Natural DOM top of card within work-container
-          const cardInitialTop = boxes[0].offsetTop;
-          // How much flex must move so card sits exactly at vertical center
-          const flexCenterY = cardCenterY - cardInitialTop;
-
-          // Dock title right at top of viewport (16px from top)
-          const titleInitialTop = title.offsetTop;
-          const titleTopY = 16 - titleInitialTop;
-
-          // Scroll phases – card is pre‑pinned at centre, title moves first
-          const titleDist = Math.abs(titleTopY);
-          const totalDistance = titleDist + distance;
-          const p1End = titleDist / totalDistance; // when title reaches top
-
-          // Pin the card at centre from the start
-          gsap.set(flex, { y: flexCenterY, immediateRender: false });
-          gsap.set(title, { y: 0, immediateRender: false });
-
+          // Horizontal scrub: first card centered → last card centered.
+          // Title is not animated – it stays at its natural spot at the top.
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
               start: "top top",
-              end: () => `+=${totalDistance}`,
+              end: () => `+=${distance}`,
               scrub: 1,
               pin: true,
               pinSpacing: true,
@@ -94,22 +85,15 @@ const Work = () => {
               id: "work",
               invalidateOnRefresh: true,
             },
-          })
-            // Phase 1 – move title to top while card stays pinned
-            .to(
-              title,
-              { y: titleTopY, ease: "power1.out", immediateRender: false },
-              0
-            )
-            // Phase 2 – horizontal parallax starts after title reaches top
-            .fromTo(
-              flex,
-              { x: startX, immediateRender: false },
-              { x: endX, ease: "none", immediateRender: false },
-              p1End
-            );
+          }).fromTo(
+            flex,
+            { x: startX, immediateRender: false },
+            { x: endX, ease: "none", immediateRender: false },
+            0
+          );
         } else {
-          // Desktop: single horizontal scrub
+          // Desktop: single horizontal scrub (reset any leftover mobile offset)
+          gsap.set(flex, { y: 0 });
           gsap.timeline({
             scrollTrigger: {
               trigger: ".work-section",
@@ -134,6 +118,10 @@ const Work = () => {
 
     createAnimation();
 
+    // Re-center when a card's height changes (e.g. images finish loading)
+    const observer = new ResizeObserver(() => centerCards());
+    observer.observe(boxes[0]);
+
     const handleResize = () => {
       createAnimation();
     };
@@ -142,6 +130,7 @@ const Work = () => {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      observer.disconnect();
       ctx?.revert();
       ScrollTrigger.getById("work")?.kill();
     };
@@ -150,7 +139,7 @@ const Work = () => {
   return (
     <div className="work-section" id="work" data-cursor-section="bright">
       <div className="work-container section-container">
-        <h2 ref={titleRef}>
+        <h2>
           My <span>Work</span>
         </h2>
         <div
