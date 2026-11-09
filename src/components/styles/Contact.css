@@ -242,9 +242,10 @@ a.contact-social {
     align-items: center;
     gap: 8px;
     margin-bottom: 3px;
+    font-size: 18px;
   }
   .contact-social .social-ico {
     display: flex;
-    font-size: 18px;
+    font-size: 1em;
   }
 }
