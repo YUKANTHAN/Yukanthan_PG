@@ -41,6 +41,9 @@ a.contact-social {
   border-bottom: 1px solid #ccc;
   margin-bottom: 8px;
 }
+.contact-social .social-ico {
+  display: none;
+}
 
 /* Contact Form */
 .contact-form-box h2 {
@@ -231,5 +234,17 @@ a.contact-social {
   }
   .contact-section h3 {
     font-size: 32px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  a.contact-social {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+  }
+  .contact-social .social-ico {
+    display: flex;
+    font-size: 18px;
   }
 }

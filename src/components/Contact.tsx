@@ -1,4 +1,5 @@
 import { MdArrowOutward } from "react-icons/md";
+import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 import "./styles/Contact.css";
 import { config } from "../config";
 import gsap from "gsap";
@@ -28,6 +29,9 @@ const Contact = () => {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   useEffect(() => {
+    // Skip the scroll-reveal on mobile so contact content is always visible
+    if (window.innerWidth <= 768) return;
+
     const contactTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: ".contact-section",
@@ -131,6 +135,9 @@ const Contact = () => {
               data-cursor="disable"
               className="contact-social"
             >
+              <span className="social-ico">
+                <FaGithub />
+              </span>
               Github <MdArrowOutward />
             </a>
             <a
@@ -140,6 +147,9 @@ const Contact = () => {
               data-cursor="disable"
               className="contact-social"
             >
+              <span className="social-ico">
+                <FaLinkedinIn />
+              </span>
               Linkedin <MdArrowOutward />
             </a>
             {config.contact.twitter && (
@@ -169,10 +179,13 @@ const Contact = () => {
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="disable"
-              className="contact-social"
-            >
-              Instagram <MdArrowOutward />
-            </a>
+                className="contact-social"
+              >
+                <span className="social-ico">
+                  <FaInstagram />
+                </span>
+                Instagram <MdArrowOutward />
+              </a>
           </div>
           <div className="contact-box contact-form-box">
             <h2>Leave a Message</h2>
