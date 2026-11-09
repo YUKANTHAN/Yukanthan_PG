@@ -13,57 +13,64 @@ const setCharacter = (
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
 
-  const loadCharacter = async () => {
+  const handleLoaded = (gltf: GLTF): GLTF => {
+    const character = gltf.scene;
+    character.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = false;
+        child.receiveShadow = false;
+        child.frustumCulled = true;
+        if (child.material && !Array.isArray(child.material)) {
+          child.material.precision = "mediump";
+        }
+      }
+    });
+    (async () => {
+      try {
+        await renderer.compileAsync(character, camera, scene);
+      } catch (err) {
+        console.warn("compileAsync failed:", err);
+      }
+    })();
     try {
-      const encryptedBlob = await decryptFile(
+      setCharTimeline(character, camera);
+      setAllTimeline();
+      character.getObjectByName("footR")!.position.y = 3.36;
+      character.getObjectByName("footL")!.position.y = 3.36;
+    } catch (err) {
+      console.warn("Character setup failed:", err);
+    }
+    dracoLoader.dispose();
+    return gltf;
+  };
+
+  const loadFrom = (url: string): Promise<GLTF> =>
+    new Promise((resolve, reject) => {
+      loader.load(
+        url,
+        (gltf) => resolve(handleLoaded(gltf)),
+        undefined,
+        (error) => {
+          console.error("Error loading GLTF model:", error);
+          reject(error);
+        }
+      );
+    });
+
+  const loadCharacter = async (): Promise<GLTF | null> => {
+    try {
+      const encryptedData = await decryptFile(
         "/models/character.enc",
         "Character3D#@"
       );
-      const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
-
-      return await new Promise<GLTF | null>((resolve, reject) => {
-        loader.load(
-          blobUrl,
-          async (gltf) => {
-            const character = gltf.scene;
-            character.traverse((child) => {
-              if (child instanceof THREE.Mesh) {
-                child.castShadow = false;
-                child.receiveShadow = false;
-                child.frustumCulled = true;
-                if (child.material && !Array.isArray(child.material)) {
-                  child.material.precision = 'mediump';
-                }
-              }
-            });
-            resolve(gltf);
-            (async () => {
-              try {
-                await renderer.compileAsync(character, camera, scene);
-              } catch (err) {
-                console.warn("compileAsync failed:", err);
-              }
-            })();
-            try {
-              setCharTimeline(character, camera);
-              setAllTimeline();
-              character.getObjectByName("footR")!.position.y = 3.36;
-              character.getObjectByName("footL")!.position.y = 3.36;
-            } catch (err) {
-              console.warn("Character setup failed:", err);
-            }
-            dracoLoader.dispose();
-          },
-          undefined,
-          (error) => {
-            console.error("Error loading GLTF model:", error);
-            reject(error);
-          }
-        );
-      });
+      const blobUrl = URL.createObjectURL(new Blob([encryptedData]));
+      return await loadFrom(blobUrl);
     } catch (err) {
-      console.error(err);
-      throw err;
+      console.warn(
+        "Encrypted character failed to load, falling back to plain model:",
+        err
+      );
+      return await loadFrom("/models/character.glb");
     }
   };
 

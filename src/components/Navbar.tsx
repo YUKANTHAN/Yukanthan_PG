@@ -28,6 +28,7 @@ const Navbar = () => {
     if (isHome) {
       lenis.stop();
     }
+    lenis.on("scroll", ScrollTrigger.update);
 
     // Resume scrolling once intro animation completes (home) or immediately (other pages)
     const startWhenReady = () => {

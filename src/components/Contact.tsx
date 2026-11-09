@@ -31,7 +31,7 @@ const Contact = () => {
     const contactTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: ".contact-section",
-        start: "top 80%",
+        start: "top 95%",
         end: "bottom center",
         toggleActions: "play none none none",
       },

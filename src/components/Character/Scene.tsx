@@ -29,11 +29,18 @@ const Scene = () => {
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
 
-      const renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: window.devicePixelRatio < 2,
-        powerPreference: "high-performance",
-      });
+      let renderer: THREE.WebGLRenderer;
+      try {
+        renderer = new THREE.WebGLRenderer({
+          alpha: true,
+          antialias: window.devicePixelRatio < 2,
+          powerPreference: "high-performance",
+        });
+      } catch (err) {
+        console.error("WebGL is unavailable on this device:", err);
+        setLoading(100);
+        return;
+      }
       renderer.setSize(container.width, container.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
