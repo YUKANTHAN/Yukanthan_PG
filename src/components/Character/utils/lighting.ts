@@ -5,17 +5,27 @@ import { gsap } from "gsap";
 const setLighting = (scene: THREE.Scene) => {
   const directionalLight = new THREE.DirectionalLight(0xc7a9ff, 0);
   directionalLight.intensity = 0;
-  directionalLight.position.set(-0.47, -0.32, -1);
+  directionalLight.position.set(-0.5, 5, -1);
   directionalLight.castShadow = true;
-  directionalLight.shadow.mapSize.width = 1024;
-  directionalLight.shadow.mapSize.height = 1024;
+  directionalLight.shadow.mapSize.width = 2048;
+  directionalLight.shadow.mapSize.height = 2048;
   directionalLight.shadow.camera.near = 0.5;
   directionalLight.shadow.camera.far = 50;
+  directionalLight.shadow.camera.left = -10;
+  directionalLight.shadow.camera.right = 10;
+  directionalLight.shadow.camera.top = 10;
+  directionalLight.shadow.camera.bottom = -10;
+  directionalLight.shadow.normalBias = 0.02;
+  directionalLight.shadow.camera.updateProjectionMatrix();
   scene.add(directionalLight);
 
   const pointLight = new THREE.PointLight(0xc2a4ff, 0, 100, 3);
   pointLight.position.set(3, 12, 4);
-  pointLight.castShadow = true;
+  // pointLight.castShadow = true; // disabled to remove vertical line in reflections
+  // pointLight.shadow.mapSize.width = 1024;
+  // pointLight.shadow.mapSize.height = 1024;
+  // pointLight.shadow.camera.near = 0.5;
+  // pointLight.shadow.camera.far = 100;
   scene.add(pointLight);
 
   new RGBELoader()

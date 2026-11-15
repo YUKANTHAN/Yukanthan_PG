@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./styles/Career.css";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { config } from "../config";
 
 const getDisplayYear = (period: string) => {
@@ -24,6 +25,14 @@ const Career = () => {
   const visibleExperiences = expanded || !isMobile
     ? config.experiences
     : featuredExperiences;
+
+  const toggleExpand = () => {
+    setExpanded((v) => !v);
+    // Recalculate ScrollTrigger positions after the section height changes
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+  };
 
   const showToggle = isMobile && featuredExperiences.length < config.experiences.length;
 
@@ -53,7 +62,7 @@ const Career = () => {
           {showToggle && (
             <button
               className="career-view-all"
-              onClick={() => setExpanded(!expanded)}
+              onClick={toggleExpand}
               aria-expanded={expanded}
             >
               {expanded ? "Show Less" : `View All (${config.experiences.length})`}

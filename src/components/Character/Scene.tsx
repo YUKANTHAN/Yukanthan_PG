@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { EffectComposer, RenderPass } from "postprocessing";
 import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
 import { useLoading } from "../../context/LoadingContext";
@@ -33,7 +34,7 @@ const Scene = () => {
       try {
         renderer = new THREE.WebGLRenderer({
           alpha: true,
-          antialias: window.devicePixelRatio < 2,
+          antialias: true,
           powerPreference: "high-performance",
         });
       } catch (err) {
@@ -42,7 +43,9 @@ const Scene = () => {
         return;
       }
       renderer.setSize(container.width, container.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 3));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
       canvasElement.appendChild(renderer.domElement);
@@ -52,6 +55,12 @@ const Scene = () => {
       camera.position.set(0, 13.1, 24.7);
       camera.zoom = 1.1;
       camera.updateProjectionMatrix();
+
+      const composer = new EffectComposer(renderer, {
+        frameBufferType: THREE.HalfFloatType,
+        multisampling: 4,
+      });
+      composer.addPass(new RenderPass(scene, camera));
 
       let headBone: THREE.Object3D | null = null;
       let screenLight: THREE.Object3D | null = null;
@@ -110,7 +119,7 @@ const Scene = () => {
           modelReady = true;
 
           const handleWindowResize = () =>
-            handleResize(renderer, camera, canvasDiv, character);
+            handleResize(renderer, camera, canvasDiv, character, composer);
           resizeRef.current = handleWindowResize;
           window.addEventListener("resize", handleWindowResize);
 
@@ -218,7 +227,7 @@ const Scene = () => {
         if (mixer) {
           mixer.update(delta);
         }
-        renderer.render(scene, camera);
+        composer.render(delta);
       };
       animate();
       return () => {
@@ -226,6 +235,7 @@ const Scene = () => {
         clearTimeout(guaranteeTimer);
         progress.stop();
         scene.clear();
+        composer.dispose();
         renderer.dispose();
         if (resizeRef.current) {
           window.removeEventListener("resize", resizeRef.current);

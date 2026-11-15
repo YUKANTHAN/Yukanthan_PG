@@ -1,0 +1,13 @@
+
+> moncy-portfolio@0.0.0 dev
+> concurrently "cd backend && (python main.py || py main.py)" "vite --host"
+
+[0] 'python' is not recognized as an internal or external command,
+[0] operable program or batch file.
+[1] [2m9:38:20 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+[1] 
+[1]   [32m[1mVITE[22m v8.2.1[39m  [2mready in [0m[1m1819[22m[2m[0m ms[22m
+[1] 
+[1]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[1]   [32m➜[39m  [1mNetwork[22m: [36mhttp://10.116.10.117:[1m5173[22m/[39m  [2mWi-Fi[22m
+[1] [2m9:38:22 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...

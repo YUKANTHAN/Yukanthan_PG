@@ -17,12 +17,9 @@ const setCharacter = (
     const character = gltf.scene;
     character.traverse((child) => {
       if (child instanceof THREE.Mesh) {
-        child.castShadow = false;
-        child.receiveShadow = false;
+        child.castShadow = true;
+        child.receiveShadow = true;
         child.frustumCulled = true;
-        if (child.material && !Array.isArray(child.material)) {
-          child.material.precision = "mediump";
-        }
       }
     });
     (async () => {

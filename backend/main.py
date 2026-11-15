@@ -23,10 +23,17 @@ db = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global client, db
-    client = MongoClient(MONGODB_URI)
-    db = client[DB_NAME]
+    try:
+        client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
+        client.admin.command("ping")
+        db = client[DB_NAME]
+    except Exception as e:
+        print(f"[backend] MongoDB unavailable ({e}); running without database")
+        client = None
+        db = None
     yield
-    client.close()
+    if client is not None:
+        client.close()
 
 
 app = FastAPI(title="Portfolio Backend", lifespan=lifespan)
