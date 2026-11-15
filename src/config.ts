@@ -268,20 +268,20 @@ export const config = {
                 file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
                 date: "2026"
             },
-            {
-                id: 3,
-                title: "Devfusion Hackathon Round 2",
-                organization: "IIT Delhi / Devfusion",
-                file: "Yukanthan P G   Devfusion Hackathon Round 2.pdf",
-                date: "2026"
-            },
-            {
-                id: 7,
-                title: "Unstop Prediction",
-                organization: "Unstop",
-                file: "Yukanthan Unstop Prediction .pdf",
-                date: "2026"
-            }
+{
+            id: 3,
+            title: "Devfusion Hackathon Round 2",
+            organization: "IIT Delhi / Devfusion",
+            file: "Yukanthan P G   Devfusion Hackathon Round 2.pdf",
+            date: "2026"
+        },
+        {
+            id: 7,
+            title: "Unstop Prediction",
+            organization: "Unstop",
+            file: "Yukanthan Unstop Prediction .pdf",
+            date: "2026"
+        }
         ],
     learnings: [
         {
@@ -396,6 +396,83 @@ export const config = {
             title: "GDG Madurai Agentic AI",
             organization: "GDG Madurai",
             file: "Ticket Yukanthan GDG Madurai Agentic AIGOOGE263440194.pdf",
+            date: "2026"
+        },
+        {
+            id: 23,
+            title: "AI Olympics",
+            organization: "Kalasalingam University",
+            file: "Yukanthan AI Olympics (Kalasalingam University).pdf",
+            date: "2026"
+        },
+        {
+            id: 24,
+            title: "Devcation Delhi 2026",
+            organization: "GDG on Campus IGDTUW & IIT Delhi",
+            file: "Yukanthan Devcation.pdf",
+            date: "2026"
+        },
+        {
+            id: 25,
+            title: "DevFusion 2.0",
+            organization: "Enginow",
+            file: "Yukanthan Devfusion 2.0.pdf",
+            date: "2026"
+        },
+        {
+            id: 26,
+            title: "DevFusion IIT Delhi Round 1",
+            organization: "Enginow",
+            file: "Yukanthan Devfusion IIT Delhi Round 1.pdf",
+            date: "2026"
+        },
+        {
+            id: 27,
+            title: "HackIndia Spark 6",
+            organization: "NIT Delhi",
+            file: "Yukanthan HackIndia Spark 6 (NIT Delhi).pdf",
+            date: "2026"
+        },
+        {
+            id: 28,
+            title: "QuantCraft",
+            organization: "Galgotias University",
+            file: "Yukanthan QuantCraft.pdf",
+            date: "2026"
+        },
+        {
+            id: 29,
+            title: "Unstop Week-of-Wins",
+            organization: "Unstop",
+            file: "Yukanthan Unstop Week-of-Wins.pdf",
+            date: "2026"
+        },
+        {
+            id: 30,
+            title: "Campus Associate Internship",
+            organization: "TechBairn",
+            file: "TechBairn_Internship_Offer_Letter_YUKANTHAN P G.pdf",
+            date: "2026"
+        },
+        {
+            id: 31,
+            title: "Internship Offer Letter",
+            organization: "Bluestock",
+            file: "Yukanthan Bluestock Offer Letter Intern .pdf",
+            date: "2026"
+        },
+        {
+            id: 32,
+            title: "Agentic AI Workshop",
+            organization: "Brand Monk",
+            file: "Yukanthan_P_G Agentic AI Workshop Brand Monk Certificate.pdf",
+            date: "2026"
+        },
+        {
+            id: 33,
+            title: "UI/UX Workshop",
+            organization: "Brand Monk",
+            file: "Yukanthan_P_G UI UX Workshop Brandmonk Certificate .pdf",
             date: "2026"
         }
     ],

@@ -22,6 +22,7 @@ const Certificates = () => {
   const lightboxDY = useRef(0);
   const touchStartX = useRef<number>(0);
   const touchStartY = useRef<number>(0);
+  const [portraitImages, setPortraitImages] = useState<Set<string>>(new Set());
 
   const mobileList = useMemo(() => {
     if (mobileCategory === "events") {
@@ -360,6 +361,20 @@ const Certificates = () => {
     target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23c2a4ff' font-family='sans-serif' font-size='14'%3ENo Preview%3C/text%3E%3C/svg%3E";
   };
 
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>, filename: string) => {
+    const img = e.currentTarget;
+    if (img.naturalHeight > img.naturalWidth) {
+      setPortraitImages(prev => new Set([...prev, filename]));
+    }
+  };
+
+  const getZoomClass = (filename: string) => {
+    if (filename === 'Yukanthan P G _ Satwa Round1 certificate.pdf' || filename === 'Yukanthan P G .pdf') {
+      return 'custom-zoom';
+    }
+    return '';
+  };
+
   return (
     <div className="certificates-section" id="certificates" data-cursor-section="bright">
       <div className="certificates-container">
@@ -616,12 +631,13 @@ const Certificates = () => {
                   aria-label={`View ${cert.title} certificate from ${cert.organization}`}
                   data-cursor="disable"
                 >
-                  <div className="modal-card-image">
+                  <div className={`modal-card-image ${portraitImages.has(cert.file) ? 'portrait' : ''} ${getZoomClass(cert.file)}`}>
                     <img
                       src={getImagePath(cert.file)}
                       alt={cert.title}
                       loading="lazy"
                       onError={handleImageError}
+                      onLoad={(e) => handleImageLoad(e, cert.file)}
                     />
                     <div className="modal-card-overlay">
                       <span>View PDF ↗</span>

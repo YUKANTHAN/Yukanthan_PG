@@ -391,6 +391,16 @@
   display: block;
 }
 
+.modal-card-image.portrait img {
+  object-fit: cover;
+  object-position: top center;
+}
+
+.modal-card-image.custom-zoom img {
+  object-fit: contain;
+  object-position: top;
+}
+
 .modal-card-overlay {
   position: absolute;
   top: 0;
