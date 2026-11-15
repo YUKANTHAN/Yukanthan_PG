@@ -76,7 +76,7 @@ const Work = () => {
       ctx = gsap.context(() => {
         const { startX, endX, distance } = measure();
 
-        if (isMobile()) {
+if (isMobile()) {
           // Pre-position cards at the center before the pin starts
           centerCards();
 
@@ -100,7 +100,7 @@ const Work = () => {
             { x: endX, ease: "none", immediateRender: false },
             0
           );
-        } else {
+} else {
           // Desktop: single horizontal scrub (reset any leftover mobile sizing)
           section.style.height = "";
           section.style.minHeight = "";
@@ -109,7 +109,7 @@ const Work = () => {
             scrollTrigger: {
               trigger: ".work-section",
               start: "top top",
-              end: () => `+=${distance}`,
+              end: () => `+=${distance * 1.03}`,
               scrub: 1,
               pin: true,
               pinSpacing: true,
