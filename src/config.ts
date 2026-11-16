@@ -255,17 +255,17 @@ export const config = {
     certificates: {
         events: [
             {
-                id: 9,
-                title: "Networking Engineer Intern",
-                organization: "Global Info Sys",
-                file: "Yukanthan Internship Global Infosys Bonafide Certicate.pdf",
-                date: "2026"
-            },
-            {
                 id: 10,
                 title: "IIIT Sricity Ideaverse",
                 organization: "IIIT Sri City",
                 file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
+                date: "2026"
+            },
+            {
+                id: 9,
+                title: "Networking Engineer Intern",
+                organization: "Global Info Sys",
+                file: "Yukanthan Internship Global Infosys Bonafide Certicate.pdf",
                 date: "2026"
             },
 {
@@ -314,6 +314,13 @@ export const config = {
             }
         ],
     modalOnly: [
+        {
+            id: 10,
+            title: "IIIT Sricity Ideaverse",
+            organization: "IIIT Sri City",
+            file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
+            date: "2026"
+        },
         {
             id: 11,
             title: "Prelude",
