@@ -474,6 +474,76 @@ export const config = {
             organization: "Brand Monk",
             file: "Yukanthan_P_G UI UX Workshop Brandmonk Certificate .pdf",
             date: "2026"
+        },
+        {
+            id: 34,
+            title: "B-Plan Competition",
+            organization: "Francis Xavier Engineering College",
+            file: "Yukanthan B-Plan Competition (Francis Xavier Engineering College).jpg",
+            date: "2026"
+        },
+        {
+            id: 35,
+            title: "Dream2Reality Idea Competition",
+            organization: "PSR Engineering College",
+            file: "Yukanthan Dream2Reality Idea Competition (PSR Engineering College).jpg",
+            date: "2026"
+        },
+        {
+            id: 36,
+            title: "INFOVATE 2026 Paper Presentation",
+            organization: "JP College of Engineering",
+            file: "Yukanthan INFOVATE 2026 Paper Presentation (JP College of Engineering).jpg",
+            date: "2026"
+        },
+        {
+            id: 37,
+            title: "INFOVATE 2026 Participation",
+            organization: "JP College of Engineering",
+            file: "Yukanthan INFOVATE 2026 Participation (JP College of Engineering).jpg",
+            date: "2026"
+        },
+        {
+            id: 38,
+            title: "NEC Tech Fest Code Relay",
+            organization: "National Engineering College",
+            file: "Yukanthan NEC Tech Fest Code Relay (National Engineering College).jpg",
+            date: "2026"
+        },
+        {
+            id: 39,
+            title: "NEC Tech Fest Dig the Bug",
+            organization: "National Engineering College",
+            file: "Yukanthan NEC Tech Fest Dig the Bug (National Engineering College).jpg",
+            date: "2026"
+        },
+        {
+            id: 40,
+            title: "Nzevotrix 24 Clueless Code",
+            organization: "PSR Engineering College",
+            file: "Yukanthan Nzevotrix 24 Clueless Code (PSR Engineering College).jpg",
+            date: "2026"
+        },
+        {
+            id: 41,
+            title: "SCIMIT 26 Mega Project",
+            organization: "Manakula Vinayagar Institute of Technology",
+            file: "Yukanthan SCIMIT 26 Mega Project (Manakula Vinayagar Institute of Technology).jpg",
+            date: "2026"
+        },
+        {
+            id: 42,
+            title: "ZYNEX 2K26 Check Mate",
+            organization: "SVeerasamy Chettiar College",
+            file: "Yukanthan ZYNEX 2K26 Check Mate (SVeerasamy Chettiar College).jpg",
+            date: "2026"
+        },
+        {
+            id: 43,
+            title: "ZYNEX 2K26 Paper Presentation",
+            organization: "SVeerasamy Chettiar College",
+            file: "Yukanthan ZYNEX 2K26 Paper Presentation (SVeerasamy Chettiar College).jpg",
+            date: "2026"
         }
     ],
     }
