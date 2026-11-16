@@ -534,14 +534,14 @@ export const config = {
         {
             id: 42,
             title: "ZYNEX 2K26 Check Mate",
-            organization: "SVeerasamy Chettiar College",
+            organization: "S.V.C. Engg Clg",
             file: "Yukanthan ZYNEX 2K26 Check Mate (SVeerasamy Chettiar College).jpg",
             date: "2026"
         },
         {
             id: 43,
             title: "ZYNEX 2K26 Paper Presentation",
-            organization: "SVeerasamy Chettiar College",
+            organization: "S.V.C. Engg Clg",
             file: "Yukanthan ZYNEX 2K26 Paper Presentation (SVeerasamy Chettiar College).jpg",
             date: "2026"
         }
