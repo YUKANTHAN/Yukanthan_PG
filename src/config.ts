@@ -315,13 +315,6 @@ export const config = {
         ],
     modalOnly: [
         {
-            id: 10,
-            title: "IIIT Sricity Ideaverse",
-            organization: "IIIT Sri City",
-            file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
-            date: "2026"
-        },
-        {
             id: 11,
             title: "Prelude",
             organization: "Innomatics Research Labs",
