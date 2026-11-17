@@ -261,20 +261,34 @@ export const config = {
                 file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
                 date: "2026"
             },
-            {
+{
                 id: 9,
                 title: "Networking Engineer Intern",
                 organization: "Global Info Sys",
                 file: "Yukanthan Internship Global Infosys Bonafide Certicate.pdf",
                 date: "2026"
             },
-{
-            id: 3,
-            title: "Devfusion Hackathon Round 2",
-            organization: "IIT Delhi / Devfusion",
-            file: "Yukanthan P G   Devfusion Hackathon Round 2.pdf",
-            date: "2026"
-        },
+            {
+                id: 36,
+                title: "INFOVATE 2026 Paper Presentation",
+                organization: "JP College of Engineering",
+                file: "Yukanthan INFOVATE 2026 Paper Presentation (JP College of Engineering).jpg",
+                date: "2026"
+            },
+            {
+                id: 37,
+                title: "INFOVATE 2026 Participation",
+                organization: "JP College of Engineering",
+                file: "Yukanthan INFOVATE 2026 Participation (JP College of Engineering).jpg",
+                date: "2026"
+            },
+            {
+                id: 3,
+                title: "Devfusion Hackathon Round 2",
+                organization: "IIT Delhi / Devfusion",
+                file: "Yukanthan P G   Devfusion Hackathon Round 2.pdf",
+                date: "2026"
+            },
         {
             id: 7,
             title: "Unstop Prediction",
@@ -491,20 +505,6 @@ export const config = {
         },
         {
             id: 36,
-            title: "INFOVATE 2026 Paper Presentation",
-            organization: "JP College of Engineering",
-            file: "Yukanthan INFOVATE 2026 Paper Presentation (JP College of Engineering).jpg",
-            date: "2026"
-        },
-        {
-            id: 37,
-            title: "INFOVATE 2026 Participation",
-            organization: "JP College of Engineering",
-            file: "Yukanthan INFOVATE 2026 Participation (JP College of Engineering).jpg",
-            date: "2026"
-        },
-        {
-            id: 38,
             title: "NEC Tech Fest Code Relay",
             organization: "National Engineering College",
             file: "Yukanthan NEC Tech Fest Code Relay (National Engineering College).jpg",
