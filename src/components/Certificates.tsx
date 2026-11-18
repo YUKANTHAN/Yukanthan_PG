@@ -244,6 +244,8 @@ const Certificates = () => {
   const nitDelhiCert = modalCertificates.find(c => c.title === "HackIndia Spark 6");
   const quantcraftCert = modalCertificates.find(c => c.title === "QuantCraft");
   const unstopWinsCert = modalCertificates.find(c => c.title === "Unstop Week-of-Wins");
+  const unstopPredictionCert = modalCertificates.find(c => c.title === "Unstop Prediction");
+  const nextDialogCert = modalCertificates.find(c => c.title === "Next Dialog E-Summit'26");
   const devfusionR2Cert = modalCertificates.find(c => c.title === "Devfusion Hackathon Round 2");
   let zynexInserted = false;
 
@@ -271,34 +273,36 @@ const Certificates = () => {
       if (nitDelhiCert) group.push({ ...nitDelhiCert });
       if (quantcraftCert) group.push({ ...quantcraftCert });
       if (unstopWinsCert) group.push({ ...unstopWinsCert });
+      if (unstopPredictionCert) group.push({ ...unstopPredictionCert });
+      if (nextDialogCert) group.push({ ...nextDialogCert });
       if (devfusionR2Cert) group.push({ ...devfusionR2Cert });
       if (devfusionCert) group.push({ ...devfusionCert });
       return group;
     }
-    if (cert.title === "ZYNEX 2K26 Paper Presentation" || 
-        cert.title === "Satwa Round 1 Certificate" || 
-        cert.title === "Certificate of Participation" ||
-        cert.title === "Nzevotrix 24 Clueless Code" ||
-        cert.title === "SCIMIT 26 Mega Project" ||
-        cert.title === "AI Olympics" ||
-        cert.title === "GenAI Powered Data Analytics Job Simulation" ||
-        cert.title === "Campus Associate Internship" ||
-        cert.title === "Internship Offer Letter" ||
-        cert.title === "Devfusion" ||
-        cert.title === "Devcation Delhi 2026" ||
-        cert.title === "DevFusion 2.0" ||
-        cert.title === "NEC Tech Fest Code Relay" ||
-        cert.title === "NEC Tech Fest Dig the Bug" ||
-        cert.title === "B-Plan Competition" ||
-        cert.title === "Dream2Reality Idea Competition" ||
-        cert.title === "INFOVATE 2026 Participation" ||
-        cert.title === "ZYNEX 2K26 Check Mate" ||
-        cert.title === "HackIndia Spark 6" ||
-        cert.title === "QuantCraft" ||
-        cert.title === "Unstop Week-of-Wins" ||
-        cert.title === "Devfusion Hackathon Round 2") {
-      return [];
-    }
+    if (cert.title === "ZYNEX 2K26 Paper Presentation") return [];
+    if (cert.title === "Satwa Round 1 Certificate") return [];
+    if (cert.title === "Certificate of Participation") return [];
+    if (cert.title === "Nzevotrix 24 Clueless Code") return [];
+    if (cert.title === "SCIMIT 26 Mega Project") return [];
+    if (cert.title === "AI Olympics") return [];
+    if (cert.title === "GenAI Powered Data Analytics Job Simulation") return [];
+    if (cert.title === "Campus Associate Internship") return [];
+    if (cert.title === "Internship Offer Letter") return [];
+    if (cert.title === "Devfusion") return [];
+    if (cert.title === "Devcation Delhi 2026") return [];
+    if (cert.title === "DevFusion 2.0") return [];
+    if (cert.title === "NEC Tech Fest Code Relay") return [];
+    if (cert.title === "NEC Tech Fest Dig the Bug") return [];
+    if (cert.title === "B-Plan Competition") return [];
+    if (cert.title === "Dream2Reality Idea Competition") return [];
+    if (cert.title === "INFOVATE 2026 Participation") return [];
+    if (cert.title === "ZYNEX 2K26 Check Mate") return [];
+    if (cert.title === "HackIndia Spark 6") return [];
+    if (cert.title === "QuantCraft") return [];
+    if (cert.title === "Unstop Week-of-Wins") return [];
+    if (cert.title === "Unstop Prediction") return [];
+    if (cert.title === "Next Dialog E-Summit'26") return [];
+    if (cert.title === "Devfusion Hackathon Round 2") return [];
     return cert;
   });
   useEffect(() => {

@@ -289,42 +289,69 @@ export const config = {
             display: "both",
             category: "Event"
         },
-        {
-            id: 1,
-            title: "Computer Vision 101",
-            organization: "Innomatics Research Labs",
-            file: "YUKANTHAN_Computer vision 101.pdf",
-            date: "2026",
-            display: "both",
-            category: "Learning"
-        },
-        {
-            id: 2,
-            title: "Introduction to Artificial Intelligence",
-            organization: "Simplilearn / E-Learning",
-            file: "YUKANTHAN_Intoduction to artificial intelligence.pdf",
-            date: "2026",
-            display: "both",
-            category: "Learning"
-        },
-        {
-            id: 3,
-            title: "Introduction to Data Science",
-            organization: "Simplilearn / E-Learning",
-            file: "YUKANTHAN_Introduction to data science.pdf",
-            date: "2026",
-            display: "both",
-            category: "Learning"
-        },
-        {
-            id: 4,
-            title: "Introduction to Deep Learning",
-            organization: "Simplilearn / E-Learning",
-            file: "YUKANTHAN_Introduction to deep learning.pdf",
-            date: "2026",
-            display: "both",
-            category: "Learning"
-        },
+{
+                id: 2,
+                title: "Introduction to Artificial Intelligence",
+                organization: "Simplilearn / E-Learning",
+                file: "YUKANTHAN_Intoduction to artificial intelligence.pdf",
+                date: "2026",
+                display: "both",
+                category: "Learning"
+            },
+            {
+                id: 16,
+                title: "AI Workshop",
+                organization: "Innomatics Research Labs",
+                file: "Yukanthan P G   AI Workshop Innomatics .pdf",
+                date: "2026",
+                display: "both",
+                category: "Learning"
+            },
+            {
+                id: 17,
+                title: "Cloud Computing",
+                organization: "NPTEL",
+                file: "Yukanthan Nptel Cloud Computing.pdf",
+                date: "2026",
+                display: "both",
+                category: "Learning"
+            },
+            {
+                id: 32,
+                title: "Agentic AI Workshop",
+                organization: "Brand Monk",
+                file: "Yukanthan_P_G Agentic AI Workshop Brand Monk Certificate.pdf",
+                date: "2026",
+                display: "both",
+                category: "Learning"
+            },
+            {
+                id: 3,
+                title: "Introduction to Data Science",
+                organization: "Simplilearn / E-Learning",
+                file: "YUKANTHAN_Introduction to data science.pdf",
+                date: "2026",
+                display: "modal",
+                category: "Learning"
+            },
+            {
+                id: 1,
+                title: "Computer Vision 101",
+                organization: "Innomatics Research Labs",
+                file: "YUKANTHAN_Computer vision 101.pdf",
+                date: "2026",
+                display: "modal",
+                category: "Learning"
+            },
+            {
+                id: 4,
+                title: "Introduction to Deep Learning",
+                organization: "Simplilearn / E-Learning",
+                file: "YUKANTHAN_Introduction to deep learning.pdf",
+                date: "2026",
+                display: "modal",
+                category: "Learning"
+            },
         {
             id: 11,
             title: "Prelude",
@@ -376,25 +403,7 @@ export const config = {
             organization: "Event",
             file: "Yukanthan P G .pdf",
             date: "2026",
-            display: "modal",
-            category: "Certificate"
-        },
-        {
-            id: 16,
-            title: "AI Workshop",
-            organization: "Innomatics Research Labs",
-            file: "Yukanthan P G   AI Workshop Innomatics .pdf",
-            date: "2026",
-            display: "modal",
-            category: "Certificate"
-        },
-        {
-            id: 17,
-            title: "Cloud Computing",
-            organization: "NPTEL",
-            file: "Yukanthan Nptel Cloud Computing.pdf",
-            date: "2026",
-            display: "modal",
+display: "modal",
             category: "Certificate"
         },
         {
@@ -501,24 +510,6 @@ export const config = {
             title: "Internship Offer Letter",
             organization: "Bluestock",
             file: "Yukanthan Bluestock Offer Letter Intern .pdf",
-            date: "2026",
-            display: "modal",
-            category: "Certificate"
-        },
-        {
-            id: 32,
-            title: "Agentic AI Workshop",
-            organization: "Brand Monk",
-            file: "Yukanthan_P_G Agentic AI Workshop Brand Monk Certificate.pdf",
-            date: "2026",
-            display: "modal",
-            category: "Certificate"
-        },
-        {
-            id: 33,
-            title: "UI/UX Workshop",
-            organization: "Brand Monk",
-            file: "Yukanthan_P_G UI UX Workshop Brandmonk Certificate .pdf",
             date: "2026",
             display: "modal",
             category: "Certificate"
