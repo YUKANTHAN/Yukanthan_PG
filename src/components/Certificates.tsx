@@ -388,7 +388,7 @@ const Certificates = () => {
       timeline.kill();
       ScrollTrigger.getById("certificates")?.kill();
     };
-  }, []);
+  }, [gridCertificates]);
 
   const handleCardClick = (filename: string) => {
     openPdf(filename);
