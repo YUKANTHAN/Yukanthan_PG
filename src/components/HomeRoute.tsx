@@ -5,7 +5,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { LoadingProvider } from "../context/LoadingProvider";
 import ErrorBoundary from "./ErrorBoundary";
 import { lenis } from "./Navbar";
-import { initialFX, initialFXStarted } from "./utils/initialFX";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,8 +38,12 @@ const HomeRoute = () => {
     }
     if (isHome) {
       document.body.style.overflowY = "auto";
-      if (!initialFXStarted) {
-        initialFX();
+      if (!(window as unknown as { __initialFXStarted?: boolean }).__initialFXStarted) {
+        import("./utils/initialFX").then((module) => {
+          if (module.initialFX) {
+            module.initialFX();
+          }
+        });
       }
       requestAnimationFrame(() => {
         ScrollTrigger.refresh();
