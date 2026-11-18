@@ -2,12 +2,13 @@ import { PropsWithChildren, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import { LoadingContext } from "./LoadingContext";
 
+const SKIP_LOADING_KEY = "yukanthan_skip_loading";
+
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(() => {
-    // Only show the loading overlay when landing on the home page
     if (window.location.pathname !== "/") return false;
-    // Skip loading on mobile
     if (window.innerWidth <= 768) return false;
+    if (typeof window !== "undefined" && localStorage.getItem(SKIP_LOADING_KEY)) return false;
     return true;
   });
   const [loading, setLoading] = useState(0);
@@ -18,7 +19,6 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
     setLoading,
   };
   useEffect(() => {
-    // Auto-start animations on mobile since there's no 3D model
     if (window.innerWidth <= 768) {
       import("../components/utils/initialFX").then((module) => {
         if (module.initialFX) {
@@ -29,8 +29,6 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
       });
     }
   }, []);
-
-  useEffect(() => {}, [loading]);
 
   return (
     <LoadingContext.Provider value={value}>

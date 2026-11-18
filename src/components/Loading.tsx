@@ -24,6 +24,8 @@ const translations = [
   "Юкантан"
 ];
 
+const SKIP_LOADING_KEY = "yukanthan_skip_loading";
+
 const Loading = ({ percent }: { percent: number }) => {
   const { setIsLoading } = useLoading();
   const [loaded, setLoaded] = useState(false);
@@ -51,6 +53,12 @@ const Loading = ({ percent }: { percent: number }) => {
       return () => clearTimeout(t1);
     }
   }, [percent]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(SKIP_LOADING_KEY, "true");
+    }
+  }, [isLoaded]);
 
   useEffect(() => {
     import("./utils/initialFX").then((module) => {
