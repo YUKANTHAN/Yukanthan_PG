@@ -342,12 +342,21 @@ export const config = {
                 date: "2026",
                 display: "modal",
                 category: "Learning"
-            },
+},
             {
                 id: 4,
                 title: "Introduction to Deep Learning",
                 organization: "Simplilearn / E-Learning",
                 file: "YUKANTHAN_Introduction to deep learning.pdf",
+                date: "2026",
+                display: "modal",
+                category: "Learning"
+            },
+            {
+                id: 33,
+                title: "UI/UX Workshop",
+                organization: "Brand Monk",
+                file: "Yukanthan_P_G UI UX Workshop Brandmonk Certificate .pdf",
                 date: "2026",
                 display: "modal",
                 category: "Learning"
