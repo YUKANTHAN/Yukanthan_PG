@@ -11,6 +11,10 @@ const Certificates = () => {
   const [showAllModal, setShowAllModal] = useState(false);
   const modalContentRef = useRef<HTMLDivElement | null>(null);
 
+  // Certificate data - single source of truth
+  const gridCertificates = config.certificates.filter(c => c.display === "grid" || c.display === "both");
+  const modalCertificates = config.certificates.filter(c => c.display === "modal" || c.display === "both");
+
   // Mobile Card Deck State
   const [mobileCategory, setMobileCategory] = useState<"all" | "events" | "learnings">("all");
   const [deckIndex, setDeckIndex] = useState(0);
@@ -26,16 +30,13 @@ const Certificates = () => {
 
   const mobileList = useMemo(() => {
     if (mobileCategory === "events") {
-      return config.certificates.events.map((c) => ({ ...c, category: "Event" }));
+      return gridCertificates.filter(c => c.category === "Event");
     }
     if (mobileCategory === "learnings") {
-      return config.certificates.learnings.map((c) => ({ ...c, category: "Learning" }));
+      return gridCertificates.filter(c => c.category === "Learning");
     }
-    return [
-      ...config.certificates.events.map((c) => ({ ...c, category: "Event" })),
-      ...config.certificates.learnings.map((c) => ({ ...c, category: "Learning" })),
-    ];
-  }, [mobileCategory]);
+    return gridCertificates;
+  }, [mobileCategory, gridCertificates]);
 
   const handleCategoryChange = (cat: "all" | "events" | "learnings") => {
     setMobileCategory(cat);
@@ -222,11 +223,84 @@ const Certificates = () => {
     }
   }, [showAllModal]);
 
-  const allCertificates = [
-    ...config.certificates.events.map(c => ({ ...c, category: "Event" })),
-    ...config.certificates.learnings.map(c => ({ ...c, category: "Learning" })),
-    ...(config.certificates.modalOnly || []).map(c => ({ ...c, category: "Certificate" })),
-  ];
+  const zynexCert = modalCertificates.find(c => c.title === "ZYNEX 2K26 Paper Presentation");
+  const satwaCert = modalCertificates.find(c => c.title === "Satwa Round 1 Certificate");
+  const participationCert = modalCertificates.find(c => c.title === "Certificate of Participation");
+  const cluelessCert = modalCertificates.find(c => c.title === "Nzevotrix 24 Clueless Code");
+  const scimitCert = modalCertificates.find(c => c.title === "SCIMIT 26 Mega Project");
+  const kalasalingamCert = modalCertificates.find(c => c.title === "AI Olympics");
+  const tataCert = modalCertificates.find(c => c.title === "GenAI Powered Data Analytics Job Simulation");
+  const techbairnCert = modalCertificates.find(c => c.title === "Campus Associate Internship");
+  const bluestockCert = modalCertificates.find(c => c.title === "Internship Offer Letter");
+  const devfusionCert = modalCertificates.find(c => c.title === "Devfusion");
+  const devcationCert = modalCertificates.find(c => c.title === "Devcation Delhi 2026");
+  const devfusion2Cert = modalCertificates.find(c => c.title === "DevFusion 2.0");
+  const necCodeRelayCert = modalCertificates.find(c => c.title === "NEC Tech Fest Code Relay");
+  const necDigBugCert = modalCertificates.find(c => c.title === "NEC Tech Fest Dig the Bug");
+  const bplanCert = modalCertificates.find(c => c.title === "B-Plan Competition");
+  const dream2realityCert = modalCertificates.find(c => c.title === "Dream2Reality Idea Competition");
+  const infovateJPCert = modalCertificates.find(c => c.title === "INFOVATE 2026 Participation");
+  const zynexCheckmateCert = modalCertificates.find(c => c.title === "ZYNEX 2K26 Check Mate");
+  const nitDelhiCert = modalCertificates.find(c => c.title === "HackIndia Spark 6");
+  const quantcraftCert = modalCertificates.find(c => c.title === "QuantCraft");
+  const unstopWinsCert = modalCertificates.find(c => c.title === "Unstop Week-of-Wins");
+  const devfusionR2Cert = modalCertificates.find(c => c.title === "Devfusion Hackathon Round 2");
+  let zynexInserted = false;
+
+  const allCertificates = modalCertificates.flatMap(cert => {
+    if (cert.title === "ApoorvCTF'26" && zynexCert && !zynexInserted) {
+      zynexInserted = true;
+      const group = [cert];
+      if (zynexCert) group.push({ ...zynexCert });
+      if (satwaCert) group.push({ ...satwaCert });
+      if (participationCert) group.push({ ...participationCert });
+      if (cluelessCert) group.push({ ...cluelessCert });
+      if (scimitCert) group.push({ ...scimitCert });
+      if (kalasalingamCert) group.push({ ...kalasalingamCert });
+      if (tataCert) group.push({ ...tataCert });
+      if (techbairnCert) group.push({ ...techbairnCert });
+      if (bluestockCert) group.push({ ...bluestockCert });
+      if (devcationCert) group.push({ ...devcationCert });
+      if (devfusion2Cert) group.push({ ...devfusion2Cert });
+      if (necCodeRelayCert) group.push({ ...necCodeRelayCert });
+      if (necDigBugCert) group.push({ ...necDigBugCert });
+      if (bplanCert) group.push({ ...bplanCert });
+      if (dream2realityCert) group.push({ ...dream2realityCert });
+      if (infovateJPCert) group.push({ ...infovateJPCert });
+      if (zynexCheckmateCert) group.push({ ...zynexCheckmateCert });
+      if (nitDelhiCert) group.push({ ...nitDelhiCert });
+      if (quantcraftCert) group.push({ ...quantcraftCert });
+      if (unstopWinsCert) group.push({ ...unstopWinsCert });
+      if (devfusionR2Cert) group.push({ ...devfusionR2Cert });
+      if (devfusionCert) group.push({ ...devfusionCert });
+      return group;
+    }
+    if (cert.title === "ZYNEX 2K26 Paper Presentation" || 
+        cert.title === "Satwa Round 1 Certificate" || 
+        cert.title === "Certificate of Participation" ||
+        cert.title === "Nzevotrix 24 Clueless Code" ||
+        cert.title === "SCIMIT 26 Mega Project" ||
+        cert.title === "AI Olympics" ||
+        cert.title === "GenAI Powered Data Analytics Job Simulation" ||
+        cert.title === "Campus Associate Internship" ||
+        cert.title === "Internship Offer Letter" ||
+        cert.title === "Devfusion" ||
+        cert.title === "Devcation Delhi 2026" ||
+        cert.title === "DevFusion 2.0" ||
+        cert.title === "NEC Tech Fest Code Relay" ||
+        cert.title === "NEC Tech Fest Dig the Bug" ||
+        cert.title === "B-Plan Competition" ||
+        cert.title === "Dream2Reality Idea Competition" ||
+        cert.title === "INFOVATE 2026 Participation" ||
+        cert.title === "ZYNEX 2K26 Check Mate" ||
+        cert.title === "HackIndia Spark 6" ||
+        cert.title === "QuantCraft" ||
+        cert.title === "Unstop Week-of-Wins" ||
+        cert.title === "Devfusion Hackathon Round 2") {
+      return [];
+    }
+    return cert;
+  });
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
     const isTablet = window.innerWidth <= 1024 && window.innerWidth > 768;
@@ -242,8 +316,8 @@ const Certificates = () => {
     }
 
     // Desktop: horizontal peel-off stack
-    const leftCardsCount = config.certificates.events.length;
-    const rightCardsCount = config.certificates.learnings.length;
+    const leftCardsCount = gridCertificates.filter(c => c.category === "Event").length;
+    const rightCardsCount = gridCertificates.filter(c => c.category === "Learning").length;
     const maxCards = Math.max(leftCardsCount, rightCardsCount);
 
     // Calculate total scroll distance based on number of cards
@@ -391,11 +465,11 @@ const Certificates = () => {
           <div className="certificates-column">
             <h3>Event Certificates</h3>
             <div className="certificate-stack">
-              {config.certificates.events.map((cert, index) => (
+              {gridCertificates.filter(c => c.category === "Event").map((cert, index) => (
                 <div
                   className={`certificate-card left-card-${index}`}
                   key={`event-${cert.id}`}
-                  style={getStackStyle(index, config.certificates.events.length)}
+                  style={getStackStyle(index, gridCertificates.filter(c => c.category === "Event").length)}
                   onClick={() => handleCardClick(cert.file)}
                   onKeyDown={(e) => handleCardKeyDown(e, cert.file)}
                   role="button"
@@ -428,11 +502,11 @@ const Certificates = () => {
           <div className="certificates-column">
             <h3>Learning Certificates</h3>
             <div className="certificate-stack">
-              {config.certificates.learnings.map((cert, index) => (
+              {gridCertificates.filter(c => c.category === "Learning").map((cert, index) => (
                 <div
                   className={`certificate-card right-card-${index}`}
                   key={`learning-${cert.id}`}
-                  style={getStackStyle(index, config.certificates.learnings.length)}
+                  style={getStackStyle(index, gridCertificates.filter(c => c.category === "Learning").length)}
                   onClick={() => handleCardClick(cert.file)}
                   onKeyDown={(e) => handleCardKeyDown(e, cert.file)}
                   role="button"
@@ -471,21 +545,21 @@ const Certificates = () => {
               onClick={() => handleCategoryChange("all")}
               data-cursor="disable"
             >
-              All ({config.certificates.events.length + config.certificates.learnings.length})
+              All ({gridCertificates.length})
             </button>
             <button
               className={`deck-tab ${mobileCategory === "events" ? "active" : ""}`}
               onClick={() => handleCategoryChange("events")}
               data-cursor="disable"
             >
-              Events ({config.certificates.events.length})
+              Events ({gridCertificates.filter(c => c.category === "Event").length})
             </button>
             <button
               className={`deck-tab ${mobileCategory === "learnings" ? "active" : ""}`}
               onClick={() => handleCategoryChange("learnings")}
               data-cursor="disable"
             >
-              Learnings ({config.certificates.learnings.length})
+              Learnings ({gridCertificates.filter(c => c.category === "Learning").length})
             </button>
           </div>
 

@@ -252,299 +252,366 @@ export const config = {
             tools: ["React", "Next.js", "Node.js", "TypeScript", "MongoDB", "PostgreSQL", "TailwindCSS", "REST APIs", "Docker", "Git"]
         }
     },
-    certificates: {
-        events: [
-            {
-                id: 10,
-                title: "IIIT Sricity Ideaverse",
-                organization: "IIIT Sri City",
-                file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
-                date: "2026"
-            },
-{
-                id: 9,
-                title: "Networking Engineer Intern",
-                organization: "Global Info Sys",
-                file: "Yukanthan Internship Global Infosys Bonafide Certicate.pdf",
-                date: "2026"
-            },
-            {
-                id: 36,
-                title: "INFOVATE 2026 Paper Presentation",
-                organization: "JP College of Engineering",
-                file: "Yukanthan INFOVATE 2026 Paper Presentation (JP College of Engineering).jpg",
-                date: "2026"
-            },
-            {
-                id: 37,
-                title: "INFOVATE 2026 Participation",
-                organization: "JP College of Engineering",
-                file: "Yukanthan INFOVATE 2026 Participation (JP College of Engineering).jpg",
-                date: "2026"
-            },
-            {
-                id: 3,
-                title: "Devfusion Hackathon Round 2",
-                organization: "IIT Delhi / Devfusion",
-                file: "Yukanthan P G   Devfusion Hackathon Round 2.pdf",
-                date: "2026"
-            },
+    certificates: [
         {
-            id: 7,
-            title: "Unstop Prediction",
-            organization: "Unstop",
-            file: "Yukanthan Unstop Prediction .pdf",
-            date: "2026"
-        }
-        ],
-    learnings: [
-        {
-            id: 1,
-            title: "Computer Vision 101",
-            organization: "Innomatics Research Labs",
-            file: "YUKANTHAN_Computer vision 101.pdf",
-            date: "2026"
+            id: 10,
+            title: "IIIT Sricity Ideaverse",
+            organization: "IIIT Sri City",
+            file: "YUKANTHAN IIIT Sricity Ideaverse.pdf",
+            date: "2026",
+            display: "both",
+            category: "Event"
         },
         {
-            id: 2,
-            title: "Introduction to Artificial Intelligence",
-            organization: "Simplilearn / E-Learning",
-            file: "YUKANTHAN_Intoduction to artificial intelligence.pdf",
-            date: "2026"
+            id: 9,
+            title: "Networking Engineer Intern",
+            organization: "Global Info Sys",
+            file: "Yukanthan Internship Global Infosys Bonafide Certicate.pdf",
+            date: "2026",
+            display: "both",
+            category: "Event"
         },
         {
-                id: 3,
-                title: "Introduction to Data Science",
-                organization: "Simplilearn / E-Learning",
-                file: "YUKANTHAN_Introduction to data science.pdf",
-                date: "2026"
-            },
-            {
-                id: 4,
-                title: "Introduction to Deep Learning",
-                organization: "Simplilearn / E-Learning",
-                file: "YUKANTHAN_Introduction to deep learning.pdf",
-                date: "2026"
-            }
-        ],
-    modalOnly: [
-        {
-            id: 11,
-            title: "Prelude",
-            organization: "Innomatics Research Labs",
-            file: "YUKANTHAN_Prelude.pdf",
-            date: "2026"
-        },
-        {
-            id: 12,
-            title: "Introduction to Robotic Process Automation",
-            organization: "Simplilearn / E-Learning",
-            file: "YUKANTHAN_Introduction to robotic process automation.pdf",
-            date: "2026"
-        },
-        {
-            id: 13,
-            title: "I PUC English",
-            organization: "Academic",
-            file: "YUKANTHAN_I PUC-ENGLISH.pdf",
-            date: "2024"
-        },
-        {
-            id: 14,
-            title: "Satwa Round 1 Certificate",
-            organization: "Satwa",
-            file: "Yukanthan P G _ Satwa Round1 certificate.pdf",
-            date: "2026"
-        },
-        {
-            id: 15,
-            title: "Certificate of Participation",
-            organization: "Event",
-            file: "Yukanthan P G .pdf",
-            date: "2026"
-        },
-        {
-            id: 16,
-            title: "AI Workshop",
-            organization: "Innomatics Research Labs",
-            file: "Yukanthan P G   AI Workshop Innomatics .pdf",
-            date: "2026"
-        },
-        {
-            id: 17,
-            title: "Cloud Computing",
-            organization: "NPTEL",
-            file: "Yukanthan Nptel Cloud Computing.pdf",
-            date: "2026"
-        },
-        {
-            id: 18,
-            title: "Next Dialog E-Summit'26",
-            organization: "Akhilesh Das Gutpta Institute of Professional Studies",
-            file: "Yukanthan Next Dialog E-Summit'26 organized by Akhilesh Das Gutpta Institute of Professional tudies.pdf",
-            date: "2026"
-        },
-        {
-            id: 19,
-            title: "GenAI Powered Data Analytics Job Simulation",
-            organization: "Tata / Forage",
-            file: "Yukanthan GenAI Powered Data Analytics Job Simulation (Tata) Micro internsip.pdf",
-            date: "2026"
-        },
-        {
-            id: 20,
-            title: "Devfusion",
-            organization: "IIT Delhi",
-            file: "Yukanthan Devfusion IIT Delhi.pdf",
-            date: "2026"
+            id: 36,
+            title: "INFOVATE 2026 Paper Presentation",
+            organization: "JP College of Engineering",
+            file: "Yukanthan INFOVATE 2026 Paper Presentation (JP College of Engineering).jpg",
+            date: "2026",
+            display: "both",
+            category: "Event"
         },
         {
             id: 21,
             title: "ApoorvCTF'26",
             organization: "IIIT Allahabad",
             file: "Yukanthan ApoorvCTF26.pdf",
-            date: "2026"
+            date: "2026",
+            display: "both",
+            category: "Event"
         },
         {
-            id: 22,
-            title: "GDG Madurai Agentic AI",
-            organization: "GDG Madurai",
-            file: "Ticket Yukanthan GDG Madurai Agentic AIGOOGE263440194.pdf",
-            date: "2026"
+            id: 1,
+            title: "Computer Vision 101",
+            organization: "Innomatics Research Labs",
+            file: "YUKANTHAN_Computer vision 101.pdf",
+            date: "2026",
+            display: "both",
+            category: "Learning"
         },
         {
-            id: 23,
-            title: "AI Olympics",
-            organization: "Kalasalingam University",
-            file: "Yukanthan AI Olympics (Kalasalingam University).pdf",
-            date: "2026"
+            id: 2,
+            title: "Introduction to Artificial Intelligence",
+            organization: "Simplilearn / E-Learning",
+            file: "YUKANTHAN_Intoduction to artificial intelligence.pdf",
+            date: "2026",
+            display: "both",
+            category: "Learning"
         },
         {
-            id: 24,
-            title: "Devcation Delhi 2026",
-            organization: "GDG on Campus IGDTUW & IIT Delhi",
-            file: "Yukanthan Devcation.pdf",
-            date: "2026"
+            id: 3,
+            title: "Introduction to Data Science",
+            organization: "Simplilearn / E-Learning",
+            file: "YUKANTHAN_Introduction to data science.pdf",
+            date: "2026",
+            display: "both",
+            category: "Learning"
         },
         {
-            id: 25,
-            title: "DevFusion 2.0",
-            organization: "Enginow",
-            file: "Yukanthan Devfusion 2.0.pdf",
-            date: "2026"
+            id: 4,
+            title: "Introduction to Deep Learning",
+            organization: "Simplilearn / E-Learning",
+            file: "YUKANTHAN_Introduction to deep learning.pdf",
+            date: "2026",
+            display: "both",
+            category: "Learning"
         },
         {
-            id: 26,
-            title: "DevFusion IIT Delhi Round 1",
-            organization: "Enginow",
-            file: "Yukanthan Devfusion IIT Delhi Round 1.pdf",
-            date: "2026"
+            id: 11,
+            title: "Prelude",
+            organization: "Innomatics Research Labs",
+            file: "YUKANTHAN_Prelude.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
         },
         {
-            id: 27,
-            title: "HackIndia Spark 6",
-            organization: "NIT Delhi",
-            file: "Yukanthan HackIndia Spark 6 (NIT Delhi).pdf",
-            date: "2026"
+            id: 12,
+            title: "Introduction to Robotic Process Automation",
+            organization: "Simplilearn / E-Learning",
+            file: "YUKANTHAN_Introduction to robotic process automation.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
         },
         {
-            id: 28,
-            title: "QuantCraft",
-            organization: "Galgotias University",
-            file: "Yukanthan QuantCraft.pdf",
-            date: "2026"
-        },
-        {
-            id: 29,
-            title: "Unstop Week-of-Wins",
-            organization: "Unstop",
-            file: "Yukanthan Unstop Week-of-Wins.pdf",
-            date: "2026"
-        },
-        {
-            id: 30,
-            title: "Campus Associate Internship",
-            organization: "TechBairn",
-            file: "TechBairn_Internship_Offer_Letter_YUKANTHAN P G.pdf",
-            date: "2026"
-        },
-        {
-            id: 31,
-            title: "Internship Offer Letter",
-            organization: "Bluestock",
-            file: "Yukanthan Bluestock Offer Letter Intern .pdf",
-            date: "2026"
-        },
-        {
-            id: 32,
-            title: "Agentic AI Workshop",
-            organization: "Brand Monk",
-            file: "Yukanthan_P_G Agentic AI Workshop Brand Monk Certificate.pdf",
-            date: "2026"
-        },
-        {
-            id: 33,
-            title: "UI/UX Workshop",
-            organization: "Brand Monk",
-            file: "Yukanthan_P_G UI UX Workshop Brandmonk Certificate .pdf",
-            date: "2026"
-        },
-        {
-            id: 34,
-            title: "B-Plan Competition",
-            organization: "Francis Xavier Engineering College",
-            file: "Yukanthan B-Plan Competition (Francis Xavier Engineering College).jpg",
-            date: "2026"
-        },
-        {
-            id: 35,
-            title: "Dream2Reality Idea Competition",
-            organization: "PSR Engineering College",
-            file: "Yukanthan Dream2Reality Idea Competition (PSR Engineering College).jpg",
-            date: "2026"
-        },
-        {
-            id: 36,
-            title: "NEC Tech Fest Code Relay",
-            organization: "National Engineering College",
-            file: "Yukanthan NEC Tech Fest Code Relay (National Engineering College).jpg",
-            date: "2026"
-        },
-        {
-            id: 39,
-            title: "NEC Tech Fest Dig the Bug",
-            organization: "National Engineering College",
-            file: "Yukanthan NEC Tech Fest Dig the Bug (National Engineering College).jpg",
-            date: "2026"
-        },
-        {
-            id: 40,
-            title: "Nzevotrix 24 Clueless Code",
-            organization: "PSR Engineering College",
-            file: "Yukanthan Nzevotrix 24 Clueless Code (PSR Engineering College).jpg",
-            date: "2026"
-        },
-        {
-            id: 41,
-            title: "SCIMIT 26 Mega Project",
-            organization: "Manakula Vinayagar Institute of Technology",
-            file: "Yukanthan SCIMIT 26 Mega Project (Manakula Vinayagar Institute of Technology).jpg",
-            date: "2026"
-        },
-        {
-            id: 42,
-            title: "ZYNEX 2K26 Check Mate",
-            organization: "S.V.C. Engg Clg",
-            file: "Yukanthan ZYNEX 2K26 Check Mate (SVeerasamy Chettiar College).jpg",
-            date: "2026"
+            id: 13,
+            title: "I PUC English",
+            organization: "Academic",
+            file: "YUKANTHAN_I PUC-ENGLISH.pdf",
+            date: "2024",
+            display: "modal",
+            category: "Certificate"
         },
         {
             id: 43,
             title: "ZYNEX 2K26 Paper Presentation",
             organization: "S.V.C. Engg Clg",
             file: "Yukanthan ZYNEX 2K26 Paper Presentation (SVeerasamy Chettiar College).jpg",
-            date: "2026"
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 14,
+            title: "Satwa Round 1 Certificate",
+            organization: "Satwa",
+            file: "Yukanthan P G _ Satwa Round1 certificate.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 15,
+            title: "Certificate of Participation",
+            organization: "Event",
+            file: "Yukanthan P G .pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 16,
+            title: "AI Workshop",
+            organization: "Innomatics Research Labs",
+            file: "Yukanthan P G   AI Workshop Innomatics .pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 17,
+            title: "Cloud Computing",
+            organization: "NPTEL",
+            file: "Yukanthan Nptel Cloud Computing.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 18,
+            title: "Next Dialog E-Summit'26",
+            organization: "Akhilesh Das Gutpta Institute of Professional Studies",
+            file: "Yukanthan Next Dialog E-Summit'26 organized by Akhilesh Das Gutpta Institute of Professional tudies.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 19,
+            title: "GenAI Powered Data Analytics Job Simulation",
+            organization: "Tata / Forage",
+            file: "Yukanthan GenAI Powered Data Analytics Job Simulation (Tata) Micro internsip.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 20,
+            title: "Devfusion",
+            organization: "IIT Delhi",
+            file: "Yukanthan Devfusion IIT Delhi.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 22,
+            title: "GDG Madurai Agentic AI",
+            organization: "GDG Madurai",
+            file: "Ticket Yukanthan GDG Madurai Agentic AIGOOGE263440194.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 23,
+            title: "AI Olympics",
+            organization: "Kalasalingam University",
+            file: "Yukanthan AI Olympics (Kalasalingam University).pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 24,
+            title: "Devcation Delhi 2026",
+            organization: "GDG on Campus IGDTUW & IIT Delhi",
+            file: "Yukanthan Devcation.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 25,
+            title: "DevFusion 2.0",
+            organization: "Enginow",
+            file: "Yukanthan Devfusion 2.0.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 27,
+            title: "HackIndia Spark 6",
+            organization: "NIT Delhi",
+            file: "Yukanthan HackIndia Spark 6 (NIT Delhi).pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 28,
+            title: "QuantCraft",
+            organization: "Galgotias University",
+            file: "Yukanthan QuantCraft.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 29,
+            title: "Unstop Week-of-Wins",
+            organization: "Unstop",
+            file: "Yukanthan Unstop Week-of-Wins.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 30,
+            title: "Campus Associate Internship",
+            organization: "TechBairn",
+            file: "TechBairn_Internship_Offer_Letter_YUKANTHAN P G.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 31,
+            title: "Internship Offer Letter",
+            organization: "Bluestock",
+            file: "Yukanthan Bluestock Offer Letter Intern .pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 32,
+            title: "Agentic AI Workshop",
+            organization: "Brand Monk",
+            file: "Yukanthan_P_G Agentic AI Workshop Brand Monk Certificate.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 33,
+            title: "UI/UX Workshop",
+            organization: "Brand Monk",
+            file: "Yukanthan_P_G UI UX Workshop Brandmonk Certificate .pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 34,
+            title: "B-Plan Competition",
+            organization: "Francis Xavier Engineering College",
+            file: "Yukanthan B-Plan Competition (Francis Xavier Engineering College).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 35,
+            title: "Dream2Reality Idea Competition",
+            organization: "PSR Engineering College",
+            file: "Yukanthan Dream2Reality Idea Competition (PSR Engineering College).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 36,
+            title: "NEC Tech Fest Code Relay",
+            organization: "National Engineering College",
+            file: "Yukanthan NEC Tech Fest Code Relay (National Engineering College).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 39,
+            title: "NEC Tech Fest Dig the Bug",
+            organization: "National Engineering College",
+            file: "Yukanthan NEC Tech Fest Dig the Bug (National Engineering College).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 40,
+            title: "Nzevotrix 24 Clueless Code",
+            organization: "PSR Engineering College",
+            file: "Yukanthan Nzevotrix 24 Clueless Code (PSR Engineering College).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 41,
+            title: "SCIMIT 26 Mega Project",
+            organization: "Manakula Vinayagar Institute of Technology",
+            file: "Yukanthan SCIMIT 26 Mega Project (Manakula Vinayagar Institute of Technology).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 42,
+            title: "ZYNEX 2K26 Check Mate",
+            organization: "S.V.C. Engg Clg",
+            file: "Yukanthan ZYNEX 2K26 Check Mate (SVeerasamy Chettiar College).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 37,
+            title: "INFOVATE 2026 Participation",
+            organization: "JP College of Engineering",
+            file: "Yukanthan INFOVATE 2026 Participation (JP College of Engineering).jpg",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 7,
+            title: "Unstop Prediction",
+            organization: "Unstop",
+            file: "Yukanthan Unstop Prediction .pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
+        },
+        {
+            id: 3,
+            title: "Devfusion Hackathon Round 2",
+            organization: "IIT Delhi / Devfusion",
+            file: "Yukanthan P G   Devfusion Hackathon Round 2.pdf",
+            date: "2026",
+            display: "modal",
+            category: "Certificate"
         }
     ],
-    }
 };
