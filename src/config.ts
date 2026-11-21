@@ -105,29 +105,10 @@ export const config = {
         }
     ],
 
-    projects: [
+projects: [
 
         {
-            id: 9,
-            title: "SOS Alert App",
-            category: "Mobile / Safety",
-            technologies: "React Native, Node.js, Firebase, Expo",
-            image: "/images/sos_alert.png",
-            description: "Safety app that automatically alerts emergency contacts when the SOS button is pressed, ensuring rapid response.",
-            link: "https://github.com/YUKANTHAN/SOS-alert-app"
-        },
-        {
-            id: 10,
-            title: "Campus Connect",
-            category: "Full Stack",
-            technologies: "React, Node.js, MongoDB, Express, Google Maps API",
-            image: "/images/campus_connect.png",
-            description: "Multi-functional campus app featuring navigation, staff and bus tracking, canteen ordering, and reporting modules.",
-            link: "https://github.com/YUKANTHAN/Campus-Connect",
-            demoLink: "https://campus-connect-pmjw.onrender.com/"
-        },
-        {
-            id: 11,
+            id: 0,
             title: "White Travels",
             category: "AI / Travel",
             technologies: "React, Node.js, OpenAI, Twilio",
@@ -136,13 +117,115 @@ export const config = {
             link: "https://github.com/YUKANTHAN/White-Travels"
         },
         {
-            id: 12,
-            title: "ERP Management System",
-            category: "Enterprise",
-            technologies: "React, Node.js, PostgreSQL, Docker",
+            id: 1,
+            title: "DocuMind-AI (AI powered Doc QA System)",
+            category: "AI / Doc Processing",
+            technologies: "Python, FastAPI, ChromaDB, Google Generative AI, FastAPI, PyPDF2",
+            image: "/images/documind_ai.png",
+            description: "Production RAG system for document Q&A with ChromaDB vector store, Gemini embeddings, and FastAPI backend.",
+            link: "https://github.com/YUKANTHAN/DocuMind-AI"
+        },
+        {
+            id: 2,
+            title: "ZenoFest 2026",
+            category: "Full Stack Event Platform",
+            technologies: "React, Vite, Three.js, GSAP, Framer Motion, Python, FastAPI, Supabase, Google APIs",
+            image: "/images/zenofest.svg",
+            description: "3D interactive event platform for ZenoFest 2026 with real-time registration, schedule management, and immersive 3D visualizations.",
+            link: "https://github.com/YUKANTHAN/ZenoFest-2k26",
+            demoLink: "https://zenofest2026.vercel.app/"
+        },
+        {
+            id: 3,
+            title: "Payroll / ERP Management System",
+            category: "FinTech / Full Stack",
+            technologies: "React, Node.js, Express, MongoDB, Razorpay, TailwindCSS, Flask, SQLAlchemy",
             image: "/images/erp_system.png",
-            description: "Robust ERP system for enterprises to manage resources and tasks efficiently.",
+            description: "Manufacturing ERP with inventory deduction, payroll engine, BOM/Recipes, and background email alerts.",
             link: "https://github.com/YUKANTHAN/ERP-System"
+        },
+        {
+            id: 4,
+            title: "ML-Face-Attendance-main",
+            category: "AI / Computer Vision",
+            technologies: "Python, PyTorch, facenet-pytorch, OpenCV, Flask, SQLite",
+            image: "/images/ml_face_attendance.svg",
+            description: "Real-time face recognition attendance system using MTCNN and InceptionResnetV1 with anti-spoofing and automated reporting.",
+            link: "https://github.com/YUKANTHAN/ML-Face-Attendance"
+        },
+        {
+            id: 5,
+            title: "MUSIC-APP-main",
+            category: "Full Stack / Media",
+            technologies: "React, TypeScript, Vite, Flutter, Web Audio API, Google GenAI, TailwindCSS",
+            image: "/images/music_app.svg",
+            description: "AI-powered music streaming app with mood-based generation, Flutter export capability, and Web Audio API synthesis.",
+            link: "https://github.com/YUKANTHAN/MUSIC-APP"
+        },
+        {
+            id: 6,
+            title: "Traveloop",
+            category: "Web / Travel",
+            technologies: "HTML, CSS, JavaScript, Node.js, Express, Google Maps API",
+            image: "/images/traveloop.svg",
+            description: "Personalized travel planning platform with AI-powered mood-based recommendations, multi-city itineraries, and budget tracking.",
+            link: "https://github.com/YUKANTHAN/Traveloop"
+        },
+        {
+            id: 7,
+            title: "Arun Crackers",
+            category: "E-commerce",
+            technologies: "React, Node.js, Express, MongoDB, Razorpay, TailwindCSS",
+            image: "/images/arun_crackers.svg",
+            description: "E-commerce platform for fireworks with inventory management, order tracking, Razorpay integration, and analytics dashboard.",
+            link: "https://github.com/YUKANTHAN/Arun-Crackers"
+        },
+        {
+            id: 8,
+            title: "Lumo Candles",
+            category: "Web / E-commerce",
+            technologies: "HTML, CSS, JavaScript, Vite, Lucide Icons",
+            image: "/images/lumo_candles.svg",
+            description: "Premium handcrafted candle e-commerce landing page with product showcase, smooth animations, and responsive design.",
+            link: "https://github.com/YUKANTHAN/Lumo-Candles"
+        },
+        {
+            id: 9,
+            title: "Global Info Sys Inc",
+            category: "Web / Business",
+            technologies: "HTML, CSS, JavaScript, GSAP, Three.js, Vite",
+            image: "/images/global_infosys.svg",
+            description: "Corporate website for Global Info Sys Inc - premium hardware & networking solutions provider since 2009 with 3D animations and interactive UI.",
+            link: "https://github.com/YUKANTHAN/Global-Info-Sys",
+            demoLink: "https://globalinfosysinc.vercel.app/"
+        },
+        {
+            id: 10,
+            title: "Wisdomystery",
+            category: "Web / Experimental",
+            technologies: "HTML, CSS, JavaScript, jQuery, Turn.js, GSAP",
+            image: "/images/wisdomystery.svg",
+            description: "Interactive chemistry education platform with 3D flipbook, interactive MCQs, and animated concept visualizations.",
+            link: "https://github.com/YUKANTHAN/Wisdomystery"
+        },
+        {
+            id: 11,
+            title: "SOS Alert App",
+            category: "Mobile / Safety",
+            technologies: "React Native, Node.js, Firebase, Expo",
+            image: "/images/sos_alert.png",
+            description: "Safety app that automatically alerts emergency contacts when the SOS button is pressed, ensuring rapid response.",
+            link: "https://github.com/YUKANTHAN/SOS-alert-app"
+        },
+        {
+            id: 12,
+            title: "Campus Connect",
+            category: "Full Stack",
+            technologies: "React, Node.js, MongoDB, Express, Google Maps API",
+            image: "/images/campus_connect.png",
+            description: "Multi-functional campus app featuring navigation, staff and bus tracking, canteen ordering, and reporting modules.",
+            link: "https://github.com/YUKANTHAN/Campus-Connect",
+            demoLink: "https://campus-connect-pmjw.onrender.com/"
         },
         {
             id: 13,
@@ -156,15 +239,6 @@ export const config = {
         },
         {
             id: 14,
-            title: "DocuMind-AI",
-            category: "AI / Document Processing",
-            technologies: "AI, CSS, Python",
-            image: "/images/documind_ai.png",
-            description: "An AI-powered document processing and analysis tool that extracts insights and summarizes content from documents.",
-            link: "https://github.com/YUKANTHAN/DocuMind-AI"
-        },
-        {
-            id: 15,
             title: "Uni-Path",
             category: "Web / Education",
             technologies: "JavaScript, HTML, CSS",
@@ -174,7 +248,7 @@ export const config = {
             demoLink: "https://yukanthan.github.io/Uni-Path/"
         },
         {
-            id: 16,
+            id: 15,
             title: "PrimeTrade.ai",
             category: "AI / Finance",
             technologies: "HTML, JavaScript, AI",
@@ -183,7 +257,7 @@ export const config = {
             link: "https://github.com/YUKANTHAN/PrimeTrade.ai"
         },
         {
-            id: 17,
+            id: 16,
             title: "Hotel Management System",
             category: "Full Stack",
             technologies: "Python, Django, HTML, CSS",
@@ -192,7 +266,7 @@ export const config = {
             link: "https://github.com/YUKANTHAN/Hotel-Management-System"
         },
         {
-            id: 18,
+            id: 17,
             title: "Bharathi Digital Services",
             category: "Web / Business",
             technologies: "Python, HTML, CSS",
@@ -201,17 +275,17 @@ export const config = {
             link: "https://github.com/YUKANTHAN/Bharathi-Digital-Services"
         },
         {
-            id: 19,
+            id: 17,
             title: "Vivekananda Vidhyashram School",
             category: "Web / Education",
             technologies: "HTML, CSS, JavaScript",
             image: "/images/vivekananda_school.png",
             description: "Official website for Vivekananda Vidhyashram School featuring school information, events, and admission details.",
-                link: "https://github.com/YUKANTHAN/Vivekananda-Vidhyashram-School-Home-Page",
-                demoLink: "https://yukanthan.github.io/Vivekananda-Vidhyashram-School-Home-Page/"
+            link: "https://github.com/YUKANTHAN/Vivekananda-Vidhyashram-School-Home-Page",
+            demoLink: "https://yukanthan.github.io/Vivekananda-Vidhyashram-School-Home-Page/"
         },
         {
-            id: 20,
+            id: 18,
             title: "Hayagrivas Website",
             category: "Web / Business",
             technologies: "HTML, CSS, JavaScript",
@@ -220,7 +294,7 @@ export const config = {
             link: "https://github.com/YUKANTHAN/Hayagrivas-Final-Page"
         },
         {
-            id: 21,
+            id: 19,
             title: "Worst UI",
             category: "Web / Fun",
             technologies: "JavaScript, HTML, CSS",
