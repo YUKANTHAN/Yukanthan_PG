@@ -130,7 +130,7 @@ projects: [
             title: "ZenoFest 2026",
             category: "Full Stack Event Platform",
             technologies: "React, Vite, Three.js, GSAP, Framer Motion, Python, FastAPI, Supabase, Google APIs",
-            image: "/images/zenofest.svg",
+            image: "/images/zenofest.png",
             description: "3D interactive event platform for ZenoFest 2026 with real-time registration, schedule management, and immersive 3D visualizations.",
             link: "https://github.com/YUKANTHAN/ZenoFest-2k26",
             demoLink: "https://zenofest2026.vercel.app/"
@@ -149,7 +149,7 @@ projects: [
             title: "ML-Face-Attendance-main",
             category: "AI / Computer Vision",
             technologies: "Python, PyTorch, facenet-pytorch, OpenCV, Flask, SQLite",
-            image: "/images/ml_face_attendance.svg",
+            image: "/images/ml_face_attendance.png",
             description: "Real-time face recognition attendance system using MTCNN and InceptionResnetV1 with anti-spoofing and automated reporting.",
             link: "https://github.com/YUKANTHAN/ML-Face-Attendance"
         },
@@ -158,7 +158,7 @@ projects: [
             title: "MUSIC-APP-main",
             category: "Full Stack / Media",
             technologies: "React, TypeScript, Vite, Flutter, Web Audio API, Google GenAI, TailwindCSS",
-            image: "/images/music_app.svg",
+            image: "/images/music_app.png",
             description: "AI-powered music streaming app with mood-based generation, Flutter export capability, and Web Audio API synthesis.",
             link: "https://github.com/YUKANTHAN/MUSIC-APP"
         },
@@ -167,7 +167,7 @@ projects: [
             title: "Traveloop",
             category: "Web / Travel",
             technologies: "HTML, CSS, JavaScript, Node.js, Express, Google Maps API",
-            image: "/images/traveloop.svg",
+            image: "/images/traveloop.png",
             description: "Personalized travel planning platform with AI-powered mood-based recommendations, multi-city itineraries, and budget tracking.",
             link: "https://github.com/YUKANTHAN/Traveloop"
         },
@@ -176,7 +176,7 @@ projects: [
             title: "Arun Crackers",
             category: "E-commerce",
             technologies: "React, Node.js, Express, MongoDB, Razorpay, TailwindCSS",
-            image: "/images/arun_crackers.svg",
+            image: "/images/arun_crackers.png",
             description: "E-commerce platform for fireworks with inventory management, order tracking, Razorpay integration, and analytics dashboard.",
             link: "https://github.com/YUKANTHAN/Arun-Crackers"
         },
@@ -185,7 +185,7 @@ projects: [
             title: "Lumo Candles",
             category: "Web / E-commerce",
             technologies: "HTML, CSS, JavaScript, Vite, Lucide Icons",
-            image: "/images/lumo_candles.svg",
+            image: "/images/lumo_candles.png",
             description: "Premium handcrafted candle e-commerce landing page with product showcase, smooth animations, and responsive design.",
             link: "https://github.com/YUKANTHAN/Lumo-Candles"
         },
@@ -194,7 +194,7 @@ projects: [
             title: "Global Info Sys Inc",
             category: "Web / Business",
             technologies: "HTML, CSS, JavaScript, GSAP, Three.js, Vite",
-            image: "/images/global_infosys.svg",
+            image: "/images/global_infosys.png",
             description: "Corporate website for Global Info Sys Inc - premium hardware & networking solutions provider since 2009 with 3D animations and interactive UI.",
             link: "https://github.com/YUKANTHAN/Global-Info-Sys",
             demoLink: "https://globalinfosysinc.vercel.app/"
@@ -204,7 +204,7 @@ projects: [
             title: "Wisdomystery",
             category: "Web / Experimental",
             technologies: "HTML, CSS, JavaScript, jQuery, Turn.js, GSAP",
-            image: "/images/wisdomystery.svg",
+            image: "/images/wisdomystery.png",
             description: "Interactive chemistry education platform with 3D flipbook, interactive MCQs, and animated concept visualizations.",
             link: "https://github.com/YUKANTHAN/Wisdomystery"
         },

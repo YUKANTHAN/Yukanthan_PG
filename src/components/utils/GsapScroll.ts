@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import gsap from "gsap";
 
-let intensityInterval: number | undefined;
+let intensityInterval: ReturnType<typeof setInterval> | undefined;
 let screenLightTimeline: gsap.core.Timeline | undefined;
 let mobileTransitionTimeline: gsap.core.Timeline | undefined;
 
