@@ -10,11 +10,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from pymongo import MongoClient
 
+import aiosmtplib
+from email.message import EmailMessage
+
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "")
 DB_NAME = "portfolio"
+
+# Email config
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_FROM = os.getenv("SMTP_FROM", "Portfolio Contact <noreply@yukanthan.com>")
+CONTACT_TO = os.getenv("CONTACT_TO", "pgyukanthan@gmail.com")
 
 client: MongoClient = None
 db = None
@@ -70,6 +81,46 @@ async def get_contacts():
     return {"contacts": contacts, "total": len(contacts)}
 
 
+async def send_contact_email(name: str, email: str) -> bool:
+    """Send notification email when contact form is submitted."""
+    if not SMTP_USER or not SMTP_PASSWORD:
+        print("[Email] SMTP credentials not configured, skipping email")
+        return False
+
+    message = EmailMessage()
+    message["From"] = SMTP_FROM
+    message["To"] = CONTACT_TO
+    message["Subject"] = f"New Portfolio Contact: {name}"
+    message["Reply-To"] = email
+
+    body = f"""
+New contact form submission:
+
+Name: {name}
+Email: {email}
+Time: {datetime.now(UTC).strftime('%Y-%m-%d %H:%M:%S UTC')}
+
+---
+Sent from portfolio contact form.
+"""
+    message.set_content(body)
+
+    try:
+        await aiosmtplib.send(
+            message,
+            hostname=SMTP_HOST,
+            port=SMTP_PORT,
+            username=SMTP_USER,
+            password=SMTP_PASSWORD,
+            start_tls=True,
+        )
+        print(f"[Email] Sent contact notification to {CONTACT_TO}")
+        return True
+    except Exception as e:
+        print(f"[Email] Failed to send: {e}")
+        return False
+
+
 @app.post("/api/contact")
 async def contact(contact: ContactRequest):
     if db is None:
@@ -81,6 +132,9 @@ async def contact(contact: ContactRequest):
         "createdAt": datetime.now(UTC),
     }
     db.contacts.insert_one(doc)
+
+    # Send notification email (non-blocking)
+    await send_contact_email(contact.name, contact.email)
 
     return {"message": "Thank you! Your message has been received."}
 
